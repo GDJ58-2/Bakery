@@ -13,7 +13,6 @@ public class AutoInfo {
 	public AutoInfo() {}
 	
 	public AutoInfo(int autoCode, String autoMemo, String createdate) {
-		super();
 		this.autoCode = autoCode;
 		this.autoMemo = autoMemo;
 		this.createdate = createdate;

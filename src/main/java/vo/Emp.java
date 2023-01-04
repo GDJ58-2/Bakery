@@ -19,7 +19,6 @@ public class Emp {
 
 	public Emp(int empCode, String empId, String empPw, String empName, String active, int authCode,
 			String createdate) {
-		super();
 		this.empCode = empCode;
 		this.empId = empId;
 		this.empPw = empPw;

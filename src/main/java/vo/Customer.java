@@ -20,7 +20,6 @@ public class Customer {
 
 	public Customer(int customerCode, String customerId, String customerPw, String customerName, String customerPhone,
 			int point, String createdate) {
-		super();
 		this.customerCode = customerCode;
 		this.customerId = customerId;
 		this.customerPw = customerPw;

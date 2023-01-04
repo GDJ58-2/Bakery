@@ -15,7 +15,6 @@ public class CustomerAddress {
 	public CustomerAddress() {}
 
 	public CustomerAddress(int addressCode, String customerId, String address, String createdate) {
-		super();
 		this.addressCode = addressCode;
 		this.customerId = customerId;
 		this.address = address;
