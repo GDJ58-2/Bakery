@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import vo.Customer;
 
 public class CustomerDao {
@@ -42,19 +43,45 @@ public class CustomerDao {
 	}
 	
 	// 아이디중복검사
-	public int checkCustomerId(Connection conn, Customer customer) throws Exception {
-		int row = 0;
+	public boolean checkCustomerId(Connection conn, Customer customer) throws Exception {
+		boolean check = false;
 		String sql = "SELECT customer_id"
 				+ " FROM customer"
 				+ " WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		row = stmt.executeUpdate(); // 1이면 아이디 중복
+		stmt.setString(1, customer.getCustomerId());
+		ResultSet rs = stmt.executeQuery(); 
+		if(rs.next()) { // ture 이면 아이디 중복
+			check = true;
+		}
+		stmt.close();
+		return check;
+	}
+	
+	// 회원정보수정
+	public int customerUpdate(Connection conn, Customer customer) throws Exception {
+		int row = 0;
+		String sql = "UPDATE customer SET customer_name customerName = ?"
+				+ " WHERE customer_id = ? AND customer_pw = PASSWORD(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerName());
+		stmt.setString(2, customer.getCustomerId());
+		stmt.setString(3, customer.getCustomerPw());
+		row = stmt.executeUpdate();
 		stmt.close();
 		return row;
 	}
 	
-	// 회원정보수정
-	
-	
 	// 회원탈퇴
+	public int customerDelete(Connection conn, Customer customer) throws Exception {
+		int row = 0;
+		String sql = "DELETE FROM customer"
+				+ " WHERE customer_id = ? and customer_pw = PASSWORD(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerId());
+		stmt.setString(2, customer.getCustomerPw());
+		row = stmt.executeUpdate();
+		stmt.close();
+		return row;
+	}
 }
