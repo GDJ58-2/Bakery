@@ -1,12 +1,12 @@
 package vo;
 
-public class outid {
+public class Outid {
 	private String id;
 	private String createdate;
 	
-	public outid() {}
+	public Outid() {}
 	
-	public outid(String id, String createdate) {
+	public Outid(String id, String createdate) {
 		super();
 		this.id = id;
 		this.createdate = createdate;
@@ -14,7 +14,7 @@ public class outid {
 
 	@Override
 	public String toString() {
-		return "outid [id=" + id + ", createdate=" + createdate + "]";
+		return "Outid [id=" + id + ", createdate=" + createdate + "]";
 	}
 
 	public String getId() {
