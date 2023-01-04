@@ -51,7 +51,7 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		ResultSet rs = stmt.executeQuery(); 
-		if(rs.next()) { // ture 이면 아이디 중복
+		if(rs.next()) { // ture이면 아이디 중복
 			check = true;
 		}
 		stmt.close();
