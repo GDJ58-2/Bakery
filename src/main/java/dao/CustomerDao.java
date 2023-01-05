@@ -3,13 +3,15 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+
+import util.DBUtil;
 import vo.Customer;
 
 public class CustomerDao {
 	
 	// 로그인
-	public int loginCustomer(Connection conn, Customer customer) throws Exception {
-		int row = 0;
+	public Customer loginCustomer(Connection conn, Customer customer) throws Exception {
+		Customer resultCustomer = null;
 		String sql = "SELECT customer_code customerCode"
 				+ ", customer_id customerId"
 				+ ", customer_name customerName"
@@ -20,9 +22,17 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
-		row = stmt.executeUpdate();
-		stmt.close();
-		return row;
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			resultCustomer = new Customer();
+			resultCustomer.setCustomerCode(rs.getInt("customerCode"));
+			resultCustomer.setCustomerId(rs.getString("customerId"));
+			resultCustomer.setCustomerName(rs.getString("customerName"));
+			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
+			resultCustomer.setPoint(rs.getInt("point"));
+		}
+		DBUtil.close(rs, stmt, conn);
+		return resultCustomer;
 	}
 	
 	// 회원가입
@@ -30,18 +40,41 @@ public class CustomerDao {
 		int row = 0;
 		String sql = "INSERT INTO customer("
 				+ "customer_id, customer_pw, customer_name, customer_phone, point, createdate"
-				+ ") VALUES (?, ?, ?, ?, 0, CURDATE())"; // 가입시 포인트는 0
+				+ ") VALUES (?, ?, ?, ?, 0, NOW())"; // 가입시 포인트는 0
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		stmt.setString(3, customer.getCustomerName());
 		stmt.setString(4, customer.getCustomerPhone());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 	
-	// pw변경이력 테이블에 정보등록
+	// 아이디중복검사
+	public boolean checkCustomerId(Connection conn, Customer customer) throws Exception {
+		boolean check = false;
+		String sql = "SELECT i.id"
+				+ " FROM (SELECT customer_id id"
+				+ "			FROM customer"
+				+ "			UNION"
+				+ "			SELECT id"
+				+ "			FROM outid"
+				+ "			UNION"
+				+ "			SELECT emp_id id"
+				+ "			FROM emp) i"
+				+ "WHERE i.id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerId());
+		ResultSet rs = stmt.executeQuery(); 
+		if(rs.next()) { // ture이면 아이디 중복
+			check = true;
+		}
+		DBUtil.close(rs, stmt, conn);
+		return check;
+	}
+	
+	// 가입시 pw_history 테이블에 데이터입력
 	public int customerNewPwHistory(Connection conn, Customer customer) throws Exception {
 		int row = 0;
 		String sql = "INSERT INTO pw_history("
@@ -51,60 +84,26 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 	
-	// 아이디중복검사(customer table)
-	public boolean checkCustomerId(Connection conn, Customer customer) throws Exception {
-		boolean check = false;
-		String sql = "SELECT customer_id"
-				+ " FROM customer"
-				+ " WHERE customer_id = ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
-		ResultSet rs = stmt.executeQuery(); 
-		if(rs.next()) { // ture이면 아이디 중복
-			check = true;
+	// 비밀번호 수정시 pw_history 테이블에 데이터입력
+		public int customerNewPwHistory(Connection conn, String newPw, Customer customer) throws Exception {
+			int row = 0;
+			String sql = "INSERT INTO pw_history("
+					+ "customer_id, pw, createdate"
+					+ ") VALUES (?, ?, CURDATE())";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customer.getCustomerId());
+			stmt.setString(2, newPw);
+			row = stmt.executeUpdate();
+			DBUtil.close(null, stmt, conn);
+			return row;
 		}
-		stmt.close();
-		return check;
-	}
-	
-	// 아이디 중복검사(emp table)
-	public boolean checkEmpId(Connection conn, Customer customer) throws Exception {
-		boolean check = false;
-		String sql = "SELECT emp_id"
-				+ " FROM emp"
-				+ " WHERE emp_id = ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
-		ResultSet rs = stmt.executeQuery(); 
-		if(rs.next()) { // ture이면 아이디 중복
-			check = true;
-		}
-		stmt.close();
-		return check;
-	}
-	
-	// 아이디 중복검사(outid table)
-	public boolean checkOutId(Connection conn, Customer customer) throws Exception {
-		boolean check = false;
-		String sql = "SELECT id"
-				+ " FROM outid"
-				+ " WHERE id = ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
-		ResultSet rs = stmt.executeQuery(); 
-		if(rs.next()) { // ture이면 아이디 중복
-			check = true;
-		}
-		stmt.close();
-		return check;
-	}
 	
 	// 회원정보조회
-	public Customer selectCustomer(Connection conn, String customerId) throws Exception {
+	public Customer selectOneCustomer(Connection conn, String customerId) throws Exception {
 		Customer resultCustomer = null;
 		String sql = "SELECT customer_code customerCode"
 				+ ", customer_id customerId"
@@ -124,8 +123,7 @@ public class CustomerDao {
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
 		}
-		stmt.close();
-		rs.close();
+		DBUtil.close(rs, stmt, conn);
 		return resultCustomer;
 	}
 	
@@ -141,7 +139,7 @@ public class CustomerDao {
 		stmt.setString(2, customer.getCustomerId());
 		stmt.setString(3, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 	
@@ -155,28 +153,54 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
-			result = true; 
+			result = true; // 변경 불가능한 비밀번호
 		}
+		DBUtil.close(rs, stmt, conn);
 		return result;
 	}
-	
 	
 	// 비밀번호 수정
 	public int customerUpdatePw(Connection conn, String newPw, Customer customer) throws Exception {
 		int row = 0;
 		String sql = "UPDATE customer"
-				+ " INNER JOIN pw_history h"
-				+ "	ON c.customer_id = h.customer_id"
-				+ " SET c.customer_pw = PASSWORD(?)"
-				+ ", h.pw = PASSWORD(?)"
-				+ " WHERE c.customer_id = ? AND c.customer_pw = PASSWORD(?)";
+				+ " SET customer_pw = PASSWORD(?)"
+				+ " WHERE customer_id = ? AND customer_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, newPw);
-		stmt.setString(2, newPw);
-		stmt.setString(3, customer.getCustomerId());
-		stmt.setString(4, customer.getCustomerPw());
+		stmt.setString(2, customer.getCustomerId());
+		stmt.setString(3, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
+		return row;
+	}
+	
+	// pw_history에 등록되어있는 데이터 개수 조회
+	public int cntPwhistory(Connection conn, Customer customer) throws Exception {
+		int resultCnt = 0;
+		String sql = "SELECT COUNT(*) cnt"
+				+ "	FROM pw_history"
+				+ " WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerId());
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			resultCnt = rs.getInt("cnt");
+		}
+		DBUtil.close(rs, stmt, conn);
+		return resultCnt;
+	}
+	
+	// pw_history에 있는 데이터가 3개 이상이면 제일 오래된 데이터 삭제
+	public int deletePwHistory(Connection conn, Customer customer) throws Exception {
+		int row = 0;
+		String sql = "DELETE FROM pw_history"
+				+ "	WHERE createdate IN (SELECT MIN(createdate)"
+				+ "						FROM pw_history"
+				+ "						WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerId());
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 	
@@ -189,20 +213,20 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 	
 	// 탈퇴아이디 등록
-	public int insertOutid(Connection conn, String customerId) throws Exception {
+	public int insertOutid(Connection conn, Customer customer) throws Exception {
 		int row = 0;
 		String sql = "INSERT INTO outid("
 				+ "id, createdate"
-				+ ") VALUES (?, CURDATE())";
+				+ ") VALUES (?, NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customerId);
+		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, conn);
 		return row;
 	}
 }
