@@ -41,7 +41,7 @@ public class EmpService {
 		try {
 			conn = DBUtil.getConnection();
 			checkId = empDao.selectId(conn, emp.getEmpId());
-			if(checkId==true) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기
+			if(checkId==true) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기 
 				throw new Exception();
 			}
 			row = empDao.insertEmp(conn, emp);
