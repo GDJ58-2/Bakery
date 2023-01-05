@@ -7,7 +7,7 @@
 </head>
 <body>
 	<h1>상품 등록</h1>
-	<form action="${pageContext.request.contextPath}/AddGoodsController" method="post" enctype="multipart/form-data">
+	<form action="${pageContext.request.contextPath}/admin/goods/addGoods" method="post" enctype="multipart/form-data">
 		<table>
 			<tr>
 				<th>상품 이름 : </th>

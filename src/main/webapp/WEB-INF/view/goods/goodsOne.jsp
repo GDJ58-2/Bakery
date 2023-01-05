@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>goodsList.jsp</title>
+<title>goodsOne.jsp</title>
 </head>
 <body>
 	<h1>${map.goodsName}</h1>
@@ -42,8 +42,8 @@
 		</tr>
 	</table>
 	<div>
-		<a href="${pageContext.request.contextPath}/ModifyGoodsController">수정</a>
-		<a href="${pageContext.request.contextPath}/RemoveGoodsController">삭제</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${map.goodsCode}">수정</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
 </body>
 </html>

@@ -60,27 +60,56 @@ public class GoodsDao {
 	
 	// INSERT
 	public HashMap<String, Integer> insertGoods(Connection conn, Goods goods) throws Exception {
-			String sql = "INSERT INTO goods(goods_name, goods_price, goods_stock, emp_id, hit, createdate) VALUES(?, ?, ?, ?, ?, NOW())";
-			// PreparedStatement.RETURN_GENERATED_KEYS 쿼리실행 후 생성된 auto_increment값을 ResultSet에 반환
-			PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
-			stmt.setString(1, goods.getGoodsName());
-			stmt.setInt(2, goods.getGoodsPrice());
-			stmt.setInt(3, goods.getGoodsStock());
-			stmt.setString(4, goods.getEmpId());
-			stmt.setInt(5, goods.getHit());
-			int row = stmt.executeUpdate();
-			ResultSet rs = stmt.getGeneratedKeys();
-			int autoKey = 0;
-			if(rs.next()) {
-				autoKey = rs.getInt(1); // stmt.executeUpdate(); 생성된 auto_increment값이 대입
-			}
-			
-			HashMap<String, Integer> map = new HashMap<String, Integer>();
-			map.put("row", row);
-			map.put("autoKey", autoKey);
-			
-			DBUtil.close(rs, stmt, null);
-			
-			return map;
+		String sql = "INSERT INTO goods(goods_name, goods_price, goods_stock, emp_id, hit, createdate) VALUES(?, ?, ?, ?, ?, NOW())";
+		// PreparedStatement.RETURN_GENERATED_KEYS 쿼리실행 후 생성된 auto_increment값을 ResultSet에 반환
+		PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+		stmt.setString(1, goods.getGoodsName());
+		stmt.setInt(2, goods.getGoodsPrice());
+		stmt.setInt(3, goods.getGoodsStock());
+		stmt.setString(4, goods.getEmpId());
+		stmt.setInt(5, goods.getHit());
+		int row = stmt.executeUpdate();
+		ResultSet rs = stmt.getGeneratedKeys();
+		int autoKey = 0;
+		if(rs.next()) {
+			autoKey = rs.getInt(1); // stmt.executeUpdate(); 생성된 auto_increment값이 대입
 		}
+		
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("row", row);
+		map.put("autoKey", autoKey);
+		
+		DBUtil.close(rs, stmt, null);
+		
+		return map;
+	}
+	
+	// UPDATE
+	public int updateGoods(Connection conn, Goods goods) throws Exception {
+		String sql = "UPDATE goods SET goods_name = ?, goods_price = ?, goods_stock = ?, emp_id = ?, hit = ? WHERE goods_code =?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, goods.getGoodsName());
+		stmt.setInt(2, goods.getGoodsPrice());
+		stmt.setInt(3, goods.getGoodsStock());
+		stmt.setString(4, goods.getEmpId());
+		stmt.setInt(5, goods.getHit());
+		stmt.setInt(6, goods.getGoodsCode());
+		int row = stmt.executeUpdate();
+		
+		DBUtil.close(null, stmt, null);
+		
+		return row;
+	}
+	
+	// DELETE
+	public int deleteGoods(Connection conn, Goods goods) throws Exception {
+		String sql = "DELETE FROM goods WHERE goods_code =?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goods.getGoodsCode());
+		int row = stmt.executeUpdate();
+		
+		DBUtil.close(null, stmt, null);
+		
+		return row;
+	}
 }

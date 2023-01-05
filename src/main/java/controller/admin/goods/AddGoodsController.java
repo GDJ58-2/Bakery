@@ -1,4 +1,4 @@
-package controller.goods;
+package controller.admin.goods;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +17,11 @@ import service.GoodsService;
 import vo.Goods;
 import vo.GoodsImg;
 
-@WebServlet("/goods/addGoods")
+@WebServlet("/admin/goods/addGoods")
 public class AddGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// View
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/goods/addGoods.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/addGoods.jsp");
 		
 		rd.forward(request, response);
 	}
@@ -85,6 +85,6 @@ public class AddGoodsController extends HttpServlet {
 		}
 		
 		// View
-		response.sendRedirect(request.getContextPath()+"/GoodsListController");
+		response.sendRedirect(request.getContextPath()+"/goods/goodsList");
 	}
 }
