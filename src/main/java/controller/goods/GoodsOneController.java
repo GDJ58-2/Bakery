@@ -1,4 +1,4 @@
-package controller;
+package controller.goods;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import service.GoodsService;
 import vo.Goods;
 
-@WebServlet("/GoodsOneController")
+@WebServlet("/goods/goodsOne")
 public class GoodsOneController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		

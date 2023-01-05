@@ -1,4 +1,4 @@
-package controller;
+package controller.goods;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import service.GoodsService;
 
-@WebServlet("/GoodsListController")
+@WebServlet("/goods/goodsList")
 public class GoodsListController extends HttpServlet {
 	private GoodsService goodsService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

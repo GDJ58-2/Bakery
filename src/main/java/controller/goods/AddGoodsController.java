@@ -1,4 +1,4 @@
-package controller;
+package controller.goods;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import service.GoodsService;
 import vo.Goods;
 import vo.GoodsImg;
 
-@WebServlet("/AddGoodsController")
+@WebServlet("/goods/addGoods")
 public class AddGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// View

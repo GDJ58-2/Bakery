@@ -3,6 +3,7 @@ package util;
 import java.sql.*;
 
 public class DBUtil {
+
 	public static Connection getConnection() throws Exception {
 		String driver	= "org.mariadb.jdbc.Driver";
 		String dbUrl	= "jdbc:mariadb://localhost:3306/shop";
