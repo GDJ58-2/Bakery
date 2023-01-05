@@ -3,19 +3,20 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import dao.EmpDao;
-import util.DBUtil;
-import vo.Emp;
 
-public class EmpService {
-	private EmpDao empDao;
-	public int addEmp(Emp emp) { // emp 추가
+import dao.AuthInfoDao;
+import util.DBUtil;
+import vo.AuthInfo;
+
+public class AuthInfoService {
+	private AuthInfoDao authInfoDao;
+	public int addAuthInfo(AuthInfo authInfo) { // authInfo 추가
 		int row = 0;
-		this.empDao = new EmpDao();
+		this.authInfoDao = new AuthInfoDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = empDao.insertEmp(conn, emp);
+			row = authInfoDao.insertAuthInfo(conn, authInfo);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -26,20 +27,20 @@ public class EmpService {
 			e.printStackTrace();
 		} finally {
 			try {
-				DBUtil.close(null, null, conn); // db 자원반납
+				DBUtil.close(null, null, conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return row;
 	}
-	public int modifyEmpPw(Emp emp) { // empPw 수정
+	public int modifyAuthInfo(AuthInfo authInfo) { // authInfo 수정
 		int row = 0;
-		this.empDao = new EmpDao();
+		this.authInfoDao = new AuthInfoDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = empDao.updateEmpPw(conn, emp);
+			row = authInfoDao.updateAuthInfo(conn, authInfo);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -50,44 +51,20 @@ public class EmpService {
 			e.printStackTrace();
 		} finally {
 			try {
-				DBUtil.close(null, null, conn); // db 자원반납
+				DBUtil.close(null, null, conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return row;
 	}
-	public Emp getEmpOne(int empCode) { // modifyEmpPw form
-		Emp emp = null;
-		this.empDao = new EmpDao();
-		Connection conn = null;
-		try {
-			conn = DBUtil.getConnection();
-			emp = empDao.selectEmpOne(conn, empCode);
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				DBUtil.close(null, null, conn); // db 자원반납
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return emp;
-	}
-	public int modifyEmpByAdmin(Emp emp) { // 권한, 활성상태 수정
+	public int removeAuthInfo(int authCode) { // authInfo 삭제
 		int row = 0;
-		this.empDao = new EmpDao();
+		this.authInfoDao = new AuthInfoDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = empDao.updateEmpByAdmin(conn, emp);
+			row = authInfoDao.deleteAuthInfo(conn, authCode);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -98,20 +75,44 @@ public class EmpService {
 			e.printStackTrace();
 		} finally {
 			try {
-				DBUtil.close(null, null, conn); // db 자원반납
+				DBUtil.close(null, null, conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return row;
 	}
-	public ArrayList<Emp> getEmpListByAdmin() { // empList 출력
-		ArrayList<Emp> list = null;
-		this.empDao = new EmpDao();
+	public AuthInfo getAuthInfoOne(int authCode) { // modifyAuthInfo form 
+		AuthInfo authInfo = null;
+		this.authInfoDao = new AuthInfoDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			list = empDao.selectEmpListByAdmin(conn);
+			authInfo = authInfoDao.selectAuthInfoOne(conn, authCode);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return authInfo;
+	}
+	public ArrayList<AuthInfo> getAuthInfoList() { // authInfoList 출력
+		ArrayList<AuthInfo> list = null;
+		this.authInfoDao = new AuthInfoDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = authInfoDao.selectAuthInfoList(conn);
 			conn.commit();
 		} catch (Exception e) {
 			try {
