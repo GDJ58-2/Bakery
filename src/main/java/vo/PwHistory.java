@@ -1,19 +1,19 @@
 package vo;
 
-public class pwHistory {
+public class PwHistory {
 	private String customerId;
 	private String pw;
 	private String createdate;
 	
 	@Override
 	public String toString() {
-		return "pwHistory [customerId=" + customerId + ", pw=" + pw + ", createdate=" + createdate + "]";
+		return "PwHistory [customerId=" + customerId + ", pw=" + pw + ", createdate=" + createdate + "]";
 	}
 
 	//생성자
-	public pwHistory() {}
+	public PwHistory() {}
 	
-	public pwHistory(String customerId, String pw, String createdate) {
+	public PwHistory(String customerId, String pw, String createdate) {
 		this.customerId = customerId;
 		this.pw = pw;
 		this.createdate = createdate;

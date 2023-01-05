@@ -11,11 +11,11 @@ public class DBUtil {
       Class.forName(driver); // 외부 드라이브 로딩
       Connection conn = DriverManager.getConnection(dbUrl, dbUser, dbPw); // db 연결
       //System.out.println("연결 성공");
-      conn.setAutoCommit(false);
+      conn.setAutoCommit(false); 
       return conn;
    }
    
-   public void close(ResultSet rs, PreparedStatement stmt, Connection conn) throws Exception {
+   public static void close(ResultSet rs, PreparedStatement stmt, Connection conn) throws Exception {
       if(rs != null) {
          rs.close();
       }
