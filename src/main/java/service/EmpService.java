@@ -9,12 +9,41 @@ import vo.Emp;
 
 public class EmpService {
 	private EmpDao empDao;
-	public int addEmp(Emp emp) { // emp 추가
-		int row = 0;
+	public Emp loginByEmp(Emp paramEmp) { // login
+		Emp returnEmp = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
+			returnEmp = empDao.selectIdPwByEmp(conn, paramEmp);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return returnEmp;
+	}
+	public int addEmp(Emp emp) { // emp 추가
+		int row = 0;
+		boolean checkId = false;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			checkId = empDao.selectId(conn, emp.getEmpId());
+			if(checkId==true) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기
+				throw new Exception();
+			}
 			row = empDao.insertEmp(conn, emp);
 			conn.commit();
 		} catch (Exception e) {

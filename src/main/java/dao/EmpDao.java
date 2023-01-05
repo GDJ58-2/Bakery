@@ -6,7 +6,22 @@ import java.util.ArrayList;
 import util.DBUtil;
 import vo.Emp;
 
-public class EmpDao { // outId 검사?
+public class EmpDao { 
+	public Emp selectIdPwByEmp(Connection conn, Emp paramEmp) throws Exception { // login session
+		Emp returnEmp = null;
+		String sql = "SELECT emp_id empId, emp_name empName FROM emp WHERE emp_id=? AND emp_pw = PASSWORD(?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, paramEmp.getEmpId());
+		stmt.setString(2, paramEmp.getEmpPw());
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			returnEmp = new Emp();
+			returnEmp.setEmpId(rs.getString("empId"));
+			returnEmp.setEmpName(rs.getString("empName"));
+		}
+		DBUtil.close(rs, stmt, null);
+		return returnEmp;
+	}
 	public int insertEmp(Connection conn, Emp emp) throws Exception { // addEmp
 		int row = 0;
 		String sql = "INSERT INTO emp(emp_id, emp_pw, emp_name, active, auth_code, createdate) VALUES(?,PASSWORD(?),?,?,?,NOW())";
@@ -19,6 +34,24 @@ public class EmpDao { // outId 검사?
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
+	}
+	public boolean selectId(Connection conn, String empId) throws Exception { // id 중복 검사
+		boolean check = false;
+		String sql = "SELECT t.userId"
+				+ "		FROM("
+				+ "			SELECT customer_id userId FROM customer UNION"
+				+ "			SELECT emp_id userId FROM emp UNION"
+				+ "			SELECT id userId FROM outid) t"
+				+ "		WHERE userId = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, empId);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) { // 사용 불가 -> true
+			check = true;
+		}
+		System.out.print(check);
+		DBUtil.close(rs, stmt, null);
+		return check;
 	}
 	public int updateEmpPw(Connection conn, Emp emp) throws Exception { // modifyEmpPw
 		int row = 0;
