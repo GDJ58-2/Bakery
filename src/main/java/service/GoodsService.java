@@ -109,4 +109,70 @@ public class GoodsService {
 			}
 		}
 	}
+	
+	// Modify
+	public int modifyGoods(Goods goods, GoodsImg goodsImg, String dir) {
+		goodsDao = new GoodsDao();
+		goodsImgDao = new GoodsImgDao();
+		Connection conn = null;
+		int row = 0;
+		try {
+			conn = DBUtil.getConnection();
+			row = goodsDao.updateGoods(conn, goods);
+			if(row == 1) {
+				row = goodsImgDao.updateGoods(conn, goodsImg);
+				System.out.println("서비스 실행 성공");
+			} else {
+				System.out.println("서비스 실행 실패");
+			}
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
+	
+	// Remove
+	public int removeGoods(Goods goods, GoodsImg goodsImg) {
+		goodsDao = new GoodsDao();
+		goodsImgDao = new GoodsImgDao();
+		Connection conn = null;
+		int row = 0;
+		try {
+			conn = DBUtil.getConnection();
+			row = goodsImgDao.deleteGoods(conn, goodsImg);
+			if(row == 1) {
+				row = goodsDao.deleteGoods(conn, goods);
+				System.out.println("서비스 실행 성공");
+			} else {
+				System.out.println("서비스 실행 실패");
+			}
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
 }
