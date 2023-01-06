@@ -82,6 +82,31 @@ public class NoticeService {
 		}
 		return row;
 	}
+	public Notice getNoticeOne(int noticeCode) { // modifyNotice form
+		Notice notice = null;
+		this.noticeDao = new NoticeDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			notice = noticeDao.selectNoticeOne(conn, noticeCode);
+			conn.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db자원 반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return notice;
+	}
 	public ArrayList<Notice> getNoticeList() { // noticeList 출력
 		ArrayList<Notice> list = null;
 		this.noticeDao = new NoticeDao();

@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<h1>권한 목록</h1>
 	<a href="${pageContext.request.contextPath}/auth/addAuthInfo">추가</a>
 	<table border="1">

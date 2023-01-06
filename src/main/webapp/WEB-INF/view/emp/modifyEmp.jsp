@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<form action="${pageContext.request.contextPath}/emp/modifyEmp" method="post">
 		<input type="hidden" name="empId" value="${e.empId}">
 		<table border="1">

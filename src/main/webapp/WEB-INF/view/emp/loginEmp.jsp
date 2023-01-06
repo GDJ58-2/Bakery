@@ -6,6 +6,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<h1>직원 로그인</h1>
 	<form action="${pageContext.request.contextPath}/emp/loginEmp" method="post">
 		<div>

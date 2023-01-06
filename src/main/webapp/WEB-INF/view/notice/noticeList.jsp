@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<h1>noticeList</h1>
 	<a href="${pageContext.request.contextPath}/notice/addNotice">추가</a>
 	<table border="1">
@@ -16,7 +17,7 @@
 				<th>내용</th>
 				<th>작성자</th>
 				<th>등록일</th>
-				<th>수정</th>
+				<th>수정/삭제</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -26,7 +27,10 @@
 					<td>${n.noticeContent}</td>
 					<td>${n.empId}</td>
 					<td>${n.createdate}</td>
-					<td><a href="${pageContext.request.contextPath}/notice/modifyNotice">수정</a></td>
+					<td>
+						<a href="${pageContext.request.contextPath}/notice/modifyNotice?noticeCode=${n.noticeCode}">수정</a>
+						<a href="${pageContext.request.contextPath}/notice/removeNotice?noticeCode=${n.noticeCode}">삭제</a>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

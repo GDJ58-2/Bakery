@@ -54,7 +54,7 @@ public class NoticeDao {
 	}
 	public ArrayList<Notice> selectNoticeList(Connection conn) throws Exception { // noticeList
 		ArrayList<Notice> list = new ArrayList<Notice>();
-		String sql = "";
+		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {

@@ -6,6 +6,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<h1>관리자 등급 추가</h1>
 	<form action="${pageContext.request.contextPath}/auth/addAuthInfo" method="post">
 		<div>
