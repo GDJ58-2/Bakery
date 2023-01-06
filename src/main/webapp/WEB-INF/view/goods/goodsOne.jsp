@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>goodsList.jsp</title>
+<title>goodsOne.jsp</title>
 </head>
 <body>
 	<h1>${map.goodsName}</h1>
@@ -14,11 +14,15 @@
 	</div>
 	<table border="1">
 		<tr>
-			<td rowspan="6">
+			<td rowspan="7">
 				<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
 			</td>
 			<th>상품 이름 : </th>
 			<td>${map.goodsName}</td>
+		</tr>
+		<tr>
+			<th>상품 종류 : </th>
+			<td>${map.categoryName}</td>
 		</tr>
 		<tr>
 			<th>상품 가격 : </th>
@@ -40,10 +44,16 @@
 			<th>출시 일자 : </th>
 			<td>${map.createdate}</td>
 		</tr>
+		<tr>
+			<td colspan="3">
+				<div>상품 설명 : </div>
+				<div>${map.goodsContent}</div>
+			</td>
+		</tr>
 	</table>
 	<div>
-		<a href="${pageContext.request.contextPath}/ModifyGoodsController">수정</a>
-		<a href="${pageContext.request.contextPath}/RemoveGoodsController">삭제</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${map.goodsCode}">수정</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
 </body>
 </html>

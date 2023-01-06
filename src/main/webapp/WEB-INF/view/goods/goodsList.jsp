@@ -28,20 +28,25 @@
 				
 				<td>
 					<div>
-						<a href="${pageContext.request.contextPath}/GoodsOneController?goodsCode=${m.goodsCode}">
+						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
 							<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
 						</a>
 					</div>
 					<div>
-						<a href="${pageContext.request.contextPath}/GoodsOneController?goodsCode=${m.goodsCode}">
+						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
 							${m.goodsName}
 						</a>
 					</div>
-					<a href="${pageContext.request.contextPath}/ModifyGoodsController">수정</a>
-					<a href="${pageContext.request.contextPath}/RemoveGoodsController">삭제</a>
+					<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${m.goodsCode}">수정</a>
+					<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${m.goodsCode}">삭제</a>
 				</td>
 			</c:forEach>
 		</tr>
 	</table>
+	<div>
+		<a href="${pageContext.request.contextPath}/admin/goods/addGoods">
+			상품 추가
+		</a>
+	</div>
 </body>
 </html>
