@@ -1,26 +1,25 @@
 package vo;
 
-public class goodsCategory {
+public class GoodsCategory {
 	private int categoryNo;
 	private String categoryKind;
 	private String categoryName;
 	private String createdate;
 	
-	public goodsCategory() {}
+	public GoodsCategory() {}
 	
-	public goodsCategory(int categoryNo, String categoryKind, String categoryName, String createdate) {
+	public GoodsCategory(int categoryNo, String categoryKind, String categoryName, String createdate) {
 		this.categoryNo = categoryNo;
 		this.categoryKind = categoryKind;
 		this.categoryName = categoryName;
 		this.createdate = createdate;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "goodsCategory [categoryNo=" + categoryNo + ", categoryKind=" + categoryKind + ", categoryName="
+		return "GoodsCategory [categoryNo=" + categoryNo + ", categoryKind=" + categoryKind + ", categoryName="
 				+ categoryName + ", createdate=" + createdate + "]";
 	}
-
 	public int getCategoryNo() {
 		return categoryNo;
 	}
