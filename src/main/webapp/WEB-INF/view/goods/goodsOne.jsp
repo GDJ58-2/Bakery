@@ -14,11 +14,15 @@
 	</div>
 	<table border="1">
 		<tr>
-			<td rowspan="6">
+			<td rowspan="7">
 				<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
 			</td>
 			<th>상품 이름 : </th>
 			<td>${map.goodsName}</td>
+		</tr>
+		<tr>
+			<th>상품 종류 : </th>
+			<td>${map.categoryName}</td>
 		</tr>
 		<tr>
 			<th>상품 가격 : </th>
@@ -39,6 +43,12 @@
 		<tr>
 			<th>출시 일자 : </th>
 			<td>${map.createdate}</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<div>상품 설명 : </div>
+				<div>${map.goodsContent}</div>
+			</td>
 		</tr>
 	</table>
 	<div>

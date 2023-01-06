@@ -15,7 +15,7 @@
 	<form action="${pageContext.request.contextPath}/admin/goods/removeGoods" method="post">
 		<table border="1">
 			<tr>
-				<td rowspan="8">
+				<td rowspan="9">
 					<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
 				</td>
 				<th>상품 코드 : </th>
@@ -23,6 +23,10 @@
 					${map.goodsCode}
 					<input type="hidden" name="goodsCode" value="${map.goodsCode}">
 				</td>
+			</tr>
+			<tr>
+				<th>상품 종류 : </th>
+				<td>${map.categoryKind} ${map.categoryName}</td>
 			</tr>
 			<tr>
 				<th>상품 이름 : </th>
@@ -54,6 +58,12 @@
 					<input type="password" name="empPw">
 				</td>
 			</tr>
+			<tr>
+			<td colspan="3">
+				<div>상품 설명 : </div>
+				<div>${map.goodsContent}</div>
+			</td>
+		</tr>
 		</table>
 		<button type="submit">상품삭제</button>
 	</form>

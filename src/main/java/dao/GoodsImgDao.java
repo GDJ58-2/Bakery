@@ -30,7 +30,7 @@ public class GoodsImgDao {
 		stmt.setString(3, goodsImg.getContentType());
 		stmt.setInt(4, goodsImg.getGoodsCode());
 		int row = stmt.executeUpdate();
-		
+		// System.out.println("row : " + row);
 		DBUtil.close(null, stmt, null);
 		
 		return row;

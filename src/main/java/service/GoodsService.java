@@ -151,9 +151,9 @@ public class GoodsService {
 		int row = 0;
 		try {
 			conn = DBUtil.getConnection();
-			row = goodsDao.deleteGoods(conn, goods);
+			row = goodsImgDao.deleteGoods(conn, goodsImg);
 			if(row == 1) {
-				row = goodsImgDao.deleteGoods(conn, goodsImg);
+				row = goodsDao.deleteGoods(conn, goods);
 				System.out.println("서비스 실행 성공");
 			} else {
 				System.out.println("서비스 실행 실패");

@@ -35,8 +35,10 @@ public class AddGoodsController extends HttpServlet {
 		DefaultFileRenamePolicy fp = new DefaultFileRenamePolicy();
 		MultipartRequest mreq = new MultipartRequest(request, dir, maxFileSize, "UTF-8", fp);
 		
+		int categoryNo = Integer.parseInt(mreq.getParameter("categoryNo"));
 		String goodsName = mreq.getParameter("goodsName");
 		int goodsPrice = Integer.parseInt(mreq.getParameter("goodsPrice"));
+		String goodsContent = mreq.getParameter("goodsContent");
 		int goodsStock = Integer.parseInt(mreq.getParameter("goodsStock"));
 		String empId = mreq.getParameter("empId");
 		int  hit = Integer.parseInt(mreq.getParameter("hit"));
@@ -51,8 +53,10 @@ public class AddGoodsController extends HttpServlet {
 			Goods goods = new Goods();
 			GoodsImg goodsImg = new GoodsImg();
 			
+			goods.setCategoryNo(categoryNo);
 			goods.setGoodsName(goodsName);
 			goods.setGoodsPrice(goodsPrice);
+			goods.setGoodsContent(goodsContent);
 			goods.setGoodsStock(goodsStock);
 			goods.setEmpId(empId);
 			goods.setHit(hit);
@@ -66,8 +70,10 @@ public class AddGoodsController extends HttpServlet {
 			
 			// 디버깅 코드
 			System.out.println("문자열 매개값 : ");
+			System.out.println("상품 종류 : " + categoryNo);
 			System.out.println("상품 이름 : " + goodsName);
 			System.out.println("상품 가격 : " + goodsPrice);
+			System.out.println("상품 내용 : " + goodsContent);
 			System.out.println("상품 재고 : " + goodsStock);
 			System.out.println("직원 아이디 : " + empId);
 			System.out.println("히트 : " + hit);
