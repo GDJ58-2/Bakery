@@ -16,8 +16,13 @@ public class ModifyEmpPwController extends HttpServlet {
 	private EmpService empService;
 	// modifyEmpPw form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//int empCode = Integer.parseInt(request.getParameter("empCode"));
-		int empCode = 2;
+		if(request.getParameter("empCode")==null||request.getParameter("empCode").equals("")) {
+			response.sendRedirect(request.getContextPath()+"/emp/empList");
+			return;
+		}
+		int empCode = Integer.parseInt(request.getParameter("empCode"));
+		//System.out.println(empCode+"<--ModifyEmpPwController empCode");
+		
 		this.empService = new EmpService();
 		Emp emp = empService.getEmpOne(empCode);
 		request.setAttribute("e", emp);
@@ -27,9 +32,14 @@ public class ModifyEmpPwController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String empId = request.getParameter("empId");
 		String empPw = request.getParameter("empPw");
+		if(empId==null||empId.equals("")||empPw==null||empPw.equals("")) {
+			response.sendRedirect(request.getContextPath()+"/emp/empList");
+			return;
+		}
 		Emp emp = new Emp();
 		emp.setEmpId(empId);
 		emp.setEmpPw(empPw);
+		
 		this.empService = new EmpService();
 		int row = empService.modifyEmpPw(emp);
 		System.out.println(row+"<--ModifyEmpPwController row");

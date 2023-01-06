@@ -9,15 +9,13 @@ import vo.Emp;
 public class EmpDao { 
 	public Emp selectIdPwByEmp(Connection conn, Emp paramEmp) throws Exception { // login session
 		Emp returnEmp = null;
-		String sql = "SELECT emp_id empId, emp_name empName FROM emp WHERE emp_id=? AND emp_pw = PASSWORD(?)";
+		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, auth_code authCode, active FROM emp WHERE emp_id=? AND emp_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, paramEmp.getEmpId());
 		stmt.setString(2, paramEmp.getEmpPw());
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
-			returnEmp = new Emp();
-			returnEmp.setEmpId(rs.getString("empId"));
-			returnEmp.setEmpName(rs.getString("empName"));
+			returnEmp = new Emp(rs.getInt("empCode"),rs.getString("empId"),null,rs.getString("empName"),rs.getString("active"),rs.getInt("authCode"),null);
 		}
 		DBUtil.close(rs, stmt, null);
 		return returnEmp;

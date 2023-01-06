@@ -14,7 +14,6 @@
 		<thead>
 			<tr>
 				<th>제목</th>
-				<th>내용</th>
 				<th>작성자</th>
 				<th>등록일</th>
 				<th>수정/삭제</th>
@@ -23,8 +22,7 @@
 		<tbody>
 			<c:forEach var="n" items="${noticeList}">
 				<tr>
-					<td>${n.noticeTitle}</td>
-					<td>${n.noticeContent}</td>
+					<td><a href="${pageContext.request.contextPath}/notice/noticeOne?noticeCode=${n.noticeCode}">${n.noticeTitle}</a></td>
 					<td>${n.empId}</td>
 					<td>${n.createdate}</td>
 					<td>

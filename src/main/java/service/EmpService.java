@@ -41,7 +41,7 @@ public class EmpService {
 		try {
 			conn = DBUtil.getConnection();
 			checkId = empDao.selectId(conn, emp.getEmpId());
-			if(checkId==true) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기 
+			if(checkId) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기 
 				throw new Exception();
 			}
 			row = empDao.insertEmp(conn, emp);
@@ -114,6 +114,9 @@ public class EmpService {
 		int row = 0;
 		this.empDao = new EmpDao();
 		Connection conn = null;
+		if(emp.getActive().equals("N")) { // 비활성화상태라면 관리자권한도 비활성화(0)
+			emp.setAuthCode(0);
+		}
 		try {
 			conn = DBUtil.getConnection();
 			row = empDao.updateEmpByAdmin(conn, emp);

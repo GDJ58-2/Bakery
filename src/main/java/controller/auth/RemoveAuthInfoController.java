@@ -15,7 +15,14 @@ public class RemoveAuthInfoController extends HttpServlet {
 	private AuthInfoService authInfoService;
 	// removeAuthInfo action
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 파라미터값 유효성검사, 받기
+		if(request.getParameter("authCode")==null||request.getParameter("authCode").equals("")) {
+			response.sendRedirect(request.getContextPath()+"/auth/authInfoList");
+			return;
+		}
 		int authCode = Integer.parseInt(request.getParameter("authCode"));
+		//System.out.println(authCode+"<--RemoveAuthInfoController authCode"); // 디버깅
+		
 		this.authInfoService = new AuthInfoService();
 		int row = authInfoService.removeAuthInfo(authCode);
 		System.out.println(row+"<--RemoveAuthInfoController row");

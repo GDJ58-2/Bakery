@@ -22,9 +22,14 @@ public class AddEmpController extends HttpServlet {
 	// addEmp action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8"); // 인코딩
+		// 파라메타값 유효성검사 , 파라메타값 저장
 		String empId = request.getParameter("empId");
 		String empPw = request.getParameter("empPw");
 		String empName = request.getParameter("empName");
+		if(empId==null||empId.equals("")||empPw==null||empPw.equals("")||empName==null||empName.equals("")) {
+			response.sendRedirect(request.getContextPath()+"/emp/empList");
+			return;
+		}
 		Emp emp = new Emp(); // request Parameter 값으로 바인딩
 		emp.setEmpId(empId);
 		emp.setEmpPw(empPw);

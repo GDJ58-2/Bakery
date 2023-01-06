@@ -8,8 +8,10 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<h1>수정</h1>
 	<form action="${pageContext.request.contextPath}/emp/modifyEmp" method="post">
 		<input type="hidden" name="empId" value="${e.empId}">
+		<input type="hidden" name="empCode" value="${e.empCode}">
 		<table border="1">
 			<thead>
 				<tr>
@@ -30,11 +32,11 @@
 						<input type="radio" name="active" value="N">N
 					</td>
 					<td>
-						<c:forEach var="a" items="${authInfoList}">
-							<select name="authCode">
+						<select name="authCode">
+							<c:forEach var="a" items="${authInfoList}">
 								<option value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
-							</select>
-						</c:forEach>
+							</c:forEach>
+						</select>
 					</td>
 				</tr>
 			</tbody>
