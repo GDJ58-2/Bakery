@@ -131,14 +131,14 @@ public class CustomerService {
 			conn = DBUtil.getConnection();
 			this.customerDao = new CustomerDao();
 		
-			boolean checkPw = customerDao.chechCustomerPw(conn, customer);
+			boolean checkPw = customerDao.checkCustomerPw(conn, newPw);
 			if(checkPw == true) { // pw 중복확인 : true이면 변경 불가한 비밀번호임
-				
+				System.out.println("CustomerService: true");
 			} else {
 				row = customerDao.customerUpdatePw(conn, newPw, customer); // 회원비밀번호 수정
-				int pwHistory = customerDao.customerNewPwHistory(conn, customer); // 비밀번호이력 입력
-				if(pwHistory == 1) {
-					System.out.println("CustomerService: pw_history 입력성공");
+				if(row == 1) {
+					System.out.println("CustomerService: pw 수정완료");
+					customerDao.customerNewPwHistory(conn, newPw, customer); // 비밀번호이력 입력
 				}
 			}
 			
@@ -149,7 +149,6 @@ public class CustomerService {
 				if(deleteHistory == 1) {
 					System.out.println("CustomerService: pw_history 삭제성공");
 				}
-				
 			}
 			conn.commit();
 		} catch(Exception e) {
@@ -170,7 +169,7 @@ public class CustomerService {
 	}
 	
 	// 회원탈퇴
-	public int deleteCustomer(Customer customer) {
+	public int removeCustomer(Customer customer) {
 		int row = 0;
 		Connection conn = null;
 		try {

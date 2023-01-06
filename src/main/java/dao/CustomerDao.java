@@ -31,7 +31,8 @@ public class CustomerDao {
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
 		}
-		DBUtil.close(rs, stmt, conn);
+		stmt.close();
+		rs.close();
 		return resultCustomer;
 	}
 	
@@ -40,14 +41,14 @@ public class CustomerDao {
 		int row = 0;
 		String sql = "INSERT INTO customer("
 				+ "customer_id, customer_pw, customer_name, customer_phone, point, createdate"
-				+ ") VALUES (?, ?, ?, ?, 0, NOW())"; // 가입시 포인트는 0
+				+ ") VALUES (?, PASSWORD(?), ?, ?, 0, NOW())"; // 가입시 포인트는 0
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		stmt.setString(3, customer.getCustomerName());
 		stmt.setString(4, customer.getCustomerPhone());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
@@ -63,14 +64,15 @@ public class CustomerDao {
 				+ "			UNION"
 				+ "			SELECT emp_id id"
 				+ "			FROM emp) i"
-				+ "WHERE i.id = ?";
+				+ " WHERE i.id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		ResultSet rs = stmt.executeQuery(); 
 		if(rs.next()) { // ture이면 아이디 중복
 			check = true;
 		}
-		DBUtil.close(rs, stmt, conn);
+		rs.close();
+		stmt.close();
 		return check;
 	}
 	
@@ -79,28 +81,28 @@ public class CustomerDao {
 		int row = 0;
 		String sql = "INSERT INTO pw_history("
 				+ "customer_id, pw, createdate"
-				+ ") VALUES (?, ?, CURDATE())";
+				+ ") VALUES (?, PASSWORD(?), NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
 	// 비밀번호 수정시 pw_history 테이블에 데이터입력
-		public int customerNewPwHistory(Connection conn, String newPw, Customer customer) throws Exception {
-			int row = 0;
-			String sql = "INSERT INTO pw_history("
-					+ "customer_id, pw, createdate"
-					+ ") VALUES (?, ?, CURDATE())";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, customer.getCustomerId());
-			stmt.setString(2, newPw);
-			row = stmt.executeUpdate();
-			DBUtil.close(null, stmt, conn);
-			return row;
-		}
+	public int customerNewPwHistory(Connection conn, String newPw, Customer customer) throws Exception {
+		int row = 0;
+		String sql = "INSERT INTO pw_history("
+				+ "customer_id, pw, createdate"
+				+ ") VALUES (?, PASSWORD(?), NOW())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customer.getCustomerId());
+		stmt.setString(2, newPw);
+		row = stmt.executeUpdate();
+		stmt.close();
+		return row;
+	}
 	
 	// 회원정보조회
 	public Customer selectOneCustomer(Connection conn, String customerId) throws Exception {
@@ -110,7 +112,7 @@ public class CustomerDao {
 				+ ", customer_name customerName"
 				+ ", customer_phone customerPhone"
 				+ ", point"
-				+ " FROM cusotmer"
+				+ " FROM customer"
 				+ " WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
@@ -119,11 +121,12 @@ public class CustomerDao {
 			resultCustomer = new Customer();
 			resultCustomer.setCustomerCode(rs.getInt("customerCode"));
 			resultCustomer.setCustomerId(rs.getString("customerId"));
-			resultCustomer.setCustomerName("customerName");
+			resultCustomer.setCustomerName(rs.getString("customerName"));
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
 		}
-		DBUtil.close(rs, stmt, conn);
+		rs.close();
+		stmt.close();
 		return resultCustomer;
 	}
 	
@@ -136,26 +139,28 @@ public class CustomerDao {
 				+ " WHERE customer_id = ? AND customer_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerName());
-		stmt.setString(2, customer.getCustomerId());
-		stmt.setString(3, customer.getCustomerPw());
+		stmt.setString(2, customer.getCustomerPhone());
+		stmt.setString(3, customer.getCustomerId());
+		stmt.setString(4, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
 	// 비밀번호 이력 조회
-	public boolean chechCustomerPw(Connection conn, Customer customer) throws Exception {
+	public boolean checkCustomerPw(Connection conn, String newPw) throws Exception {
 		boolean result = false;
 		String sql = "SELECT pw"
 				+ " FROM pw_history"
-				+ " WHERE customer_id = ?";
+				+ " WHERE pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
+		stmt.setString(1, newPw);
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			result = true; // 변경 불가능한 비밀번호
 		}
-		DBUtil.close(rs, stmt, conn);
+		rs.close();
+		stmt.close();
 		return result;
 	}
 	
@@ -170,7 +175,7 @@ public class CustomerDao {
 		stmt.setString(2, customer.getCustomerId());
 		stmt.setString(3, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
@@ -186,7 +191,8 @@ public class CustomerDao {
 		if(rs.next()) {
 			resultCnt = rs.getInt("cnt");
 		}
-		DBUtil.close(rs, stmt, conn);
+		rs.close();
+		stmt.close();
 		return resultCnt;
 	}
 	
@@ -200,7 +206,7 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
@@ -213,7 +219,7 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 	
@@ -226,7 +232,7 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, conn);
+		stmt.close();
 		return row;
 	}
 }
