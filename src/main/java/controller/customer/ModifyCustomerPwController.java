@@ -13,7 +13,7 @@ import service.CustomerService;
 
 @WebServlet("/customer/modifyCustomerPw")
 public class ModifyCustomerPwController extends HttpServlet {
-
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
@@ -38,15 +38,18 @@ public class ModifyCustomerPwController extends HttpServlet {
 		String pw = request.getParameter("pw");
 		String newPw = request.getParameter("newPw");
 		
+		//System.out.println("pw: " + pw);
+		//System.out.println("newPw: " + newPw);
+		
 		Customer customer = new Customer();
 		customer.setCustomerId(loginCustomer.getCustomerId());
 		customer.setCustomerPw(pw);
 		
+		//System.out.println(customer);
+		
 		CustomerService customerService = new CustomerService();
-		int result = customerService.modifyCustomerPw(newPw, customer);
-		if(result == 1) {
-			System.out.println("ModifyCustomerPwController: pw수정 완료");
-		}
+		customerService.modifyCustomerPw(newPw, customer);
+		//System.out.println("ModifyCustomerPwController: pw수정 완료");
 		response.sendRedirect(request.getContextPath() + "/customer/selectOneCustomer");
 	}
 }

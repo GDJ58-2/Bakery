@@ -131,19 +131,21 @@ public class CustomerService {
 			conn = DBUtil.getConnection();
 			this.customerDao = new CustomerDao();
 		
-			boolean checkPw = customerDao.checkCustomerPw(conn, newPw);
+			boolean checkPw = customerDao.checkCustomerPw(conn, newPw, customer);
 			if(checkPw == true) { // pw 중복확인 : true이면 변경 불가한 비밀번호임
-				System.out.println("CustomerService: true");
+				System.out.println("CustomerService: pw 변경불가");
 			} else {
 				row = customerDao.customerUpdatePw(conn, newPw, customer); // 회원비밀번호 수정
 				if(row == 1) {
 					System.out.println("CustomerService: pw 수정완료");
-					customerDao.customerNewPwHistory(conn, newPw, customer); // 비밀번호이력 입력
+					int insertHistory = customerDao.customerNewPwHistory(conn, newPw, customer); // 비밀번호이력 입력
+					System.out.println("CustomerService insertHistory: " + insertHistory);
 				}
 			}
 			
 			// pw_history 데이터 3개 이상이면 제일 오래된 데이터 삭제
 			int cnt = customerDao.cntPwhistory(conn, customer);
+			//System.out.println("CustomerService cnt: " + cnt);
 			if(cnt > 3) {
 				int deleteHistory = customerDao.deletePwHistory(conn, customer);
 				if(deleteHistory == 1) {

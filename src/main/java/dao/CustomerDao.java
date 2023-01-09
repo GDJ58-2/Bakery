@@ -3,8 +3,6 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
-
-import util.DBUtil;
 import vo.Customer;
 
 public class CustomerDao {
@@ -91,18 +89,18 @@ public class CustomerDao {
 	}
 	
 	// 비밀번호 수정시 pw_history 테이블에 데이터입력
-	public int customerNewPwHistory(Connection conn, String newPw, Customer customer) throws Exception {
-		int row = 0;
-		String sql = "INSERT INTO pw_history("
-				+ "customer_id, pw, createdate"
-				+ ") VALUES (?, PASSWORD(?), NOW())";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
-		stmt.setString(2, newPw);
-		row = stmt.executeUpdate();
-		stmt.close();
-		return row;
-	}
+		public int customerNewPwHistory(Connection conn, String newPw, Customer customer) throws Exception {
+			int row = 0;
+			String sql = "INSERT INTO pw_history("
+					+ "customer_id, pw, createdate"
+					+ ") VALUES (?, PASSWORD(?), NOW())";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, customer.getCustomerId());
+			stmt.setString(2, newPw);
+			row = stmt.executeUpdate();
+			stmt.close();
+			return row;
+		}
 	
 	// 회원정보조회
 	public Customer selectOneCustomer(Connection conn, String customerId) throws Exception {
@@ -148,13 +146,14 @@ public class CustomerDao {
 	}
 	
 	// 비밀번호 이력 조회
-	public boolean checkCustomerPw(Connection conn, String newPw) throws Exception {
+	public boolean checkCustomerPw(Connection conn, String newPw, Customer customer) throws Exception {
 		boolean result = false;
 		String sql = "SELECT pw"
 				+ " FROM pw_history"
-				+ " WHERE pw = PASSWORD(?)";
+				+ " WHERE pw = PASSWORD(?) AND customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, newPw);
+		stmt.setString(2, customer.getCustomerId());
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			result = true; // 변경 불가능한 비밀번호
@@ -191,6 +190,7 @@ public class CustomerDao {
 		if(rs.next()) {
 			resultCnt = rs.getInt("cnt");
 		}
+		//System.out.println("CustomerDao cnt: " + resultCnt);
 		rs.close();
 		stmt.close();
 		return resultCnt;
@@ -202,7 +202,7 @@ public class CustomerDao {
 		String sql = "DELETE FROM pw_history"
 				+ "	WHERE createdate IN (SELECT MIN(createdate)"
 				+ "						FROM pw_history"
-				+ "						WHERE customer_id = ?";
+				+ "						WHERE customer_id = ?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
