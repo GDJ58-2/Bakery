@@ -7,6 +7,10 @@
 </head>
 <body>
 	<h1>상품 등록</h1>
+	<br>
+	<div style="color:red;">
+	${msg}
+	</div>
 	<form action="${pageContext.request.contextPath}/admin/goods/addGoods" method="post" enctype="multipart/form-data">
 		<table border="1">
 			<tr>
