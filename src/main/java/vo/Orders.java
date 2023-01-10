@@ -31,7 +31,10 @@ public class Orders {
 				+ ", addressCode=" + addressCode + ", orderQuantity=" + orderQuantity + ", orderPrice=" + orderPrice
 				+ ", orderState=" + orderState + ", createdate=" + createdate + "]";
 	}
-
+	public int getOrderCode() {
+		return orderCode;
+	}
+	
 	public void setOrderCode(int orderCode) {
 		this.orderCode = orderCode;
 	}

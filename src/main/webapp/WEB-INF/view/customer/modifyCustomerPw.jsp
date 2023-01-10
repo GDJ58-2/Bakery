@@ -19,5 +19,11 @@
 		</div>
 		<button type = "submit" id = "modifyPwBtn">비밀번호변경</button>
 	</form>
+	
+	<div>
+		<a href = "${pageContext.request.contextPath}/customer/home">
+			home
+		</a>
+	</div>
 </body>
 </html>
