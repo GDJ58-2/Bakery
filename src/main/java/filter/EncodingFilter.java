@@ -20,7 +20,8 @@ public class EncodingFilter extends HttpFilter implements Filter {
 			HttpServletRequest req = (HttpServletRequest)request;
 			if(req.getMethod().equals("POST")) {
 				request.setCharacterEncoding("UTF-8");
-				System.out.println("인코딩 UTF-8 필터");
+				// 디버깅 코드
+				// System.out.println("인코딩 UTF-8 필터");
 			}
 		}
 		chain.doFilter(request, response);

@@ -2,6 +2,8 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import dao.CustomerAddressDao;
 import dao.OrdersDao;
@@ -15,6 +17,62 @@ public class OrdersService {
 	private PointHistoryDao pointHistoryDao;
 	private OrdersDao ordersDao;
 	private CustomerAddressDao customerAddressDao;
+	
+	// GET
+	// 회원의 주문 내역
+	public ArrayList<HashMap<String, Object>> getOrdersList(String customerId){
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.ordersDao = new OrdersDao();
+			list = ordersDao.selectOrdersList(conn, customerId);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 회원의 주문 상세보기
+	public HashMap<String, Object> getOrdersOne(int orderCode) {
+		HashMap<String, Object> map = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			this.ordersDao = new OrdersDao();
+			map = ordersDao.selectOrdersOne(conn, orderCode);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
+	
+	// ADD
 	public int addOrders(Orders orders, CustomerAddress address, int paramUsePoint) { // 주문
 		int orderCode = 0;
 		this.pointHistoryDao = new PointHistoryDao();
@@ -49,6 +107,8 @@ public class OrdersService {
 		}
 		return orderCode;
 	}
+	
+	// UPDATE
 	public int modifyOrdersByAdmin(Orders orders) { // 주문수정-관리자
 		int row = 0;
 		this.ordersDao = new OrdersDao();
@@ -80,6 +140,7 @@ public class OrdersService {
 		}
 		return row;
 	}
+	
 	public int modifyOrdersByCustomer(Orders orders) { // 주문수정- 고객
 		int row = 0;
 		this.ordersDao = new OrdersDao();
