@@ -113,7 +113,7 @@ public class RemoveQuestionController extends HttpServlet {
 	    	msg = URLEncoder.encode("삭제에 실패하였습니다.", "utf-8");
 			
 			// View
-	    	response.sendRedirect(request.getContextPath()+"/admin/goods/removeQuestion?questionCode="+questionCode+"&msg="+msg);
+	    	response.sendRedirect(request.getContextPath()+"/question/removeQuestion?questionCode="+questionCode+"&msg="+msg);
 	    }
 	}
 }

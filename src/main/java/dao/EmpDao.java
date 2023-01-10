@@ -68,6 +68,9 @@ public class EmpDao {
 		stmt.setString(1, emp.getActive());
 		stmt.setInt(2, emp.getAuthCode());
 		stmt.setString(3, emp.getEmpId());
+		System.out.println(emp.getActive());
+		System.out.println(emp.getAuthCode());
+		System.out.println( emp.getEmpId());
 		row=stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
@@ -84,10 +87,9 @@ public class EmpDao {
 		DBUtil.close(rs, stmt, null);
 		return emp;
 	}
-	// ----------페이징, 정렬
 	public ArrayList<Emp> selectEmpListByAdmin(Connection conn) throws Exception { // empList
 		ArrayList<Emp> list = new ArrayList<Emp>();
-		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, active, auth_code authCode, createdate FROM emp";
+		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, active, a.auth_code authCode, a.auth_memo authMemo, e.createdate FROM emp e INNER JOIN auth_info a ON e.auth_code=a.auth_code ORDER BY active ASC, e.auth_code DESC";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {

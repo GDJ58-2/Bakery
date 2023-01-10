@@ -52,10 +52,13 @@ public class NoticeDao {
 		DBUtil.close(rs, stmt, null);
 		return notice;
 	}
-	public ArrayList<Notice> selectNoticeList(Connection conn) throws Exception { // noticeList
+	public ArrayList<Notice> selectNoticeList(Connection conn, String search, int beginRow, int rowPerPage) throws Exception { // noticeList
 		ArrayList<Notice> list = new ArrayList<Notice>();
-		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice";
+		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice WHERE notice_title LIKE ? ORDER BY createdate DESC LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+search+"%");
+		stmt.setInt(2, beginRow);
+		stmt.setInt(3, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			Notice notice = new Notice(rs.getInt("noticeCode"),rs.getString("noticeTitle"),rs.getString("noticeContent"),rs.getString("empId"),rs.getString("createdate"));

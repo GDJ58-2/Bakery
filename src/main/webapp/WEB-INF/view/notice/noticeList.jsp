@@ -10,6 +10,16 @@
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
 	<h1>noticeList</h1>
 	<a href="${pageContext.request.contextPath}/notice/addNotice">추가</a>
+	<!-- 검색창 -->
+	<form action="${pageContext.request.contextPath}/notice/noticeList">
+		<input type="text" name="search" value="${search}">
+		<button type="submit">검색</button>
+		<select name="rowPerPage">
+			<option value=10>10</option>
+			<option value=20>20</option>
+			<option value=30>30</option>
+		</select>
+	</form>
 	<table border="1">
 		<thead>
 			<tr>
@@ -33,5 +43,7 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${currentPage-1}&rowPerPage=${rowPerPage}&search=${search}">이전</a>
+	<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${currentPage+1}&rowPerPage=${rowPerPage}&search=${search}">다음</a>
 </body>
 </html>

@@ -107,13 +107,22 @@ public class NoticeService {
 		}
 		return notice;
 	}
-	public ArrayList<Notice> getNoticeList() { // noticeList 출력
+	public ArrayList<Notice> getNoticeList(String search, int currentPage, int rowPerPage) { // noticeList 출력
 		ArrayList<Notice> list = null;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
+		if(search==null) {
+			search="";
+		}
+		int beginRow = (currentPage-1)*rowPerPage;
+		/*
+		System.out.println(beginRow);
+		System.out.println(currentPage);
+		System.out.println(rowPerPage);
+		*/
 		try {
 			conn = DBUtil.getConnection();
-			list = noticeDao.selectNoticeList(conn);
+			list = noticeDao.selectNoticeList(conn, search, beginRow, rowPerPage);
 			conn.commit();
 		} catch (Exception e) {
 			try {

@@ -16,7 +16,11 @@
 			<button type = "button" id = "selectBtn">회원정보</button>
 		</a>
 	</div>
-	
+	<div>
+		<a href = "${pageContext.request.contextPath}/question/questionList">
+			<button type = "button" id = "selectBtn">내 문의내역</button>
+		</a>
+	</div>
 	<!-- 로그아웃 -->
 	<div>
 		<a href = "${pageContext.request.contextPath}/customer/logout">

@@ -117,6 +117,9 @@ public class EmpService {
 		if(emp.getActive().equals("N")) { // 비활성화상태라면 관리자권한도 비활성화(0)
 			emp.setAuthCode(0);
 		}
+		if(emp.getAuthCode()==0) { 
+			emp.setActive("N");
+		}
 		try {
 			conn = DBUtil.getConnection();
 			row = empDao.updateEmpByAdmin(conn, emp);

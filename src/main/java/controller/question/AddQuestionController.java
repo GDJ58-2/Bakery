@@ -34,6 +34,7 @@ public class AddQuestionController extends HttpServlet {
 		
 		int orderCode = 0;
 		// 방어코드
+		
 		if(request.getParameter("orderCode") == null || (request.getParameter("orderCode")).equals("")) {
 			response.sendRedirect(request.getContextPath()+"/question/questionList");
 			return;

@@ -1,7 +1,7 @@
 package controller.question;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,9 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.GoodsService;
+import service.QuestionCommentService;
 import service.QuestionService;
 import vo.Question;
+import vo.QuestionComment;
 
 @WebServlet("/question/questionOne")
 public class QuestionOneController extends HttpServlet {
@@ -51,6 +52,12 @@ public class QuestionOneController extends HttpServlet {
 		question = questionService.getQuestionOne(questionCode);
 	    
 		request.setAttribute("question", question);
+		
+		QuestionCommentService qcs = new QuestionCommentService();
+		ArrayList<QuestionComment> list = qcs.getCommentList(questionCode);
+		
+		request.setAttribute("commentList", list);
+		//System.out.println(list+"<--QuestionOneController list");
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/question/questionOne.jsp");

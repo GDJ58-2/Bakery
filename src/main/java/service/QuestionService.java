@@ -3,22 +3,28 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import dao.QuestionCommentDao;
 import dao.QuestionDao;
 import util.DBUtil;
 import vo.Question;
 
 public class QuestionService {
 	private QuestionDao questionDao;
+	private QuestionCommentDao questionCommentDao;
 	// GET
 	// 리스트
-	public ArrayList<Question> getQuestionList() {
-		ArrayList<Question> list = null;
+	public ArrayList<HashMap<String, Object>> getQuestionList(String customerId) {
+		ArrayList<HashMap<String, Object>> list = null;
 		this.questionDao = new QuestionDao();
 		Connection conn = null;
+		if(customerId==null||customerId.equals("")) { // 관리자 - questionList 모두 출력
+			customerId = "%%";
+		}
 		try {
 			conn = DBUtil.getConnection();
-			list = questionDao.selectQuestionList(conn);
+			list = questionDao.selectQuestionList(conn, customerId);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -120,9 +126,14 @@ public class QuestionService {
 	public int removeQuestion(int questionCode) {
 		int row = 0;
 		this.questionDao = new QuestionDao();
+		this.questionCommentDao = new QuestionCommentDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
+			int count = questionCommentDao.selectCommentCount(conn, questionCode);
+			if(count!=0) {
+				return row;
+			}
 			row = questionDao.deleteQuestion(conn, questionCode);
 			conn.commit();
 		} catch (Exception e) {
