@@ -18,7 +18,7 @@ public class SiteCounterDao {
 	public void updateCounter() throws Exception {
 		Connection conn = DriverManager.getConnection("jdbc:mariadb://localhost:3306/shop", "root", "java1234");
 		String sql = "UPDATE site_counter SET counter_num = counter_num + 1"
-					+ "	WHERE counter_date = CUREDATE()";
+					+ "	WHERE counter_date = CURDATE()";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.executeUpdate();
 	}
