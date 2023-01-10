@@ -12,7 +12,7 @@
 	<div style="color:red;">
 	${msg}
 	</div>
-	<form action="${pageContext.request.contextPath}/question/addQuestion">
+	<form action="${pageContext.request.contextPath}/question/addQuestion" method="post">
 		<table border="1">
 			<tr>
 				<th>주문 번호 : </th>
@@ -24,10 +24,10 @@
 				<th>문의 종류</th>
 				<td>
 					<select name="category">
-						<option>배송</option>
-						<option>반품</option>
-						<option>교환</option>
-						<option>기타</option>
+						<option value="배송">배송</option>
+						<option value="반품">반품</option>
+						<option value="교환">교환</option>
+						<option value="기타">기타</option>
 					</select>
 				</td>
 			</tr>

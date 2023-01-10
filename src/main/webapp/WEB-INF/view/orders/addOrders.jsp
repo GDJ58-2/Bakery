@@ -27,7 +27,7 @@
 			</tr>
 			<tr>
 				<td>포인트 적립 5%</td>
-				<td><input type="text" name="saveupPoint" value="100"></td>
+				<td><input type="number" name="saveupPoint" value="${g.goodsPrice*g.cartQuantity/20}" id="point"></td>
 			</tr>
 			<tr>
 				<td>총 가격</td>

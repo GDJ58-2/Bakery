@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.DBUtil;
 import vo.Question;
@@ -11,18 +12,30 @@ import vo.Question;
 public class QuestionDao {
 	// SELECT
 	// 리스트
-	public ArrayList<Question> selectQuestionList(Connection conn) throws Exception {
-		ArrayList<Question> list = new ArrayList<Question>();
-		String sql = "SELECT question_code questionCode, order_code orderCode, category, question_memo questionMemo, createdate FROM question";
+	public ArrayList<HashMap<String, Object>> selectQuestionList(Connection conn, String customerId) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT q.question_code questionCode, q.category category, q.question_memo questionMemo, q.createdate, qc.comment_code commentCode, o.customer_id customerId, o.order_state orderState, o.order_code orderCode"
+				+ "		FROM question q"
+				+ "	LEFT JOIN question_comment qc"
+				+ "		ON q.question_code=qc.question_code"
+				+ "		INNER JOIN orders o"
+				+ "		WHERE o.customer_id LIKE ?"	
+				+ "		GROUP BY q.question_code "
+				+ "		ORDER BY qc.createdate ASC, q.createdate DESC";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
-			Question question = new Question();
-			question.setQuestionCode(rs.getInt("questionCode"));
-			question.setOrderCode(rs.getInt("orderCode"));
-			question.setCategory(rs.getString("category"));
-			question.setQuestionMemo(rs.getString("questionMemo"));
-			question.setCreatedate(rs.getString("createdate"));
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("questionCode", rs.getInt("questionCode"));
+			map.put("category", rs.getString("category"));
+			map.put("questionMemo", rs.getString("questionMemo"));
+			map.put("createdate", rs.getString("createdate"));
+			map.put("commentCode", rs.getInt("commentCode"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("orderState", rs.getString("orderState"));
+			map.put("orderCode", rs.getInt("orderCode"));
+			list.add(map);
 		}
 		DBUtil.close(rs, stmt, null);
 		return list;
