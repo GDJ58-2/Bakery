@@ -4,11 +4,92 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.DBUtil;
 import vo.Orders;
 
 public class OrdersDao {
+	// SELECT
+	// 회원의 주문 내역
+	public ArrayList<HashMap<String, Object>> selectOrdersList(Connection conn, String customerId) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename, g.origin_name originName\r\n"
+				+ "	FROM orders o INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename, img.origin_name\r\n"
+				+ "										FROM goods g INNER JOIN goods_img img\r\n"
+				+ "											ON g.goods_code = img.goods_code) g\r\n"
+				+ "		ON o.goods_code = g.goods_code"
+				+ " WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("orderCode", rs.getInt("orderCode"));
+			map.put("goodsCode", rs.getInt("goodsCode"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("addressCode", rs.getInt("addressCode"));
+			map.put("orderQuantity", rs.getInt("orderQuantity"));
+			map.put("orderPrice", rs.getInt("orderPrice"));
+			map.put("orderState", rs.getString("orderState"));
+			map.put("createdate", rs.getString("createdate"));
+			map.put("goodsName", rs.getString("goodsName"));
+			map.put("fileName", rs.getString("fileName"));
+			map.put("originName", rs.getString("originName"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
+	// 회원의 주문 상세보기
+	public HashMap<String, Object> selectOrdersOne(Connection conn, int orderCode) throws Exception {
+		HashMap<String, Object> map = null;
+		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, o.customer_code customerCode, o.customer_name customerName, o.customer_phone customerPhone, o.address address, g.goods_code goodsCode, g.category_no categoryNo, g.category_kind categoryKind, g.category_name categoryName, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_content goodsContent, g.goods_stock goodsStock, g.emp_id empId, g.hit hit, g.filename filename, g.origin_name originName\r\n"
+				+ "	FROM (SELECT o.order_code, o.goods_code, o.customer_Id, o.address_code, o.order_quantity, o.order_price, o.order_state, o.createdate, c.customer_code, c.customer_name, c.customer_phone, c.address \r\n"
+				+ "				FROM (SELECT c.customer_code, c.customer_id, c.customer_name, c.customer_phone, ca.address_code, ca.address\r\n"
+				+ "							FROM customer c INNER JOIN customer_address ca\r\n"
+				+ "								ON c.customer_id = ca.customer_id) c INNER JOIN orders o \r\n"
+				+ "					ON	o.customer_id = c.customer_id) o INNER JOIN (SELECT g.goods_code, g.category_no, g.category_kind, g.category_name, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, img.filename, img.origin_name\r\n"
+				+ "																						FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.createdate, c.category_kind, c.category_name\r\n"
+				+ "				   																			FROM goods g INNER JOIN goods_category c\r\n"
+				+ "				   																				ON g.category_no = c.category_no) g INNER JOIN goods_img img\r\n"
+				+ "																			 		  	ON g.goods_code = img.goods_code) g\r\n"
+				+ "		ON o.goods_code = g.goods_code\r\n"
+				+ "	WHERE o.order_code = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, orderCode);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			map = new HashMap<String, Object>();
+			map.put("orderCode", rs.getInt("orderCode"));
+			map.put("goodsCode", rs.getInt("goodsCode"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("addressCode", rs.getInt("addressCode"));
+			map.put("orderQuantity", rs.getInt("orderQuantity"));
+			map.put("orderPrice", rs.getInt("orderPrice"));
+			map.put("orderState", rs.getString("orderState"));
+			map.put("createdate", rs.getString("createdate"));
+			map.put("customerCode", rs.getInt("customerCode"));
+			map.put("customerName", rs.getString("customerName"));
+			map.put("customerPhone", rs.getString("customerPhone"));
+			map.put("address", rs.getString("address"));
+			map.put("categoryNo", rs.getInt("categoryNo"));
+			map.put("categoryName", rs.getString("categoryName"));
+			map.put("goodsName", rs.getString("goodsName"));
+			map.put("goodsPrice", rs.getString("goodsPrice"));
+			map.put("goodsStock", rs.getInt("goodsStock"));
+			map.put("empId", rs.getString("empId"));
+			map.put("hit", rs.getInt("hit"));
+			map.put("filename", rs.getString("filename"));
+			map.put("originName", rs.getString("originName"));
+		}
+		DBUtil.close(rs, stmt, null);
+		return map;
+	}
+	
+	// INSERT
 	public int insertOrders(Connection conn, Orders orders) throws Exception { // addOrders
 		int orderCode = 0;
 		String sql = "INSERT INTO orders(goods_code,customer_id,address_code,order_quantity,order_price,order_state,createdate) VALUES(?,?,?,?,?,?,NOW())";
@@ -27,6 +108,8 @@ public class OrdersDao {
 		DBUtil.close(null, stmt, null);
 		return orderCode;
 	}
+	
+	// UPDATE
 	public int updateOrdersByCustomer(Connection conn, Orders orders) throws Exception { // 주문자 취소, 구매확정
 		int row = 0;
 		String sql = "UPDATE orders SET order_state=? WHERE order_code=?";

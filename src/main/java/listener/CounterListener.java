@@ -4,11 +4,11 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import dao.SiteCounterDao;
+import service.SiteCounterService;
 
 @WebListener
 public class CounterListener implements HttpSessionListener {
-	private SiteCounterDao siteCounterDao;
+	private SiteCounterService siteCounterService;
 	
 	// 세션이 생성될때
     public void sessionCreated(HttpSessionEvent se)  { 
@@ -19,13 +19,13 @@ public class CounterListener implements HttpSessionListener {
     	System.out.println("세션생성 currentCount : "+ se.getSession().getServletContext().getAttribute("currentCount"));
     	
     	// 전체 or 날짜별 접속자 수 -> db가 필용
-    	siteCounterDao = new SiteCounterDao();
+    	siteCounterService = new SiteCounterService();
     	try {
-	    	int todayCount = siteCounterDao.selectTodayCount();
+	    	int todayCount = siteCounterService.getTodayCount();
 	    	if(todayCount == 0) { // 오늘 첫 접속자
-	    		siteCounterDao.insertCounter();
+	    		siteCounterService.addCount();
 	    	} else { // 오늘 첫 접속자 아님
-	    		siteCounterDao.updateCounter();
+	    		siteCounterService.modifyCount();
 	    	} 
     	} catch(Exception e) {
     		e.printStackTrace();
