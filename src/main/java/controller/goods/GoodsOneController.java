@@ -1,6 +1,7 @@
 package controller.goods;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import service.GoodsService;
+import service.ReviewService;
 import vo.Goods;
 
 @WebServlet("/goods/goodsOne")
@@ -51,6 +53,12 @@ public class GoodsOneController extends HttpServlet {
 		map = goodsService.getGoodsOne(goodsCode);
 	    
 		request.setAttribute("map", map);
+		
+		// 리뷰글보기
+		ReviewService reviewService = new ReviewService();
+		ArrayList<HashMap<String, Object>> list = reviewService.getReviewList(goodsCode);
+		request.setAttribute("list", list);
+		
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/goods/goodsOne.jsp");

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import vo.Customer;
+import util.DBUtil;
 
 public class CustomerDao {
 	
@@ -29,8 +30,7 @@ public class CustomerDao {
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
 		}
-		stmt.close();
-		rs.close();
+		DBUtil.close(rs, stmt, null);
 		return resultCustomer;
 	}
 	
@@ -46,7 +46,7 @@ public class CustomerDao {
 		stmt.setString(3, customer.getCustomerName());
 		stmt.setString(4, customer.getCustomerPhone());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -69,8 +69,7 @@ public class CustomerDao {
 		if(rs.next()) { // ture이면 아이디 중복
 			check = true;
 		}
-		rs.close();
-		stmt.close();
+		DBUtil.close(rs, stmt, null);
 		return check;
 	}
 	
@@ -84,7 +83,7 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -98,7 +97,7 @@ public class CustomerDao {
 			stmt.setString(1, customer.getCustomerId());
 			stmt.setString(2, newPw);
 			row = stmt.executeUpdate();
-			stmt.close();
+			DBUtil.close(null, stmt, null);
 			return row;
 		}
 	
@@ -123,8 +122,7 @@ public class CustomerDao {
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
 		}
-		rs.close();
-		stmt.close();
+		DBUtil.close(rs, stmt, null);
 		return resultCustomer;
 	}
 	
@@ -141,7 +139,7 @@ public class CustomerDao {
 		stmt.setString(3, customer.getCustomerId());
 		stmt.setString(4, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -158,8 +156,7 @@ public class CustomerDao {
 		if(rs.next()) {
 			result = true; // 변경 불가능한 비밀번호
 		}
-		rs.close();
-		stmt.close();
+		DBUtil.close(rs, stmt, null);
 		return result;
 	}
 	
@@ -174,7 +171,7 @@ public class CustomerDao {
 		stmt.setString(2, customer.getCustomerId());
 		stmt.setString(3, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -191,8 +188,7 @@ public class CustomerDao {
 			resultCnt = rs.getInt("cnt");
 		}
 		//System.out.println("CustomerDao cnt: " + resultCnt);
-		rs.close();
-		stmt.close();
+		DBUtil.close(rs, stmt, null);
 		return resultCnt;
 	}
 	
@@ -206,7 +202,7 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -219,7 +215,7 @@ public class CustomerDao {
 		stmt.setString(1, customer.getCustomerId());
 		stmt.setString(2, customer.getCustomerPw());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
@@ -232,7 +228,7 @@ public class CustomerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
-		stmt.close();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
 }

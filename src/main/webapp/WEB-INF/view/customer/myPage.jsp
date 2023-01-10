@@ -22,6 +22,11 @@
 			<td>${selectOneCustomer.customerPhone}</td>
 		</tr>
 	</table>
+	<div>
+		<a href = "${pageContext.request.contextPath}/review/reviewList">
+			내 리뷰 관리
+		</a>
+	</div>
 	<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">
 		<button type = "button" id = modifyBtn>회원정보수정</button> 
 	</a>
@@ -31,5 +36,11 @@
 	<a href = "${pageContext.request.contextPath}/customer/removeCustomer">
 		<button type = "button" id = removeBtn>회원탈퇴</button> 
 	</a>
+	
+	<div>
+		<a href = "${pageContext.request.contextPath}/customer/home">
+			home
+		</a>
+	</div>
 </body>
 </html>

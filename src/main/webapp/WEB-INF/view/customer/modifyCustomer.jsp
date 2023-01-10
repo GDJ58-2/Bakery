@@ -37,5 +37,11 @@
 		</table>
 		<button type = "submit" id = "modifyBtn">정보수정</button>
 	</form>
+	
+	<div>
+		<a href = "${pageContext.request.contextPath}/customer/home">
+			home
+		</a>
+	</div>
 </body>
 </html>

@@ -55,5 +55,14 @@
 		<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${map.goodsCode}">수정</a>
 		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
+	
+	<div>
+		<c:forEach var = "m" items = "${list}" varStatus = "i">
+		<tr>
+			<td>${m.customerId}</td>
+			<td>${m.reviewMemo}</td>
+		</tr>
+		</c:forEach>
+	</div>
 </body>
 </html>
