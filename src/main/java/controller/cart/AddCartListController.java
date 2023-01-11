@@ -12,7 +12,7 @@ import java.util.HashMap;
 import vo.Customer;
 import vo.Cart;
 import service.CartService;
-
+import service.GoodsService;
 @WebServlet("/cart/addCart")
 public class AddCartListController extends HttpServlet {
 	
@@ -22,11 +22,11 @@ public class AddCartListController extends HttpServlet {
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
 		ArrayList<HashMap<String, Object>> list = null;
 		Cart cart = null;
-		//String customerId = "user";
 		int goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
-		String goodsName = request.getParameter("goodsName");
-		int goodsPrice = 3000;
-		//int goodsPrice = Integer.parseInt(request.getParameter("goodsPrice"));
+		GoodsService goodsService = new GoodsService(); 
+		HashMap<String, Object> goodsOne = goodsService.getGoodsOne(goodsCode); // goodsCode로 goods정보 얻기
+		String goodsName = (String)goodsOne.get("goodsName");
+		int goodsPrice = (int)goodsOne.get("goodsPrice");
 		//int goodsQuantity = Integer.parseInt(request.getParameter("goodsQuantity"));
 		int goodsQuantity = 1;
 		System.out.println("goodsCode:"+goodsCode+"goodsName:"+goodsName);
