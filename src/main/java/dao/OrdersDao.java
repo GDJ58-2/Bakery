@@ -122,7 +122,7 @@ public class OrdersDao {
 	}
 	public int updateOrdersByAdmin(Connection conn, Orders orders) throws Exception { // modifyOrders
 		int row = 0;
-		String sql = "UPDATE orders SET order_quantity=?, order_price=? order_state=? WHERE order_code=?";
+		String sql = "UPDATE orders SET order_quantity=?, order_price=?, order_state=? WHERE order_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, orders.getOrderQuantity());
 		stmt.setInt(2, orders.getOrderPrice());

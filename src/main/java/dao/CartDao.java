@@ -3,10 +3,12 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import vo.Cart;
+
 import util.DBUtil;
+import vo.Cart;
 
 public class CartDao {
 	
@@ -85,7 +87,17 @@ public class CartDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	
+	public int updateCartsQuantity(Connection conn, Cart cart) throws Exception {
+		int row = 0;
+		String sql = "UPDATE cart SEt cart_quantity=? WHERE customer_id=? AND goods_code=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, cart.getCartQuantity());
+		stmt.setString(2, cart.getCustomerId());
+		stmt.setInt(3, cart.getGoodsCode());
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
 	// 장바구니 삭제하기
 	public int deleteCartList(Connection conn, Cart cart) throws Exception {
 		int row = 0;
@@ -95,5 +107,44 @@ public class CartDao {
 		stmt.setInt(2, cart.getGoodsCode());
 		row = stmt.executeUpdate();
 		return row;
+	}
+	// 최종적으로 결제하기 전 주문리스트
+	public ArrayList<HashMap<String, Object>> selectCartList(Connection conn, String customerId, int[] goodsCode) throws Exception {
+		ArrayList<HashMap<String, Object>> list= new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT c.goods_code goodsCode"
+				+ "			, g.goods_name goodsName"
+				+ "			, g.goods_price goodsPrice"
+				+ "			, c.customer_id customerId"
+				+ "			, c.cart_quantity cartQuantity"
+				+ "			, c.createdate"
+				+ "		FROM cart c"
+				+ "		INNER JOIN goods g"
+				+ "		ON c.goods_code = g.goods_code"
+				+ "		WHERE c.customer_id = ?"
+				+ "		AND c.goods_code = ?";
+		String sqlWhere = " OR c.goods_code=?";
+		for(int i=0; i<goodsCode.length-1; i++) {
+			sql+=sqlWhere;
+		}
+		System.out.println(sql);
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		for(int i=0; i<goodsCode.length; i++) {
+			stmt.setInt(i+2, goodsCode[i]);
+			System.out.println(i+2+","+ goodsCode[i]);
+		}
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("goodsCode", rs.getInt("goodsCode"));
+			map.put("goodsName", rs.getString("goodsName"));
+			map.put("goodsPrice", rs.getInt("goodsPrice"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("cartQuantity", rs.getInt("cartQuantity"));
+			map.put("createdate", rs.getString("createdate"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
 	}
 }

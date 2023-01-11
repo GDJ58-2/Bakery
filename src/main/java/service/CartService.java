@@ -50,7 +50,30 @@ public class CartService {
 		}
 		return row; 
 	}
-	
+	// 장바구니 수량 변경
+	public int modifyCart(Cart cart) {
+		int row = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.cartDao = new CartDao();
+			cartDao.updateCartsQuantity(conn, cart);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
 	// 장바구니 목록 불러오기 
 	public ArrayList<HashMap<String, Object>> selectCartList(String customerId) {
 		ArrayList<HashMap<String, Object>> list = null;
@@ -104,5 +127,30 @@ public class CartService {
 			}
 		}
 		return row; 
+	}
+	// 최종적으로 결제하기 전 주문리스트
+	public ArrayList<HashMap<String, Object>> selectCartList(String customerId, int[] goodsCode) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.cartDao = new CartDao();
+			list = cartDao.selectCartList(conn, customerId, goodsCode);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 }
