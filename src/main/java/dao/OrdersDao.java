@@ -35,7 +35,7 @@ public class OrdersDao {
 			map.put("orderState", rs.getString("orderState"));
 			map.put("createdate", rs.getString("createdate"));
 			map.put("goodsName", rs.getString("goodsName"));
-			map.put("fileName", rs.getString("fileName"));
+			map.put("filename", rs.getString("filename"));
 			map.put("originName", rs.getString("originName"));
 			list.add(map);
 		}
