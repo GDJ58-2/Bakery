@@ -29,7 +29,7 @@ public class AddCartListController extends HttpServlet {
 		int goodsPrice = (int)goodsOne.get("goodsPrice");
 		//int goodsQuantity = Integer.parseInt(request.getParameter("goodsQuantity"));
 		int goodsQuantity = 1;
-		System.out.println("goodsCode:"+goodsCode+"goodsName:"+goodsName);
+		//System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 			if(list == null) { // 장바구니가 비어있을 때
@@ -50,6 +50,14 @@ public class AddCartListController extends HttpServlet {
 					if(goodsCode == codeNum) {
 						map.put("goodsQuantity", quantity + goodsQuantity);
 					}
+				}
+				if(codeNum != goodsCode) {
+					HashMap<String, Object> map2 = new HashMap<String, Object>();
+					map2.put("goodsCode", goodsCode);
+					map2.put("goodsName", goodsName);
+					map2.put("goodsPrice", goodsPrice);
+					map2.put("goodsQuantity", goodsQuantity);
+					list.add(map2);
 				}
 			}
 			System.out.println("AddCartListController: 비회원장바구니담기 완료");
