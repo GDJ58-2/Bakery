@@ -55,7 +55,18 @@
 		<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${map.goodsCode}">수정</a>
 		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
+	<div>
+		<a href = "${pageContext.request.contextPath}/cart/addCart?goodsCode=${map.goodsCode}&goodsName=${map.goodsName}">
+			주문하기
+		</a>
+	</div>
+	<div>
+		<a href = "${pageContext.request.contextPath}/cart/cartList">
+			장바구니
+		</a>
+	</div>
 	
+	<!-- 리뷰목록 -->
 	<div>
 		<c:forEach var = "m" items = "${list}" varStatus = "i">
 		<tr>
