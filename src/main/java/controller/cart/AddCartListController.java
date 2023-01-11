@@ -29,18 +29,29 @@ public class AddCartListController extends HttpServlet {
 		//int goodsPrice = Integer.parseInt(request.getParameter("goodsPrice"));
 		//int goodsQuantity = Integer.parseInt(request.getParameter("goodsQuantity"));
 		int goodsQuantity = 1;
+		System.out.println("goodsCode:"+goodsCode+"goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
-			if(list == null) {
+			if(list == null) { // 장바구니가 비어있을 때
 				list = new ArrayList<HashMap<String, Object>>();
 				session.setAttribute("userList", list);
+				HashMap<String, Object> map = new HashMap<String, Object>();
+				map.put("goodsCode", goodsCode);
+				map.put("goodsName", goodsName);
+				map.put("goodsPrice", goodsPrice);
+				map.put("goodsQuantity", goodsQuantity);
+				list.add(map);
+			} else { // 장바구니가 비어있지 않을 때
+				int codeNum = 0;
+				int quantity = 0;
+				for(HashMap<String, Object> map : list) {
+					codeNum = (int)map.get("goodsCode");
+					quantity = (int)map.get("goodsQuantity");
+					if(goodsCode == codeNum) {
+						map.put("goodsQuantity", quantity + goodsQuantity);
+					}
+				}
 			}
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("goodsCode", goodsCode);
-			map.put("goodsName", goodsName);
-			map.put("goodsPrice", goodsPrice);
-			map.put("goodsQuantity", goodsQuantity);
-			list.add(map);
 			System.out.println("AddCartListController: 비회원장바구니담기 완료");
 			response.sendRedirect(request.getContextPath() + "/goods/goodsOne?goodsCode=" + goodsCode);
 		} else { // 회원
