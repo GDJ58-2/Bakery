@@ -56,7 +56,7 @@
 		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
 	<div>
-		<a href = "${pageContext.request.contextPath}/cart/addCart?goodsCode=${map.goodsCode}&goodsName=${map.goodsName}">
+		<a href = "${pageContext.request.contextPath}/cart/addCart?goodsCode=${map.goodsCode}">
 			주문하기
 		</a>
 	</div>
