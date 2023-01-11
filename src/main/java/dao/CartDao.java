@@ -43,7 +43,7 @@ public class CartDao {
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("goodscode", rs.getInt("goodsCode"));
+			m.put("goodsCode", rs.getInt("goodsCode"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("goodsPrice", rs.getInt("goodsPrice"));
 			m.put("customerId", rs.getString("customerId"));
@@ -75,7 +75,7 @@ public class CartDao {
 	// 담겨있는 상품 수량변경하기
 	public int updateGoodsQuantity(Connection conn, Cart cart) throws Exception {
 		int row = 0;
-		String sql = "UPDATE cart SET cart_quantity = ?"
+		String sql = "UPDATE cart SET cart_quantity = cart_quantity + ?"
 				+ " WHERE customer_id = ? AND goods_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, cart.getCartQuantity());
