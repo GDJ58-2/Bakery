@@ -33,6 +33,6 @@ public class PointHistoryListController extends HttpServlet {
 		PointHistoryService pointHistoryService = new PointHistoryService();
 		ArrayList<HashMap<String, Object>> list = pointHistoryService.getPointHistory(customerId);
 		request.setAttribute("list", list);
-		request.getRequestDispatcher("/WEB-INF/view/orders/ordersList.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/pointHistory/pointHistoryList.jsp").forward(request, response);
 	}
 }
