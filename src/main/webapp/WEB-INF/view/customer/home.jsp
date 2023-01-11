@@ -10,6 +10,28 @@
 	<div>
 		${loginCustomer.customerName}님 반갑습니다
 	</div>
+	
+	<!-- (임시)상품목록 -->
+	<div>
+		<a href = "${pageContext.request.contextPath}/goods/goodsList">
+			<button type = "button" id = "goodsBtn">제품목록</button>
+		</a>
+	</div>
+	
+	<!-- 장바구니 조회 -->
+	<div>
+		<a href = "${pageContext.request.contextPath}/cart/cartList">
+			<button type = "button" id = "cartBtn">장바구니</button>
+		</a>
+	</div>
+	
+	<!-- 주문 조회 -->
+	<div>
+		<a href = "${pageContext.request.contextPath}/">
+			<button type = "button" id = "cartBtn">주문목록</button>
+		</a>
+	</div>
+	
 	<!-- 회원정보조회 -->
 	<div>
 		<a href = "${pageContext.request.contextPath}/customer/selectOneCustomer">
