@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ordersListjsp</title>
+<title>ordersList.jsp</title>
 </head>
 <body>
 <h1>주문 내역</h1>
