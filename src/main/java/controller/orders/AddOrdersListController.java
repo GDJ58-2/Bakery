@@ -27,6 +27,12 @@ public class AddOrdersListController extends HttpServlet {
 			return;
 		}
 		ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>)request.getAttribute("list");
+		//System.out.println(list);
+		int orderPrice = 0;
+		for(HashMap<String, Object> map : list) {
+			orderPrice += (int)map.get("goodsPrice")*(int)map.get("cartQuantity");
+		}
+		request.setAttribute("orderPrice", orderPrice);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/WEB-INF/view/orders/addOrders.jsp").forward(request, response);
 	}

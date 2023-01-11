@@ -8,8 +8,8 @@
 </head>
 <body>
 	<h1> add order</h1>
-	<c:forEach var="o" items="${list}">
-		<form action="${pageContext.request.contextPath}/orders/addOrders" method="post">
+	<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
+		<c:forEach var="o" items="${list}">
 			<input type="hidden" name="goodsCode" value="${o.goodsCode}">
 			<table border="1">
 				<tr>
@@ -19,34 +19,34 @@
 				<tr>
 					<td><img src="${pageContext.request.contextPath}/upload/${o.filename}" width="100" height="100"></td>
 					<td>${o.goodsName}</td>
-					<td><input type="number" name="orderQuantity" value="${o.cartQuantity}"></td>
+					<td><input type="number" name="cartQuantity" value="${o.cartQuantity}"></td>
 				</tr>
 			</table>
 			<table>
-				<tr>
-					<td>포인트 사용</td>
-					<td><input type="number" name="usePoint" value="0">/${loginCustomer.point}</td>
-				</tr>
 				<tr>
 					<td>포인트 적립 5%</td>
-					<td><input type="number" name="saveupPoint" value="${o.goodsPrice*o.cartQuantity/20}" id="point"></td>
+					<td><input type="number" name="saveupPoint" value="${o.goodsPrice*o.cartQuantity/20}"></td>
 				</tr>
 				<tr>
-					<td>총 가격</td>
-					<td><input type="number" name="orderPrice" value="${o.goodsPrice*o.cartQuantity}"></td>
+					<td>가격</td>
+					<td><input type="number" name="orderPrice" value="${o.goodsPrice*o.cartQuantity}" readonly="readonly"></td>
 				</tr>
 			</table>
-			<table>
-				<tr>
-					<td>주소 입력</td>
-					<td><textarea cols="50" rows="5" name="address"></textarea></td>
-				</tr>
-			</table>
-			
-			<div>
-				<button type="submit">주문하기</button>
-			</div>
-		</form>
-	</c:forEach>
+		</c:forEach>
+		<div>					
+			포인트 사용
+			<input type="number" name="usePoint" value="0">/${loginCustomer.point}
+		</div>
+		<div>
+			가격 
+			<input type="number" name="price" value="${orderPrice}">
+		</div>
+		<div>
+			<textarea rows="5" cols="50" name="address"></textarea>
+		</div>
+		<div>
+			<button type="submit">주문하기</button>
+		</div>
+	</form>
 </body>
 </html>

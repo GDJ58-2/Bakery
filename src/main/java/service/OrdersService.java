@@ -5,10 +5,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import dao.CartDao;
 import dao.CustomerAddressDao;
 import dao.OrdersDao;
 import dao.PointHistoryDao;
 import util.DBUtil;
+import vo.Cart;
 import vo.CustomerAddress;
 import vo.Orders;
 import vo.PointHistory;
@@ -17,6 +19,7 @@ public class OrdersService {
 	private PointHistoryDao pointHistoryDao;
 	private OrdersDao ordersDao;
 	private CustomerAddressDao customerAddressDao;
+	private CartDao cartDao;
 	
 	// GET
 	// 회원의 주문 내역
@@ -78,6 +81,7 @@ public class OrdersService {
 		this.pointHistoryDao = new PointHistoryDao();
 		this.customerAddressDao = new CustomerAddressDao();
 		this.ordersDao = new OrdersDao();
+		this.cartDao = new CartDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
@@ -86,6 +90,8 @@ public class OrdersService {
 			orders.setAddressCode(addressCode);
 			orderCode = ordersDao.insertOrders(conn, orders);
 			System.out.println(orderCode+"<--OrdersService orderCode");
+			Cart cart = new Cart(orders.getGoodsCode(), orders.getCustomerId(), orders.getOrderQuantity(), null);
+			cartDao.deleteCartList(conn, cart);
 			PointHistory usePoint = new PointHistory(orderCode, "사용", paramUsePoint, null);
 			if(paramUsePoint!=0) {
 				pointHistoryDao.insertPoint(conn, usePoint);

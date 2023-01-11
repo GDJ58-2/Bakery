@@ -29,7 +29,7 @@ public class ModifyCartController extends HttpServlet {
 		}
 		// 장바구니 수정
 		String[] goodsCodeStr = request.getParameterValues("goodsCode");
-		int[] goodsCodeInt = new int [goodsCodeStr.length];
+		int[] goodsCodeInt = new int[goodsCodeStr.length];
 		//System.out.println("goods"+goodsCodeStr.length);
 		//System.out.println(goodsCodeInt.length);
 		for(int i=0; i<goodsCodeStr.length; i++) {
@@ -38,7 +38,7 @@ public class ModifyCartController extends HttpServlet {
 			//System.out.println(goodsCodeStr[i]+"<----goodsCodeStr[i]");
 		}
 		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
-		int[] cartQuantityArr = new int [cartQuantityStr.length];
+		int[] cartQuantityArr = new int[cartQuantityStr.length];
 
 		//System.out.println("cart"+cartQuantityStr.length);
 		//System.out.println(cartQuantityArr.length);
@@ -59,19 +59,31 @@ public class ModifyCartController extends HttpServlet {
 			cartService.modifyCart(c);
 		}
 		
-		// 체크된 goodsCode 목록 
-		String[] checkedGoodsCodeStr = request.getParameterValues("checkedGoodsCode");
-		int[] checkedGoodsCodeInt = new int[checkedGoodsCodeStr.length];
-		//System.out.println("check"+checkedGoodsCodeStr.length);
-		//System.out.println(checkedGoodsCodeInt.length);
-		for(int i=0; i<checkedGoodsCodeStr.length; i++) {
-			int j = Integer.parseInt(checkedGoodsCodeStr[i]);
-			checkedGoodsCodeInt[i] = j;
-			//System.out.println(checkedGoodsCodeInt[i]+"<----checkedGoodsCodeInt[i]");
+		
+		if(request.getParameterValues("checkedGoodsCode")!=null) { // cartList에서 넘어온 경우
+			// 체크된 goodsCode 목록 
+			String[] checkedGoodsCodeStr = request.getParameterValues("checkedGoodsCode");
+			int[] checkedGoodsCodeInt = new int[checkedGoodsCodeStr.length];
+			//System.out.println("check"+checkedGoodsCodeStr.length);
+			//System.out.println(checkedGoodsCodeInt.length);
+			for(int i=0; i<checkedGoodsCodeStr.length; i++) {
+				int j = Integer.parseInt(checkedGoodsCodeStr[i]);
+				checkedGoodsCodeInt[i] = j;
+				//System.out.println(checkedGoodsCodeInt[i]+"<----checkedGoodsCodeInt[i]");
+			}
+
+			ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
+			request.setAttribute("list", orderList);
+			request.getRequestDispatcher("/orders/addOrdersList").forward(request, response);
+		} else { // addOrders에서 넘어온 경우
+			String address = request.getParameter("address");
+			int saveupPoint = Integer.parseInt(request.getParameter("saveupPoint"));
+			ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), goodsCodeInt);
+			request.setAttribute("address", address);
+			request.setAttribute("saveupPoint", saveupPoint);
+			request.setAttribute("list", orderList);
+			request.getRequestDispatcher("/orders/addOrders").forward(request, response);
 		}
 		
-		ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
-		request.setAttribute("list", orderList);
-		request.getRequestDispatcher("/orders/addOrdersList").forward(request, response);
 	}
 }
