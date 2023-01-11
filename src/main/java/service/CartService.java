@@ -14,14 +14,14 @@ public class CartService {
 	// 장바구니에 담기
 	public int addCart(Cart cart) {
 		int row = 0;
-		int duplResult = 0;
+		boolean duplResult = false;
 		int updateQuantity = 0;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
 			duplResult = cartDao.duplGoods(conn, cart); // 같은 상품이 담겨있는지 확인
-			if(duplResult != 1) {
+			if(duplResult == false) {
 				row = cartDao.insertCart(conn, cart);
 				if(row == 1) { // 선택한 상품이 장바구니에 없음
 					System.out.println("CartService: 장바구니 담기 완료");
@@ -31,6 +31,7 @@ public class CartService {
 				if(updateQuantity == 1) {
 					System.out.println("CartService: 수량변경완료");
 				}
+			row = 1;
 			}
 			conn.commit();
 		} catch(Exception e) {
