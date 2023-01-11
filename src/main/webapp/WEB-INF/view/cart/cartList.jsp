@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script>
+	$(document).ready(function(){
+		$('')
+	});
+</script>
 </head>
 <body>
 	<c:choose>
@@ -19,23 +24,23 @@
 			</c:forEach>
 			</table>
 		</c:when>
+		
 		<c:when test = "${customerList != null}">
-			<table>
-			<c:forEach var = "customer" items = "${customerList}">
-				<tr>
-					<td>${customer.goodsCode}</td>
-					<td>${customer.goodsName}</td>
-					<td>${customer.goodsQuantity}</td>
-					<td>
-						<c:if test = "${loginCustomer != null}">
-							<a href = "${pageContext.request.contextPath}/orders/addOrders?goodsCode=${customer.goodsCode}&goodsName=${customer.goodsName}&goodsQuantity=${customer.goodsQuantity}">
-								<button type = "button">결제하기</button>
-							</a>
-						</c:if>
-					</td>
-				</tr>
-			</c:forEach>
-			</table>
+			<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
+				<table>
+				<c:forEach var = "customer" items = "${customerList}">
+					<tr>
+						<td><input type="hidden" name="goodsCode" value="${customer.goodsCode}"></td>
+						<td><input type="checkbox" name="checkedGoodsCode" value="${customer.goodsCode}"></td>
+						<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
+						<td><input type="number" name="cartQuantity" value="${customer.cartQuantity}">개</td>
+					</tr>
+				</c:forEach>
+				</table>
+				<c:if test = "${loginCustomer != null}">
+					<button type = "submit">결제하기</button>
+				</c:if>
+			</form>
 		</c:when>
 	</c:choose>
 	
