@@ -56,17 +56,20 @@ public class CartDao {
 	}
 	
 	// 이미 담겨있는 상품인지 확인하기
-	public int duplGoods(Connection conn, Cart cart) throws Exception {
-		int row = 0;
+	public boolean duplGoods(Connection conn, Cart cart) throws Exception {
+		boolean result = false;
 		String sql = "SELECT goods_code goodsCode"
 				+ " FROM cart"
 				+ " WHERE customer_id = ? AND goods_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, cart.getCustomerId());
 		stmt.setInt(2, cart.getGoodsCode());
-		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, null);
-		return row;
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			result = true;
+		}
+		DBUtil.close(rs, stmt, null);
+		return result;
 	}
 	
 	// 담겨있는 상품 수량변경하기
