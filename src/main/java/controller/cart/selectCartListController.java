@@ -28,26 +28,37 @@ public class selectCartListController extends HttpServlet {
 		this.cartService = new CartService();
 		
 		if(loginCustomer != null) { // 회원
-			if(userList == null) {
+			if(userList == null) { // 비회원장바구니가 비어있을 때
 				String custmerId = loginCustomer.getCustomerId();
 				customerList = cartService.selectCartList(custmerId);
-				//System.out.println("null_customerList: "+customerList);
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
 				session.removeAttribute("userList");
-			} else {
-				customerList = userList;
-				session.removeAttribute("userList");
-				//System.out.println("customerList: "+customerList);
+			} else { // 비회원장바구니가 비어있지 않을 때
+				String custmerId = loginCustomer.getCustomerId();
+				customerList = cartService.selectCartList(custmerId);
+				Cart cart = null;
+				cart = new Cart();
+				int result = 0;
+				for(HashMap<String, Object> user : userList) {
+					cart.setGoodsCode((int)user.get("goodsCode"));
+					cart.setCartQuantity((int)user.get("goodsQuantity"));
+					cart.setCustomerId(custmerId);
+					this.cartService = new CartService();
+					result = cartService.addCart(cart);
+				}
+				if(result == 1) {
+					customerList = cartService.selectCartList(custmerId);
+				}
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
+				session.removeAttribute("userList");
 			}
-				
 		} else { // 비회원
 			System.out.println("userList: "+userList);
 			request.setAttribute("loginCustomer", loginCustomer);
 			request.setAttribute("userList", userList);
-		} 
+		}
 		
 		// view
 		request.getRequestDispatcher("/WEB-INF/view/cart/cartList.jsp").forward(request, response);
