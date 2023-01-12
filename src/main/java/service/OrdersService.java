@@ -18,8 +18,8 @@ import vo.PointHistory;
 public class OrdersService {
 	private PointHistoryDao pointHistoryDao;
 	private OrdersDao ordersDao;
-	private CustomerAddressDao customerAddressDao;
 	private CartDao cartDao;
+	private CustomerAddressService customerAddressService;
 	
 	// GET
 	// 회원의 주문 내역
@@ -106,19 +106,14 @@ public class OrdersService {
 	public int addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
 		int orderCode = 0;
 		this.pointHistoryDao = new PointHistoryDao();
-		this.customerAddressDao = new CustomerAddressDao();
+		this.customerAddressService = new CustomerAddressService();
 		this.ordersDao = new OrdersDao();
 		this.cartDao = new CartDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
-			int addressCode = 0;
-			if(address.getAddressKind().equals("기타")) {
-				addressCode = customerAddressDao.insertAddress(conn, address);
-			} else {
-				addressCode = customerAddressDao.selectAddressCode(conn, address);
-			}
+			int addressCode = customerAddressService.addAddress(address);
 			System.out.println(addressCode+"<--OrdersService addressCode");
 			// 주문추가
 			for(Orders o : ordersList) {
@@ -134,6 +129,7 @@ public class OrdersService {
 					pointHistoryDao.insertPoint(conn, usePoint);
 				}
 			}
+		
 			conn.commit();
 		} catch (Exception e) {
 			try {

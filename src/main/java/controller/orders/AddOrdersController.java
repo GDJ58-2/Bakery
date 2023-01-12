@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import service.CartService;
 import service.OrdersService;
 import vo.Customer;
 import vo.CustomerAddress;
@@ -18,6 +19,7 @@ import vo.Orders;
 
 @WebServlet("/orders/addOrders")
 public class AddOrdersController extends HttpServlet {
+	private CartService cartService;
 	private OrdersService ordersService;
 	// addOrders action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,19 +31,37 @@ public class AddOrdersController extends HttpServlet {
 			return;
 		}
 		String customerId = loginCustomer.getCustomerId();
+		
 		String addressKind = request.getParameter("addressKind");
 		String address = request.getParameter("address");
 		int usePoint = Integer.parseInt(request.getParameter("usePoint"));
-
-		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null);
-		this.ordersService = new OrdersService();
-		ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>)request.getAttribute("list");
-		ArrayList<Orders> ordersList = new ArrayList<Orders>();
 		
+		// 주문할 상품 목록 파라메타값 저장
+		String[] goodsCodeStr = request.getParameterValues("goodsCode");
+		int[] goodsCodeInt = new int[goodsCodeStr.length];
+		for(int i=0; i<goodsCodeStr.length; i++) {
+			int j = Integer.parseInt(goodsCodeStr[i]);
+			goodsCodeInt[i] = j;
+			//System.out.println(goodsCodeStr[i]+"<----goodsCodeStr[i]");
+		}
+		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
+		int[] cartQuantityArr = new int[cartQuantityStr.length];
+		for(int i=0; i<cartQuantityStr.length; i++) {
+			int j = Integer.parseInt(cartQuantityStr[i]);
+			cartQuantityArr[i] = j;
+			//System.out.println(cartQuantityArr[i]+"<----cartQuantityArr[i]");
+		}
+		this.cartService = new CartService();
+		ArrayList<HashMap<String, Object>> list = cartService.selectCartList(loginCustomer.getCustomerId(), goodsCodeInt);
+		ArrayList<Orders> ordersList = new ArrayList<Orders>();
+		// 파라메타값 바인딩
+		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null); 
+		// ArrayList<HashMap<String, Object>>  ---> ArrayList<Orders>
 		for(HashMap<String, Object> map : list) {
-			Orders orders = new Orders(0,(int)map.get("goodsCode"), customerId, 0, (int)map.get("cartQuantity"), (int)map.get("goodsPrice"), null,null);
+			Orders orders = new Orders(0,(int)map.get("goodsCode"), customerId, 0, (int)map.get("cartQuantity"), (int)map.get("goodsPrice")*(int)map.get("cartQuantity"), null,null);
 			ordersList.add(orders);
 		}
+		this.ordersService = new OrdersService();
 		ordersService.addOrders(ordersList, paramAddress, usePoint);
 		response.sendRedirect(request.getContextPath()+"/orders/ordersList");
 	}

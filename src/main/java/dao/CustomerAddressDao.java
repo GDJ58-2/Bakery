@@ -70,7 +70,7 @@ public class CustomerAddressDao {
 		String sql = "SELECT address_code addressCode FROM customer_address WHERE address_kind=? AND customer_id=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, address.getAddressKind());
-		stmt.setString(2, address.getAddress());
+		stmt.setString(2, address.getCustomerId());
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			addressCode=rs.getInt("addressCode");
@@ -98,7 +98,7 @@ public class CustomerAddressDao {
 	// UPDATE
 	public int updateAddress(Connection conn, CustomerAddress address) throws Exception {
 		int row = 0;
-		String sql = "UPDATE customer_address SET address = ? WHERE address_code = ?";
+		String sql = "UPDATE customer_address SET address = ? WHERE address_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql); 
 		stmt.setString(1, address.getAddress());
 		stmt.setInt(2, address.getAddressCode());

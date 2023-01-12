@@ -23,7 +23,7 @@
 		</c:when>
 		
 		<c:when test = "${customerList != null}">
-			<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
+			<form action="${pageContext.request.contextPath}/orders/addOrdersList" method="post">
 				<table>
 				<c:forEach var = "customer" items = "${customerList}">
 					<tr>
@@ -40,13 +40,5 @@
 			</form>
 		</c:when>
 	</c:choose>
-	
-	<div>
-		<c:if test = "${loginCustomer == null}">
-			<a href ="${pageContext.request.contextPath}/customer/login">
-				로그인
-			</a>
-		</c:if>
-	</div>
 </body>
 </html>
