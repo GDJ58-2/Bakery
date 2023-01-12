@@ -7,7 +7,7 @@
 <title>ordersList.jsp</title>
 </head>
 <body>
-<h1>주문 내역</h1>
+<h1>나의 주문 내역</h1>
 	<table border="1">
 		<tr>
 			<th>주문 번호</th>
@@ -21,25 +21,25 @@
 		<c:forEach var="m" items="${list}">
 			<tr>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}">
+					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
 						${m.orderCode}
 					</a>
 				</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}">
+					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
 						<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
 					</a>
 				</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}">
+					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
 						${m.goodsName}
 					</a>
 				</td>
 				<td>
-					${m.orderQuantity}
+					${m.orderQuantity}개
 				</td>
 				<td>
-					${m.orderPrice}
+					${m.orderPrice}원
 				</td>
 				<td>
 					${m.createdate}

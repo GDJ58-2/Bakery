@@ -48,7 +48,34 @@ public class OrdersService {
 		return list;
 	}
 	
-	// 회원의 주문 상세보기
+	// 회원의 날짜별 주문 상세보기
+	public ArrayList<HashMap<String, Object>> getOrdersOneList(String createdate) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			this.ordersDao = new OrdersDao();
+			list = ordersDao.selectOrdersOneList(conn, createdate);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 회원의 주문 상세보기 (수정 목적)
 	public HashMap<String, Object> getOrdersOne(int orderCode) {
 		HashMap<String, Object> map = null;
 		Connection conn = null;

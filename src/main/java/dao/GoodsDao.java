@@ -14,7 +14,7 @@ public class GoodsDao {
 	// 상품 리스트
 	public ArrayList<HashMap<String, Object>> selectgoodsList(Connection conn) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
-		String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, img.filename filename"
+		String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_stock goodsStock, img.filename filename"
 				   + "	FROM goods g INNER JOIN goods_img img"
 				   + "	ON g.goods_code = img.goods_code";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -23,6 +23,7 @@ public class GoodsDao {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("goodsCode", rs.getInt("goodsCode"));
 			m.put("categoryNo", rs.getInt("categoryNo"));
+			m.put("goodsStock", rs.getString("goodsStock"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("filename", rs.getString("filename"));
 			list.add(m);

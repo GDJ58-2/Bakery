@@ -1,6 +1,7 @@
 package controller.orders;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -36,18 +37,33 @@ public class OrdersOneController extends HttpServlet {
 		
 		// 주문 상세보기
 		int orderCode = 0;
+		String createdate = null;
 		
-		if(request.getParameter("orderCode") != null){
+		if(request.getParameter("orderCode") == null || request.getParameter("orderCode").equals("")){
+			response.sendRedirect(request.getContextPath()+"/orders/ordersList");
+			return;
+		} else {
 			orderCode = Integer.parseInt(request.getParameter("orderCode"));
+		}
+		if(request.getParameter("createdate") == null || request.getParameter("createdate").equals("")){
+			response.sendRedirect(request.getContextPath()+"/orders/ordersList");
+			return;
+		} else {
+			createdate = request.getParameter("createdate");
+			createdate = createdate.substring(0, 10);
 		}
 		// 디버깅 코드
 		// System.out.println("orderCode : " + orderCode);
+		// System.out.println("createdate : " + createdate);
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		OrdersService ordersService = new OrdersService();
 		map = ordersService.getOrdersOne(orderCode);
+		list = ordersService.getOrdersOneList(createdate);
 		
 		request.setAttribute("map", map);
+		request.setAttribute("list", list);
 		request.getRequestDispatcher("/WEB-INF/view/orders/ordersOne.jsp").forward(request, response);
 	}
 }
