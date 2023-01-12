@@ -57,7 +57,7 @@ public class CartService {
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
-			cartDao.updateCartsQuantity(conn, cart);
+			row = cartDao.updateCartsQuantity(conn, cart);
 			conn.commit();
 		} catch (Exception e) {
 			try {

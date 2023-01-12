@@ -27,8 +27,7 @@ public class AddCartListController extends HttpServlet {
 		HashMap<String, Object> goodsOne = goodsService.getGoodsOne(goodsCode); // goodsCode로 goods정보 얻기
 		String goodsName = (String)goodsOne.get("goodsName");
 		int goodsPrice = (int)goodsOne.get("goodsPrice");
-		//int goodsQuantity = Integer.parseInt(request.getParameter("goodsQuantity"));
-		int goodsQuantity = 1;
+		int cartQuantity = Integer.parseInt(request.getParameter("cartQuantity"));
 		//System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
@@ -39,16 +38,16 @@ public class AddCartListController extends HttpServlet {
 				map.put("goodsCode", goodsCode);
 				map.put("goodsName", goodsName);
 				map.put("goodsPrice", goodsPrice);
-				map.put("goodsQuantity", goodsQuantity);
+				map.put("cartQuantity", cartQuantity);
 				list.add(map);
 			} else { // 장바구니가 비어있지 않을 때
 				int codeNum = 0;
 				int quantity = 0;
 				for(HashMap<String, Object> map : list) {
 					codeNum = (int)map.get("goodsCode");
-					quantity = (int)map.get("goodsQuantity");
+					quantity = (int)map.get("cartQuantity");
 					if(goodsCode == codeNum) {
-						map.put("goodsQuantity", quantity + goodsQuantity);
+						map.put("cartQuantity", quantity + cartQuantity);
 					}
 				}
 				if(codeNum != goodsCode) {
@@ -56,7 +55,7 @@ public class AddCartListController extends HttpServlet {
 					map2.put("goodsCode", goodsCode);
 					map2.put("goodsName", goodsName);
 					map2.put("goodsPrice", goodsPrice);
-					map2.put("goodsQuantity", goodsQuantity);
+					map2.put("cartQuantity", cartQuantity);
 					list.add(map2);
 				}
 			}
@@ -66,7 +65,7 @@ public class AddCartListController extends HttpServlet {
 			cart = new Cart();
 			cart.setGoodsCode(goodsCode);
 			cart.setCustomerId(loginCustomer.getCustomerId());
-			cart.setCartQuantity(goodsQuantity);
+			cart.setCartQuantity(cartQuantity);
 			CartService cartService = new CartService();
 			int result = cartService.addCart(cart);
 			if(result == 1) {
