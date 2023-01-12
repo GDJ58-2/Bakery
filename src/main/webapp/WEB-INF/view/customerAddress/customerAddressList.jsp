@@ -7,18 +7,26 @@
 <title>customerAddressList.jsp</title>
 </head>
 <body>
-<h1>나의 주소 목록</h1>
+	<h1>나의 주소 목록</h1>
+	<br>
+	<div style="color:red;">
+	${msg}
+	</div>
 	<table border="1">
 		<tr>
 			<th>주소 번호</th>
+			<th>주소 종류</th>
 			<th>주소</th>
 			<th>생성 날짜</th>
-			<th>수정/삭제</th>
+			<th>수정</th>
 		</tr>
 		<c:forEach var="ca" items="${list}">
 			<tr>
 				<td>
 					${ca.addressCode}
+				</td>
+				<td>
+					${ca.addressKind}
 				</td>
 				<td>
 					${ca.address}
@@ -27,12 +35,10 @@
 					${ca.createdate}
 				</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/customerAddress/modifyCustomerAddress">수정</a>
-					<a href="${pageContext.request.contextPath}/customerAddress/removeCustomerAddress">삭제</a>
+					<a href="${pageContext.request.contextPath}/customerAddress/modifyCustomerAddress?addressCode=${ca.addressCode}">수정</a>
 				</td>
 			</tr>
 		</c:forEach>
 	</table>
-	<a href="${pageContext.request.contextPath}/customerAddress/addCustomerAddress">추가</a>
 </body>
 </html>

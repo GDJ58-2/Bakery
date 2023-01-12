@@ -118,7 +118,7 @@ public class ModifyQuestionController extends HttpServlet {
 		this.questionService = new QuestionService();
 		int row = questionService.modifyQuestion(question);
 		if(row == 1){
-			System.out.println("수정실패");
+			System.out.println("수정성공");
 	    	
 	    	String msg = URLEncoder.encode("문의가 수정되었습니다.", "utf-8");
 	    	

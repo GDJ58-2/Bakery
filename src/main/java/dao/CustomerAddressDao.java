@@ -13,7 +13,7 @@ public class CustomerAddressDao {
 	// SELECT
 	public ArrayList<CustomerAddress> selectAddressList(Connection conn, String customerId) throws Exception {
 		ArrayList<CustomerAddress> list = new ArrayList<CustomerAddress>();
-		String sql = "SELECT address_code addressCode, customer_id customerId, address, createdate\r\n"
+		String sql = "SELECT address_code addressCode, customer_id customerId, address_kind addressKind, address, createdate\r\n"
 					+ "FROM customer_address\r\n"
 					+ "WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -23,6 +23,7 @@ public class CustomerAddressDao {
 			CustomerAddress ca = new CustomerAddress();
 			ca.setAddressCode(rs.getInt("addressCode"));
 			ca.setCustomerId(rs.getString("customerId"));
+			ca.setAddressKind(rs.getString("addressKind"));
 			ca.setAddress(rs.getString("address"));
 			ca.setCreatedate(rs.getString("createdate"));
 			list.add(ca);
@@ -32,7 +33,7 @@ public class CustomerAddressDao {
 	
 	public CustomerAddress selectAddressOne(Connection conn, int addressCode) throws Exception {
 		CustomerAddress ca = null;
-		String sql = "SELECT address_code addressCode, customer_id customerId, address, createdate\r\n"
+		String sql = "SELECT address_code addressCode, customer_id customerId, address_kind addressKind, address, createdate\r\n"
 					+ "FROM customer_address\r\n"
 					+ "WHERE address_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -42,6 +43,7 @@ public class CustomerAddressDao {
 			ca = new CustomerAddress();
 			ca.setAddressCode(rs.getInt("addressCode"));
 			ca.setCustomerId(rs.getString("customerId"));
+			ca.setAddressKind(rs.getString("addressKind"));
 			ca.setAddress(rs.getString("address"));
 			ca.setCreatedate(rs.getString("createdate"));
 		}
