@@ -223,4 +223,34 @@ public class CustomerService {
 		}
 		return row;
 	}
+	
+	// 고객목록 출력 - 관리자 기능
+	public ArrayList<Customer> getCustomerListByAdmin(String search, int currentPage, int rowPerPage) {
+		ArrayList<Customer> list = null;
+		Connection conn = null;
+		if(search==null) { // 검색어
+			search="%%";
+		}
+		int beginRow = (currentPage-1)*rowPerPage;
+		try {
+			conn = DBUtil.getConnection();
+			this.customerDao = new CustomerDao();
+			list = customerDao.selectCustomerListByAdmin(conn,search,beginRow,rowPerPage);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
+		return list;
+	}
 }
