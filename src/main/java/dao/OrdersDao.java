@@ -46,17 +46,18 @@ public class OrdersDao {
 	// 회원의 주문 상세보기
 	public HashMap<String, Object> selectOrdersOne(Connection conn, int orderCode) throws Exception {
 		HashMap<String, Object> map = null;
-		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, o.customer_code customerCode, o.customer_name customerName, o.customer_phone customerPhone, o.address address, g.goods_code goodsCode, g.category_no categoryNo, g.category_kind categoryKind, g.category_name categoryName, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_content goodsContent, g.goods_stock goodsStock, g.emp_id empId, g.hit hit, g.filename filename, g.origin_name originName\r\n"
-				+ "	FROM (SELECT o.order_code, o.goods_code, o.customer_Id, o.address_code, o.order_quantity, o.order_price, o.order_state, o.createdate, c.customer_code, c.customer_name, c.customer_phone, c.address \r\n"
-				+ "				FROM (SELECT c.customer_code, c.customer_id, c.customer_name, c.customer_phone, ca.address_code, ca.address\r\n"
-				+ "							FROM customer c INNER JOIN customer_address ca\r\n"
-				+ "								ON c.customer_id = ca.customer_id) c INNER JOIN orders o \r\n"
-				+ "					ON	o.customer_id = c.customer_id) o INNER JOIN (SELECT g.goods_code, g.category_no, g.category_kind, g.category_name, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, img.filename, img.origin_name\r\n"
-				+ "																						FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.createdate, c.category_kind, c.category_name\r\n"
-				+ "				   																			FROM goods g INNER JOIN goods_category c\r\n"
-				+ "				   																				ON g.category_no = c.category_no) g INNER JOIN goods_img img\r\n"
-				+ "																			 		  	ON g.goods_code = img.goods_code) g\r\n"
-				+ "		ON o.goods_code = g.goods_code\r\n"
+		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, o.customer_code customerCode, o.customer_name customerName, o.customer_phone customerPhone, o.category_no categoryNo, o.category_kind categoryKind, o.category_name categoryName, o.goods_name goodsName, o.goods_price goodsPrice, o.goods_content goodsContent, o.goods_stock goodsStock, o.emp_id empId, o.hit hit, o.filename filename, o.origin_name originName, ca.address_code addressCode, ca.address_kind addressKind, ca.address address\r\n"
+				+ "	FROM(SELECT o.order_code, o.goods_code, o.customer_Id, o.address_code, o.order_quantity, o.order_price, o.order_state, o.createdate, o.customer_code, o.customer_name, o.customer_phone, g.category_no, g.category_kind, g.category_name, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.filename, g.origin_name\r\n"
+				+ "			FROM (SELECT o.order_code, o.goods_code, o.customer_Id, o.address_code, o.order_quantity, o.order_price, o.order_state, o.createdate, c.customer_code, c.customer_name, c.customer_phone\r\n"
+				+ "						FROM (SELECT customer_code, customer_id, customer_name, customer_phone\r\n"
+				+ "									FROM customer ) c INNER JOIN orders o \r\n"
+				+ "										ON	o.customer_id = c.customer_id) o INNER JOIN (SELECT g.goods_code, g.category_no, g.category_kind, g.category_name, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, img.filename, img.origin_name\r\n"
+				+ "																											FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.createdate, c.category_kind, c.category_name\r\n"
+				+ "				   																									FROM goods g INNER JOIN goods_category c\r\n"
+				+ "				   																										ON g.category_no = c.category_no) g INNER JOIN goods_img img\r\n"
+				+ "																										 	  	ON g.goods_code = img.goods_code) g \r\n"
+				+ "				ON o.goods_code = g.goods_code) o INNER JOIN customer_address ca\r\n"
+				+ "		ON o.address_code = ca.address_code		\r\n"
 				+ "	WHERE o.order_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, orderCode);
@@ -75,6 +76,7 @@ public class OrdersDao {
 			map.put("customerName", rs.getString("customerName"));
 			map.put("customerPhone", rs.getString("customerPhone"));
 			map.put("address", rs.getString("address"));
+			map.put("addressKind", rs.getString("addressKind"));
 			map.put("categoryNo", rs.getInt("categoryNo"));
 			map.put("categoryName", rs.getString("categoryName"));
 			map.put("goodsName", rs.getString("goodsName"));

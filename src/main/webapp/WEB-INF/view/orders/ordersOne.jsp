@@ -87,6 +87,10 @@
 			<td>${map.customerPhone}</td>
 		</tr>
 		<tr>
+			<th>주소 종류 : </th>
+			<td>${map.addressKind}</td>
+		</tr>
+		<tr>
 			<th>받는 주소 : </th>
 			<td>${map.address}</td>
 		</tr>

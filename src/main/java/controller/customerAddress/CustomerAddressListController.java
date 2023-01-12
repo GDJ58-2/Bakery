@@ -26,6 +26,14 @@ public class CustomerAddressListController extends HttpServlet {
 		}
 		*/
 		
+		// 메시지가 있을 경우
+		request.setCharacterEncoding("UTF-8");
+		String msg = null;
+		if(request.getParameter("msg") != null) {
+			msg = request.getParameter("msg");
+		}
+		request.setAttribute("msg", msg);
+		
 		// 세션의 로그인 된 아이디로 수정 예정
 		String customerId = "test";
 		
