@@ -8,6 +8,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>수정</h1>
 	<form action="${pageContext.request.contextPath}/emp/modifyEmp" method="post">
 		<input type="hidden" name="empId" value="${e.empId}">

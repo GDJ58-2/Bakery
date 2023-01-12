@@ -7,6 +7,9 @@
 <title>modifyOrders</title>
 </head>
 <body>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<!-- 관리자페이지 -->
 	<h1>주문상세</h1>
 	<h3>주문 날짜 ${map.createdate} 주문 번호 ${map.orderCode}</h3>

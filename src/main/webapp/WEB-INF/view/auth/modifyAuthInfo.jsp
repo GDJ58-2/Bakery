@@ -7,6 +7,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>관리자 등급 수정</h1>
 	<form action="${pageContext.request.contextPath}/auth/modifyAuthInfo" method="post">
 		<div>

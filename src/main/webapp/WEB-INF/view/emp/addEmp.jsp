@@ -7,6 +7,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>회원가입</h1>
 	<form action="${pageContext.request.contextPath}/emp/addEmp" method="post">
 		<div>

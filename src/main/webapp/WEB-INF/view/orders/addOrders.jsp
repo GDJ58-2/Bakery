@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1> add order</h1>
 	<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
 		<c:forEach var="o" items="${list}">

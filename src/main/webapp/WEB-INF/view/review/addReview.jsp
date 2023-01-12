@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h2>addReview</h2>
 	<form action = "${pageContext.request.contextPath}/review/addReview" method = "post" id = "addForm">
 		<input type = "hidden" name = "orderCode" value = "${map.orderCode}">

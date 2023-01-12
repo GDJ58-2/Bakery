@@ -7,6 +7,8 @@
 <title>questionOne.jsp</title>
 </head>
 <body>
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>문의 상세정보</h1>
 	<br>
 	<div style="color:red;">
