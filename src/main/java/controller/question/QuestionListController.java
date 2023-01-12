@@ -20,8 +20,13 @@ public class QuestionListController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer==null) {
+			response.sendRedirect(request.getContextPath()+"/customer/login");
+			return;
+		}
 		String customerId = loginCustomer.getCustomerId();
 		System.out.println(customerId);
+	
 		questionService = new QuestionService();
 		ArrayList<HashMap<String, Object>> list = questionService.getQuestionList(customerId);
 		System.out.println(list);

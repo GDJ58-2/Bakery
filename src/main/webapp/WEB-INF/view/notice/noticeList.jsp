@@ -7,9 +7,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/empMenu.jsp"></jsp:include><!-- 관리자 -->
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>noticeList</h1>
+	<!-- 관리자 기능 -->
 	<a href="${pageContext.request.contextPath}/notice/addNotice">추가</a>
+	
 	<!-- 검색창 -->
 	<form action="${pageContext.request.contextPath}/notice/noticeList">
 		<input type="text" name="search" value="${search}">
@@ -35,10 +39,13 @@
 					<td><a href="${pageContext.request.contextPath}/notice/noticeOne?noticeCode=${n.noticeCode}">${n.noticeTitle}</a></td>
 					<td>${n.empId}</td>
 					<td>${n.createdate}</td>
+					
+					<!-- 관리자 -->
 					<td>
 						<a href="${pageContext.request.contextPath}/notice/modifyNotice?noticeCode=${n.noticeCode}">수정</a>
 						<a href="${pageContext.request.contextPath}/notice/removeNotice?noticeCode=${n.noticeCode}">삭제</a>
 					</td>
+					
 				</tr>
 			</c:forEach>
 		</tbody>

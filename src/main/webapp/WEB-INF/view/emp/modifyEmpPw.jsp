@@ -7,6 +7,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>비밀번호 변경</h1>
 	<form action="${pageContext.request.contextPath}/emp/modifyEmpPw" method="post">
 		<div>

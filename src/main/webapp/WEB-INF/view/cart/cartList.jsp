@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<jsp:include page="../inc/customer.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<c:choose>
 		<c:when test = "${userList != null}">
 			<table>

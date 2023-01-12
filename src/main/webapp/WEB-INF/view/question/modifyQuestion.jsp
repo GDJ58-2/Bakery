@@ -7,6 +7,7 @@
 <title>modifyQuestion.jsp</title>
 </head>
 <body>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>문의 수정</h1>
 	<br>
 	<div style="color:red;">

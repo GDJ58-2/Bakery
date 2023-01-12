@@ -8,6 +8,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>직원 목록</h1>
 	<a href="${pageContext.request.contextPath}/emp/addEmp">추가</a>
 	<table border="1">

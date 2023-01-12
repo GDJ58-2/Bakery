@@ -7,6 +7,7 @@
 </head>
 <body>
 	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1>add Notice</h1>
 	<form action="${pageContext.request.contextPath}/notice/addNotice" method="post">
 		<div>

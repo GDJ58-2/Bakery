@@ -32,7 +32,7 @@ public class AddQuestionController extends HttpServlet {
 		}
 		*/
 		
-		int orderCode = 0;
+		int orderCode = 4;
 		// 방어코드
 		
 		if(request.getParameter("orderCode") == null || (request.getParameter("orderCode")).equals("")) {
