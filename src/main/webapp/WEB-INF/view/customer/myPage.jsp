@@ -26,6 +26,10 @@
 		<a href = "${pageContext.request.contextPath}/review/reviewList">
 			내 리뷰 관리
 		</a>
+		
+		<a href = "${pageContext.request.contextPath}/customerAddress/customerAddressList">
+			내 주소 관리
+		</a>
 	</div>
 	<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">
 		<button type = "button" id = modifyBtn>회원정보수정</button> 
