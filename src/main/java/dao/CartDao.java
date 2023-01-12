@@ -106,8 +106,21 @@ public class CartDao {
 		stmt.setString(1, cart.getCustomerId());
 		stmt.setInt(2, cart.getGoodsCode());
 		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
 		return row;
 	}
+	
+	// 장바구니 전체 삭제
+	public int deleteCartList(Connection conn, String customerId) throws Exception {
+		int row = 0;
+		String sql = "DELETE FROM cart WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+	
 	// 최종적으로 결제하기 전 주문리스트
 	public ArrayList<HashMap<String, Object>> selectCartList(Connection conn, String customerId, int[] goodsCode) throws Exception {
 		ArrayList<HashMap<String, Object>> list= new ArrayList<HashMap<String, Object>>();

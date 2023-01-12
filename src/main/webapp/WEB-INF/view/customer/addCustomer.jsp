@@ -34,6 +34,14 @@
 					<input type = "text" id = "phone" name = "phone1">-<input type = "text" id = "phone" name = "phone2">-<input type = "text" id = "phone" name = "phone3">
 				</td> 
 			</tr>
+			<tr>
+				<td>Address</td>
+				<td>
+					<input type = "radio" id = "addressKind" name = "addressKind" value = "집">집
+					<input type = "radio" id = "addressKind" name = "addressKind" value = "회사">회사
+					<input type = "text" id = "address" name = "address">
+				</td>
+			</tr>
 		</table>
 		<button type = "submit" id = "createBtn">create</button>
 	</form>

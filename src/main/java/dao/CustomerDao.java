@@ -3,7 +3,10 @@ package dao;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
+
 import vo.Customer;
+import vo.CustomerAddress;
 import util.DBUtil;
 
 public class CustomerDao {
@@ -85,6 +88,22 @@ public class CustomerDao {
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
+	}
+	
+	// 가입시 customer_address 테이블에 데이터입력
+	public int insertAddress(Connection conn, CustomerAddress address) throws Exception{
+		int addressCode = 0;
+		String sql = "INSERT INTO customer_address(customer_id, address, createdate) VALUES(?, ?, NOW())";
+		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Statement.RETURN_GENERATED_KEYS : 쿼리 실행 후 생성된 auto_increment 값을 ResultSet에 반환
+		stmt.setString(1, address.getCustomerId());
+		stmt.setString(2, address.getAddress());
+		stmt.executeUpdate();
+		ResultSet rs = stmt.getGeneratedKeys();
+		if(rs.next()) {
+			addressCode = rs.getInt(1);
+		}
+		DBUtil.close(rs, stmt, null);
+		return addressCode;
 	}
 	
 	// 비밀번호 수정시 pw_history 테이블에 데이터입력
@@ -201,6 +220,30 @@ public class CustomerDao {
 				+ "						WHERE customer_id = ?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customer.getCustomerId());
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+
+	// 회원탈퇴 전 삭제되어야 하는 db들 - cart(cartDao), point_history, pw_history
+	// 4) point_history 삭제
+	public int deleteCustomerPointHistory(Connection conn, String customerId) throws Exception {
+		int row = 0;
+		String sql = "DELETE FROM point_history"
+				+ " WHERE order_code IN (SELECT order_code FROM orders WHERE customer_id = ?)";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+	
+	// 6) pw_history 삭제 
+	public int deletePwHistory(Connection conn, String customerId) throws Exception {
+		int row = 0;
+		String sql = "DELETE FROM pw_history WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;

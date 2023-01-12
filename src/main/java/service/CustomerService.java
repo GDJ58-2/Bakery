@@ -2,10 +2,13 @@ package service;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import util.DBUtil;
 import vo.Customer;
 import dao.CustomerDao;
+import dao.CartDao;
+import dao.PointHistoryDao;
 
 public class CustomerService {
 	private CustomerDao customerDao;
@@ -177,10 +180,31 @@ public class CustomerService {
 		try {
 			conn = DBUtil.getConnection();
 			this.customerDao = new CustomerDao();
-			row = customerDao.customerDelete(conn, customer);
-			if(row == 1) {
-				customerDao.insertOutid(conn, customer);
-				System.out.println("CustomerService: 탈퇴완료");
+			CartDao cartDao = new CartDao();
+			int pointHistory = customerDao.deleteCustomerPointHistory(conn, customer.getCustomerId());
+			int deleteCartList = cartDao.deleteCartList(conn, customer.getCustomerId());
+			// 디버깅
+			if(pointHistory == 1) {
+				System.out.println("CustomerService: point_history 삭제완료");
+			} else {
+				System.out.println("CustomerService: point_history 내역없음");
+			}
+			if(deleteCartList == 1) {
+				System.out.println("CustomerService: cartList 삭제완료");
+			} else {
+				System.out.println("CustomerService: cartList 내역없음");
+			}
+			int pwHistory = customerDao.deletePwHistory(conn, customer.getCustomerId());
+			//System.out.println(pointHistory+","+pwHistory+","+deleteCartList);
+			if(pointHistory == 0 || pointHistory == 1 || pwHistory == 0 || pwHistory == 1 
+					|| deleteCartList == 0 || deleteCartList == 1) {
+				row = customerDao.customerDelete(conn, customer);
+				if(row == 1) {
+					customerDao.insertOutid(conn, customer);
+					System.out.println("CustomerService: 탈퇴완료");
+				} else {
+					System.out.println("CustomerService: 탈퇴실패");
+				}
 			}
 			conn.commit();
 		} catch(Exception e) {

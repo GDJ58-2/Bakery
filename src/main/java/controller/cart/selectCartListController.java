@@ -54,7 +54,7 @@ public class selectCartListController extends HttpServlet {
 				session.removeAttribute("userList");
 			}
 		} else { // 비회원
-			System.out.println("userList: "+userList);
+			//System.out.println("userList: "+userList);
 			request.setAttribute("loginCustomer", loginCustomer);
 			request.setAttribute("userList", userList);
 		}
