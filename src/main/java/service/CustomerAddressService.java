@@ -1,6 +1,8 @@
 package service;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -11,6 +13,33 @@ import vo.CustomerAddress;
 public class CustomerAddressService {
 	private CustomerAddressDao customerAddressDao;
 	// GET
+	// 집, 회사, 기타 주소 개수 파악
+	public int getAddressCount(String customerId, String addressKind) {
+		int count = 0;
+		this.customerAddressDao = new CustomerAddressDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			count = customerAddressDao.selectAddressCount(conn, customerId, addressKind);
+			System.out.println("count : " + count);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+	
 	// 리스트
 	public ArrayList<CustomerAddress> getAddressList(String customerId) {
 		ArrayList<CustomerAddress> list = null;
