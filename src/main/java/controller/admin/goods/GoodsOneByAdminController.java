@@ -1,9 +1,10 @@
-package controller.goods;
+package controller.admin.goods;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,12 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import service.GoodsService;
+import service.ReviewService;
 
-@WebServlet("/goods/goodsList")
-public class GoodsListController extends HttpServlet {
-	private GoodsService goodsService;
+@WebServlet("/admin/goods/goodsOneByAdmin")
+public class GoodsOneByAdminController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// 로그인 후에만 진입가능
 		/*
 		HttpSession session = request.getSession();
@@ -36,9 +36,30 @@ public class GoodsListController extends HttpServlet {
 		}
 		request.setAttribute("msg", msg);
 		
-		goodsService = new GoodsService();
-		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsList();
+		// 상품 상세보기
+		int goodsCode = 0;
+		
+		if(request.getParameter("goodsCode") != null){
+			goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
+		}
+		// 디버깅 코드
+		// System.out.println("goodsCode : " + goodsCode);
+		
+	    HashMap<String, Object> map = new HashMap<String, Object>();
+		GoodsService goodsService = new GoodsService();
+		map = goodsService.getGoodsOne(goodsCode);
+	    
+		request.setAttribute("map", map);
+		
+		// 리뷰글보기
+		ReviewService reviewService = new ReviewService();
+		ArrayList<HashMap<String, Object>> list = reviewService.getReviewList(goodsCode);
 		request.setAttribute("list", list);
-		request.getRequestDispatcher("/WEB-INF/view/goods/goodsList.jsp").forward(request, response);
+		
+		
+		// View
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/goodsOneByAdmin.jsp");
+		
+		rd.forward(request, response);
 	}
 }

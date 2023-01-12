@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>goodsList.jsp</title>
+<title>goodsListByAdmin.jsp</title>
 </head>
 <body>
 <h1>페스츄리/파이</h1>
@@ -28,18 +28,26 @@
 				
 				<td>
 					<div>
-						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
+						<a href="${pageContext.request.contextPath}/admin/goods/goodsOneByAdmin?goodsCode=${m.goodsCode}">
 							<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
 						</a>
 					</div>
 					<div>
-						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
+						<a href="${pageContext.request.contextPath}/admin/goods/goodsOneByAdmin?goodsCode=${m.goodsCode}">
 							${m.goodsName}
 						</a>
 					</div>
+					<div>재고 : ${m.goodsStock}개</div>
+					<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${m.goodsCode}">수정</a>
+					<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${m.goodsCode}">삭제</a>
 				</td>
 			</c:forEach>
 		</tr>
 	</table>
+	<div>
+		<a href="${pageContext.request.contextPath}/admin/goods/addGoods">
+			상품 추가
+		</a>
+	</div>
 </body>
 </html>

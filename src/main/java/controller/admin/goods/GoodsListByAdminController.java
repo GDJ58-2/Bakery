@@ -1,4 +1,4 @@
-package controller.goods;
+package controller.admin.goods;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import service.GoodsService;
 
-@WebServlet("/goods/goodsList")
-public class GoodsListController extends HttpServlet {
+@WebServlet("/admin/goods/goodsListByAdmin")
+public class GoodsListByAdminController extends HttpServlet {
 	private GoodsService goodsService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		// 로그인 후에만 진입가능
 		/*
 		HttpSession session = request.getSession();
@@ -39,6 +39,6 @@ public class GoodsListController extends HttpServlet {
 		goodsService = new GoodsService();
 		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsList();
 		request.setAttribute("list", list);
-		request.getRequestDispatcher("/WEB-INF/view/goods/goodsList.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/view/admin/goods/goodsListByAdmin.jsp").forward(request, response);
 	}
 }

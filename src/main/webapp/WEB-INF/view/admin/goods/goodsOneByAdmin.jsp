@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>goodsOne.jsp</title>
+<title>goodsOneByAdmin.jsp</title>
 </head>
 <body>
 	<h1>${map.goodsName}</h1>
@@ -12,11 +12,9 @@
 	<div style="color:red;">
 	${msg}
 	</div>
-	<form action="${pageContext.request.contextPath}/cart/addCart" method="get">
-	<input type="hidden" name="goodsCode" value="${map.goodsCode}">
 	<table border="1">
 		<tr>
-			<td rowspan="5">
+			<td rowspan="7">
 				<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
 			</td>
 			<th>상품 이름 : </th>
@@ -28,17 +26,23 @@
 		</tr>
 		<tr>
 			<th>상품 가격 : </th>
-			<td>${map.goodsPrice}원</td>
-		</tr>
-		<tr>
-			<th>상품 개수 : </th>
-			<td>
-				<input type="number" name="cartQuantity">개
-			</td>
+			<td>${map.goodsPrice}</td>
 		</tr>
 		<tr>
 			<th>상품 재고 : </th>
 			<td>${map.goodsStock}개</td>
+		</tr>
+		<tr>
+			<th>작성 직원 : </th>
+			<td>${map.empId}</td>
+		</tr>
+		<tr>
+			<th>상품 순위 : </th>
+			<td>${map.hit}위</td>
+		</tr>
+		<tr>
+			<th>출시 일자 : </th>
+			<td>${map.createdate}</td>
 		</tr>
 		<tr>
 			<td colspan="3">
@@ -47,12 +51,9 @@
 			</td>
 		</tr>
 	</table>
-	<button type="submit">장바구니 추가</button>
-	</form>
 	<div>
-		<a href = "${pageContext.request.contextPath}/cart/cartList">
-			장바구니
-		</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/modifyGoods?goodsCode=${map.goodsCode}">수정</a>
+		<a href="${pageContext.request.contextPath}/admin/goods/removeGoods?goodsCode=${map.goodsCode}">삭제</a>
 	</div>
 	
 	<!-- 리뷰목록 -->
