@@ -47,6 +47,7 @@ public class RemoveCustomerController extends HttpServlet {
 		int result = customerService.removeCustomer(customer);
 		if(result == 1) {
 			System.out.println("RemoveCustomerController: 탈퇴완료");
+			request.getSession().invalidate();
 			response.sendRedirect(request.getContextPath() + "/customer/login");
 		}
 	}

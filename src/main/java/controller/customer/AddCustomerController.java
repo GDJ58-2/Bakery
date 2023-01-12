@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import vo.Customer;
+import vo.CustomerAddress;
 import service.CustomerService;
+import service.CustomerAddressService;
 
 @WebServlet("/customer/addCustomer")
 public class AddCustomerController extends HttpServlet {
@@ -41,8 +42,11 @@ public class AddCustomerController extends HttpServlet {
 		String num2 = request.getParameter("phone2");
 		String num3 = request.getParameter("phone3");
 		String phone = num1+"-"+num2+"-"+num3;
+		String address = request.getParameter("address");
+		String addressKind = request.getParameter("addressKind");
 		
-		if(id.equals("") || pw.equals("") || name.equals("") || phone.equals("")) {
+		if(id.equals("") || pw.equals("") || name.equals("") || phone.equals("")
+				|| address.equals("") || addressKind.equals("")) {
 			response.sendRedirect(request.getContextPath() + "/customer/addCustomer");
 			return;
 		}
@@ -53,9 +57,16 @@ public class AddCustomerController extends HttpServlet {
 		customer.setCustomerName(name);
 		customer.setCustomerPhone(phone);
 		
+		CustomerAddress customerAddress = new CustomerAddress();
+		customerAddress.setCustomerId(id);
+		customerAddress.setAddressKind(addressKind);
+		customerAddress.setAddress(address);
+		
 		CustomerService customerService = new CustomerService();
 		int result = customerService.addCustomer(customer);
-		if(result == 1) { 
+		CustomerAddressService addressService = new CustomerAddressService();
+		int addressResult = addressService.addAddress(customerAddress);
+		if(result == 1 && addressResult == 1) { 
 			System.out.println("AddCustomerController: 회원가입 완료");
 			response.sendRedirect(request.getContextPath() + "/customer/login");
 		} else {
