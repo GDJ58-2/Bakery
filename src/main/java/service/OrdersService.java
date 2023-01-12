@@ -76,7 +76,7 @@ public class OrdersService {
 	}
 	
 	// ADD
-	public int addOrders(Orders orders, CustomerAddress address, int paramUsePoint) { // 주문
+	public int addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
 		int orderCode = 0;
 		this.pointHistoryDao = new PointHistoryDao();
 		this.customerAddressDao = new CustomerAddressDao();
@@ -85,16 +85,27 @@ public class OrdersService {
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			int addressCode = customerAddressDao.insertAddress(conn, address);
+			// 주소추가
+			int addressCode = 0;
+			if(address.getAddressKind().equals("기타")) {
+				addressCode = customerAddressDao.insertAddress(conn, address);
+			} else {
+				addressCode = customerAddressDao.selectAddressCode(conn, address);
+			}
 			System.out.println(addressCode+"<--OrdersService addressCode");
-			orders.setAddressCode(addressCode);
-			orderCode = ordersDao.insertOrders(conn, orders);
-			System.out.println(orderCode+"<--OrdersService orderCode");
-			Cart cart = new Cart(orders.getGoodsCode(), orders.getCustomerId(), orders.getOrderQuantity(), null);
-			cartDao.deleteCartList(conn, cart);
-			PointHistory usePoint = new PointHistory(orderCode, "사용", paramUsePoint, null);
-			if(paramUsePoint!=0) {
-				pointHistoryDao.insertPoint(conn, usePoint);
+			// 주문추가
+			for(Orders o : ordersList) {
+				o.setAddressCode(addressCode);
+				orderCode = ordersDao.insertOrders(conn, o);
+				System.out.println(orderCode+"<--OrdersService orderCode");
+				// 장바구니 삭제
+				Cart cart = new Cart(o.getGoodsCode(), o.getCustomerId(), o.getOrderQuantity(), null);
+				cartDao.deleteCartList(conn, cart);
+				// 포인트 내역 추가
+				PointHistory usePoint = new PointHistory(orderCode, "사용", paramUsePoint, null);
+				if(paramUsePoint!=0) {
+					pointHistoryDao.insertPoint(conn, usePoint);
+				}
 			}
 			conn.commit();
 		} catch (Exception e) {

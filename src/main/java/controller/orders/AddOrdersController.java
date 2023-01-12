@@ -29,21 +29,20 @@ public class AddOrdersController extends HttpServlet {
 			return;
 		}
 		String customerId = loginCustomer.getCustomerId();
+		String addressKind = request.getParameter("addressKind");
 		String address = request.getParameter("address");
-		/*
-		 * int usePoint = Integer.parseInt(request.getParameter("usePoint"));
-		 * int saveupPoint = Integer.parseInt(request.getParameter("saveupPoint"));
-			int goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
-			int orderQuantity = Integer.parseInt(request.getParameter("orderQuantity"));
-			int orderPrice = Integer.parseInt(request.getParameter("orderPrice"));
-		 */
-		CustomerAddress paramAddress = new CustomerAddress(0,customerId, address, null);
+		int usePoint = Integer.parseInt(request.getParameter("usePoint"));
+
+		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null);
 		this.ordersService = new OrdersService();
 		ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>)request.getAttribute("list");
+		ArrayList<Orders> ordersList = new ArrayList<Orders>();
+		
 		for(HashMap<String, Object> map : list) {
 			Orders orders = new Orders(0,(int)map.get("goodsCode"), customerId, 0, (int)map.get("cartQuantity"), (int)map.get("goodsPrice"), null,null);
-			ordersService.addOrders(orders, paramAddress, (int)request.getAttribute("saveupPoint"));
+			ordersList.add(orders);
 		}
+		ordersService.addOrders(ordersList, paramAddress, usePoint);
 		response.sendRedirect(request.getContextPath()+"/orders/ordersList");
 	}
 }

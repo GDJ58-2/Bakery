@@ -12,12 +12,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import service.CartService;
+import service.CustomerAddressService;
 import vo.Cart;
 import vo.Customer;
+import vo.CustomerAddress;
 
 
 @WebServlet("/cart/modifyCart")
 public class ModifyCartController extends HttpServlet {
+	private CustomerAddressService customerAddressService;
 	private CartService cartService;
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사
@@ -71,16 +74,14 @@ public class ModifyCartController extends HttpServlet {
 				checkedGoodsCodeInt[i] = j;
 				//System.out.println(checkedGoodsCodeInt[i]+"<----checkedGoodsCodeInt[i]");
 			}
-
+			this.customerAddressService = new CustomerAddressService();
+			ArrayList<CustomerAddress> addressList = customerAddressService.getAddressList(loginCustomer.getCustomerId());
 			ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
-			request.setAttribute("list", orderList);
+			request.setAttribute("addressList", addressList);
+			request.setAttribute("orderList", orderList);
 			request.getRequestDispatcher("/orders/addOrdersList").forward(request, response);
 		} else { // addOrders에서 넘어온 경우
-			String address = request.getParameter("address");
-			int saveupPoint = Integer.parseInt(request.getParameter("saveupPoint"));
 			ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), goodsCodeInt);
-			request.setAttribute("address", address);
-			request.setAttribute("saveupPoint", saveupPoint);
 			request.setAttribute("list", orderList);
 			request.getRequestDispatcher("/orders/addOrders").forward(request, response);
 		}

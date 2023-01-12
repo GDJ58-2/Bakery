@@ -11,7 +11,7 @@
 	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1> add order</h1>
 	<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
-		<c:forEach var="o" items="${list}">
+		<c:forEach var="o" items="${orderList}">
 			<input type="hidden" name="goodsCode" value="${o.goodsCode}">
 			<table border="1">
 				<tr>
@@ -44,7 +44,16 @@
 			<input type="number" name="price" value="${orderPrice}">
 		</div>
 		<div>
-			<textarea rows="5" cols="50" name="address"></textarea>
+			<div>
+				<select name="addressKind">
+					<c:forEach var="a" items="${addressList}">
+						<option value="${a.addressKind}">${a.addressKind} - ${a.address}</option>
+					</c:forEach>
+					<option value="기타">직접입력</option>
+				</select>
+			</div>
+			<!-- 직접입력 선택시 textarea 생성 -->
+			<textarea rows="5" cols="50" name="address"></textarea> 
 		</div>
 		<div>
 			<button type="submit">주문하기</button>
