@@ -118,13 +118,29 @@ public class CustomerAddressService {
 	}
 	
 	// ADD
+	// addressKind(집, 회사, 기타)별로 한개씩만 입력가능 
 	public int addAddress(CustomerAddress address) {
 		int addressCode = 0;
 		this.customerAddressDao = new CustomerAddressDao();
 		Connection conn = null;
+		System.out.println(address);
 		try {
 			conn = DBUtil.getConnection();
-			addressCode = customerAddressDao.insertAddress(conn, address);
+			int count = customerAddressDao.selectAddressCount(conn, address.getCustomerId(), address.getAddressKind());
+			System.out.println(count+"<--<--CustomerAddressService count");
+			if(count==0) {
+				addressCode=customerAddressDao.insertAddress(conn, address);
+			} else {
+				addressCode=customerAddressDao.selectAddressCode(conn, address);
+				if(address.getAddressKind().equals("기타")) { // 기타선택시 업데이트
+					System.out.println(address.getAddressKind()+"<--CustomerAddressService getAddressKind()");
+					System.out.println(addressCode+"<--CustomerAddressService addressCode");
+					address.setAddressCode(addressCode);
+					int row = customerAddressDao.updateAddress(conn, address);
+					System.out.println(row+"<--<--CustomerAddressService row");
+				}
+			}
+			System.out.print(addressCode+"<--CustomerAddressService addressCode");
 			conn.commit();
 		} catch (Exception e) {
 			try {

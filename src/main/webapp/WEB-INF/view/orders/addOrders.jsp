@@ -10,7 +10,7 @@
 	<jsp:include page="../inc/customer.jsp"></jsp:include>
 	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	<h1> add order</h1>
-	<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
+	<form action="${pageContext.request.contextPath}/orders/addOrders" method="post">
 		<c:forEach var="o" items="${orderList}">
 			<input type="hidden" name="goodsCode" value="${o.goodsCode}">
 			<table border="1">
@@ -44,6 +44,7 @@
 			<input type="number" name="price" value="${orderPrice}">
 		</div>
 		<div>
+			<!-- 직접입력 / 배송지 선택하기 -->
 			<div>
 				<select name="addressKind">
 					<c:forEach var="a" items="${addressList}">
