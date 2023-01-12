@@ -11,6 +11,22 @@ import vo.CustomerAddress;
 
 public class CustomerAddressDao {
 	// SELECT
+	// 집, 회사, 기타 주소 개수 파악
+	public int selectAddressCount(Connection conn, String customerId, String addressKind) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count\r\n"
+				+ "FROM customer_address\r\n"
+				+ "WHERE customer_id = ? AND address_kind = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		stmt.setString(2, addressKind);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+	}
+		return count;
+	}
+	
 	public ArrayList<CustomerAddress> selectAddressList(Connection conn, String customerId) throws Exception {
 		ArrayList<CustomerAddress> list = new ArrayList<CustomerAddress>();
 		String sql = "SELECT address_code addressCode, customer_id customerId, address_kind addressKind, address, createdate\r\n"

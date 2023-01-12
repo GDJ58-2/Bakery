@@ -11,9 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import service.CustomerAddressService;
-import service.QuestionService;
 import vo.CustomerAddress;
-import vo.Question;
 
 @WebServlet("/customerAddress/modifyCustomerAddress")
 public class ModifyCustomerAddressController extends HttpServlet {
