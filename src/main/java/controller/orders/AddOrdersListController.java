@@ -17,7 +17,7 @@ import vo.Customer;
 @WebServlet("/orders/addOrdersList")
 public class AddOrdersListController extends HttpServlet {
 	private OrdersService ordersService;
-	// addOrdersList form
+	// addOrders form
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사
 		HttpSession session = request.getSession();
@@ -26,12 +26,14 @@ public class AddOrdersListController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>)request.getAttribute("list");
+		ArrayList<HashMap<String, Object>> list = (ArrayList<HashMap<String, Object>>)request.getAttribute("orderList");
 		//System.out.println(list);
 		int orderPrice = 0;
 		for(HashMap<String, Object> map : list) {
 			orderPrice += (int)map.get("goodsPrice")*(int)map.get("cartQuantity");
 		}
+		
+		
 		request.setAttribute("orderPrice", orderPrice);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/WEB-INF/view/orders/addOrders.jsp").forward(request, response);

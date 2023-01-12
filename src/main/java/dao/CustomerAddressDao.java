@@ -49,14 +49,27 @@ public class CustomerAddressDao {
 		}
 		return ca;
 	}
-	
-	// INSERT
-	public int insertAddress(Connection conn, CustomerAddress address) throws Exception{
+	public int selectAddressCode(Connection conn, CustomerAddress address) throws Exception {
 		int addressCode = 0;
-		String sql = "INSERT INTO customer_address(customer_id, address, createdate) VALUES(?, ?, NOW())";
+		String sql = "SELECT address_code addressCode FROM customer_address WHERE address_kind=? AND customer_id=?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, address.getAddressKind());
+		stmt.setString(2, address.getAddress());
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			addressCode=rs.getInt("addressCode");
+		}
+		DBUtil.close(rs, stmt, null);
+		return addressCode;
+	}
+	// INSERT
+	public int insertAddress(Connection conn, CustomerAddress address) throws Exception {
+		int addressCode = 0;
+		String sql = "INSERT INTO customer_address(customer_id, address_kind, address, createdate) VALUES(?,?,?,NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Statement.RETURN_GENERATED_KEYS : 쿼리 실행 후 생성된 auto_increment 값을 ResultSet에 반환
 		stmt.setString(1, address.getCustomerId());
-		stmt.setString(2, address.getAddress());
+		stmt.setString(2, address.getAddressKind());
+		stmt.setString(3, address.getAddress());
 		stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
 		if(rs.next()) {
@@ -67,7 +80,7 @@ public class CustomerAddressDao {
 	}
 	
 	// UPDATE
-	public int updateAddress(Connection conn, CustomerAddress address) throws Exception{
+	public int updateAddress(Connection conn, CustomerAddress address) throws Exception {
 		int row = 0;
 		String sql = "UPDATE customer_address SET address = ? WHERE address_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql); 
@@ -79,7 +92,7 @@ public class CustomerAddressDao {
 	}
 	
 	// DELETE
-	public int deleteAddress(Connection conn, int addressCode) throws Exception{
+	public int deleteAddress(Connection conn, int addressCode) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM customer_address WHERE address_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);

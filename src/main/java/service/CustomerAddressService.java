@@ -62,6 +62,31 @@ public class CustomerAddressService {
 		}
 		return ca;
 	}
+
+	public int getAddressCode(CustomerAddress address) {
+		int addressCode = 0;
+		this.customerAddressDao = new CustomerAddressDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			addressCode = customerAddressDao.selectAddressCode(conn, address);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return addressCode;
+	}
 	
 	// ADD
 	public int addAddress(CustomerAddress address) {
