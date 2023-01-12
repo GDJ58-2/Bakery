@@ -1,13 +1,15 @@
 package dao;
 
-import java.sql.PreparedStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+import util.DBUtil;
 import vo.Customer;
 import vo.CustomerAddress;
-import util.DBUtil;
 
 public class CustomerDao {
 	
@@ -273,5 +275,22 @@ public class CustomerDao {
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
+	}
+	
+	// 고객목록 출력
+	public ArrayList<Customer> selectCustomerListByAdmin(Connection conn, String search, int beginRow, int rowPerPage) throws Exception {
+		ArrayList<Customer> list = new ArrayList<Customer>();
+		String sql = "SELECT customer_code customerCode, customer_id customerId, customer_name customerName, customer_phone customerPhone, point, createdate FROM customer WHERE customer_id LIKE ? LIMIT ?,?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, search);
+		stmt.setInt(2, beginRow);
+		stmt.setInt(3, rowPerPage);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			Customer c = new Customer(rs.getInt("customerCode"), rs.getString("customerId"),null, rs.getString("customerName"), rs.getString("customerPhone"), rs.getInt("point"), rs.getString("createdate"));
+			list.add(c);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
 	}
 }
