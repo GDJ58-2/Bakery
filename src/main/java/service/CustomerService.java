@@ -198,7 +198,7 @@ public class CustomerService {
 			//System.out.println(pointHistory+","+pwHistory+","+deleteCartList);
 			if(pointHistory == 0 || pointHistory == 1 || pwHistory == 0 || pwHistory == 1 
 					|| deleteCartList == 0 || deleteCartList == 1) {
-				row = customerDao.customerDelete(conn, customer);
+				row = customerDao.customerDelete(conn, customer.getCustomerId());
 				if(row == 1) {
 					customerDao.insertOutid(conn, customer);
 					System.out.println("CustomerService: 탈퇴완료");
