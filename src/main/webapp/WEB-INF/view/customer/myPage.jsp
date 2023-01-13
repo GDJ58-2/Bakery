@@ -21,6 +21,10 @@
 			<td>Phone Number</td>
 			<td>${selectOneCustomer.customerPhone}</td>
 		</tr>
+		<tr>
+			<td>Point</td>
+			<td>${selectOneCustomer.point}</td>
+		</tr>
 	</table>
 	<div>
 		<a href = "${pageContext.request.contextPath}/review/reviewList">

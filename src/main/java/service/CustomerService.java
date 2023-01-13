@@ -80,8 +80,30 @@ public class CustomerService {
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
+			PointHistoryDao pointHistoryDao = new PointHistoryDao();
 			this.customerDao = new CustomerDao();
-			customer = customerDao.selectOneCustomer(conn, customerId);
+			// 포인트정보 업데이트
+			ArrayList<HashMap<String, Object>> pHistory = pointHistoryDao.selectPointHistory(conn, customerId);
+			String pKind = null;
+			int plusPoint = 0;
+			int minusPoint = 0;
+			int totalPoint = 0;
+			for(HashMap<String, Object> map : pHistory) {
+				pKind = (String)map.get("pointKind");
+				if(pKind.equals("적립")) {
+					plusPoint = (int)map.get("point");
+				} else {
+					minusPoint = (int)map.get("point");
+				}
+				totalPoint = totalPoint + (plusPoint - minusPoint);
+			}
+			Customer customerPoint = new Customer();
+			customerPoint.setCustomerId(customerId);
+			customerPoint.setPoint(totalPoint);
+			int row = customerDao.customerPoint(conn, customerPoint);
+			if(row == 1) {
+				customer = customerDao.selectOneCustomer(conn, customerId);
+			}
 			conn.commit();
 		} catch(Exception e) {
 			try {
