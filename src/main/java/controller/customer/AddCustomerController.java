@@ -65,8 +65,8 @@ public class AddCustomerController extends HttpServlet {
 		CustomerService customerService = new CustomerService();
 		int result = customerService.addCustomer(customer);
 		CustomerAddressService addressService = new CustomerAddressService();
-		int addressResult = addressService.addAddress(customerAddress);
-		if(result == 1 && addressResult == 1) { 
+		addressService.addAddress(customerAddress);
+		if(result == 1) { 
 			System.out.println("AddCustomerController: 회원가입 완료");
 			response.sendRedirect(request.getContextPath() + "/customer/login");
 		} else {
