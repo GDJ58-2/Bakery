@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.CartDao;
-import dao.CustomerAddressDao;
 import dao.OrdersDao;
 import dao.PointHistoryDao;
 import util.DBUtil;
@@ -49,14 +48,14 @@ public class OrdersService {
 	}
 	
 	// 회원의 날짜별 주문 상세보기
-	public ArrayList<HashMap<String, Object>> getOrdersOneList(String createdate) {
+	public ArrayList<HashMap<String, Object>> getOrdersOneList(String createdate, String customerId) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			
 			this.ordersDao = new OrdersDao();
-			list = ordersDao.selectOrdersOneList(conn, createdate);
+			list = ordersDao.selectOrdersOneList(conn, createdate, customerId);
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -195,6 +194,33 @@ public class OrdersService {
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
 				pointHistoryDao.insertPoint(conn, p);
 			}
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
+	
+	// REMOVE
+	public int removeOrders(String createdate) { // 주문 삭제
+		int row = 0;
+		this.ordersDao = new OrdersDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			row = ordersDao.deleteOrders(conn, createdate);
+			// System.out.println("service row : " + row);
 			conn.commit();
 		} catch (Exception e) {
 			try {

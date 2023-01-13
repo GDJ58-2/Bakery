@@ -45,7 +45,7 @@ public class OrdersDao {
 	}
 	
 	// 회원의 날짜별 주문 상세보기
-	public ArrayList<HashMap<String, Object>> selectOrdersOneList(Connection conn, String createdate) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectOrdersOneList(Connection conn, String createdate, String customerId) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, o.customer_code customerCode, o.customer_name customerName, o.customer_phone customerPhone, o.category_no categoryNo, o.category_kind categoryKind, o.category_name categoryName, o.goods_name goodsName, o.goods_price goodsPrice, o.goods_content goodsContent, o.goods_stock goodsStock, o.emp_id empId, o.hit hit, o.filename filename, o.origin_name originName, ca.address_code addressCode, ca.address_kind addressKind, ca.address address\r\n"
 				+ "	FROM(SELECT o.order_code, o.goods_code, o.customer_Id, o.address_code, o.order_quantity, o.order_price, o.order_state, o.createdate, o.customer_code, o.customer_name, o.customer_phone, g.category_no, g.category_kind, g.category_name, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.filename, g.origin_name\r\n"
@@ -59,9 +59,10 @@ public class OrdersDao {
 				+ "																										 	  	ON g.goods_code = img.goods_code) g \r\n"
 				+ "				ON o.goods_code = g.goods_code) o INNER JOIN customer_address ca\r\n"
 				+ "		ON o.address_code = ca.address_code		\r\n"
-				+ "	WHERE o.createdate LIKE ?";
+				+ "	WHERE o.createdate LIKE ? AND o.customer_id = ?";	
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+createdate+"%");
+		stmt.setString(2, customerId);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -181,6 +182,20 @@ public class OrdersDao {
 		stmt.setString(3, orders.getOrderState());
 		stmt.setInt(4, orders.getOrderCode());
 		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+	
+	// DELETE
+	public int deleteOrders(Connection conn, String createdate) throws Exception { // 주문 삭제
+		int row = 0;
+		String orderState = "취소";
+		String sql = "UPDATE orders SET order_state = ? WHERE createdate LIKE ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, orderState);
+		stmt.setString(2, "%"+createdate+"%");
+		row = stmt.executeUpdate();
+		// System.out.println("dao row : " + row);
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
