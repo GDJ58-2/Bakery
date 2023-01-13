@@ -164,6 +164,20 @@ public class CustomerDao {
 		return row;
 	}
 	
+	// 포인트 정보 업데이트
+	public int customerPoint(Connection conn, Customer customer) throws Exception {
+		int row = 0;
+		String sql = "UPDATE customer"
+				+ " SET point = ?"
+				+ " WHERE customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, customer.getPoint());
+		stmt.setString(2, customer.getCustomerId());
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+	
 	// 비밀번호 이력 조회
 	public boolean checkCustomerPw(Connection conn, String newPw, Customer customer) throws Exception {
 		boolean result = false;
