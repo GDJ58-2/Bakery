@@ -3,7 +3,6 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +122,7 @@ public class OrdersDao {
 			map.put("orderQuantity", rs.getInt("orderQuantity"));
 			map.put("orderPrice", rs.getInt("orderPrice"));
 			map.put("orderState", rs.getString("orderState"));
-			map.put("createdate", (rs.getString("createdate")).substring(0, 10));
+			map.put("createdate", rs.getString("createdate"));
 			map.put("customerCode", rs.getInt("customerCode"));
 			map.put("customerName", rs.getString("customerName"));
 			map.put("customerPhone", rs.getString("customerPhone"));
@@ -178,16 +177,15 @@ public class OrdersDao {
 	// DELETE
 	public int deleteOrders(Connection conn, String createdate) throws Exception { // 주문 삭제
 		int row = 0;
-		String orderState = "취소";
-		String sql = "UPDATE orders SET order_state = ? WHERE createdate LIKE ?";
+		String sql = "DELETE orders WHERE createdate LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, orderState);
-		stmt.setString(2, "%"+createdate+"%");
+		stmt.setString(1, "%"+createdate+"%");
 		row = stmt.executeUpdate();
 		// System.out.println("dao row : " + row);
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
+	
 	// 관리자 주문내역 보기 
 	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();

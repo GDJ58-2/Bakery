@@ -63,9 +63,11 @@ public class RemoveOrdersController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		OrdersService ordersService = new OrdersService();
 		map = ordersService.getOrdersOne(orderCode);
+		String orderdate = ((String)map.get("createdate")).substring(0, 10);
 		list = ordersService.getOrdersOneList(createdate, customerId);
 		
 		request.setAttribute("map", map);
+		request.setAttribute("orderdate", orderdate);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/WEB-INF/view/orders/removeOrders.jsp").forward(request, response);
 	}
@@ -85,7 +87,6 @@ public class RemoveOrdersController extends HttpServlet {
 		// 주문 삭제
 		int orderCode = 0;
 		String createdate = null;
-		String orderState = null;
 		String customerPw = null;
 		
 		// 방어코드
@@ -101,12 +102,6 @@ public class RemoveOrdersController extends HttpServlet {
 		} else {
 			createdate = request.getParameter("createdate");
 		}
-		if(request.getParameter("orderState") == null || request.getParameter("orderState").equals("")){
-			response.sendRedirect(request.getContextPath()+"/orders/ordersOne");
-			return;
-		} else {
-			orderState = request.getParameter("orderState");
-		}
 		if(request.getParameter("customerPw") == null || request.getParameter("customerPw").equals("")){
 			response.sendRedirect(request.getContextPath()+"/orders/ordersOne");
 			return;
@@ -117,54 +112,37 @@ public class RemoveOrdersController extends HttpServlet {
 		// 디버깅 코드
 		// System.out.println("orderCode : " + orderCode);
 		// System.out.println("createdate : " + createdate);
-		// System.out.println("orderState : " + orderState);
 		// System.out.println("customerPw : " + customerPw);
 		
-		if(orderState.equals("결제")) {
-			if(customerPw.equals("1234")) {
-				int row = 0;
-				OrdersService ordersService = new OrdersService();
-				row = ordersService.removeOrders(createdate);
-				if(row != 0) {
-					System.out.println("취소성공");    	
-			    	
-			    	response.setContentType("text/html; charset=UTF-8");
-			    	
-			    	PrintWriter out = response.getWriter();
-			    	 
-			    	out.println("<script>alert('주문이 취소되었습니다.'); location.href='/bakery/orders/ordersList';</script>");
-			    	
-			    	out.flush();
-				} else {
-					System.out.println("취소실패");
-			    	
-			    	String msg = URLEncoder.encode("주문취소를 실패하였습니다.", "utf-8");
-			    	
-			    	// View
-			    	response.sendRedirect(request.getContextPath()+"/orders/removeOrders?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
-				}
-			} else {
-				System.out.println("취소실패");
+		if(customerPw.equals("1234")) {
+			int row = 0;
+			OrdersService ordersService = new OrdersService();
+			row = ordersService.removeOrders(createdate);
+			if(row != 0) {
+				System.out.println("삭제성공");    	
 		    	
-		    	String msg = URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
+		    	response.setContentType("text/html; charset=UTF-8");
+		    	
+		    	PrintWriter out = response.getWriter();
+		    	 
+		    	out.println("<script>alert('주문이 취소되었습니다.'); location.href='/bakery/orders/ordersList';</script>");
+		    	
+		    	out.flush();
+			} else {
+				System.out.println("삭제실패");
+		    	
+		    	String msg = URLEncoder.encode("주문취소를 실패하였습니다.", "utf-8");
 		    	
 		    	// View
 		    	response.sendRedirect(request.getContextPath()+"/orders/removeOrders?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
 			}
-		} else if(orderState.equals("취소")) {
-			System.out.println("취소실패");
-	    	
-	    	String msg = URLEncoder.encode("이미 주문 취소된 상품입니다.", "utf-8");
-	    	
-	    	// View
-	    	response.sendRedirect(request.getContextPath()+"/orders/ordersOne?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
 		} else {
-			System.out.println("취소실패");
+			System.out.println("삭제실패");
 	    	
-	    	String msg = URLEncoder.encode("이미 출고된 상품입니다.", "utf-8");
+	    	String msg = URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
 	    	
 	    	// View
-	    	response.sendRedirect(request.getContextPath()+"/orders/ordersOne?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
+	    	response.sendRedirect(request.getContextPath()+"/orders/removeOrders?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
 		}
 	}
 }
