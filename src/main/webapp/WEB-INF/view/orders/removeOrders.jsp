@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>주문상세</h1>
-	<h3>주문 일자 : ${map.createdate}</h3>
+	<h3>주문 일자 : ${orderdate}</h3>
 	<br>
 	<div style="color:red;">
 	${msg}
@@ -53,19 +53,19 @@
 			<tr>
 				<th>리뷰 작성 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${m.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/review/addReview?orderCode=${map.orderCode}">리뷰 작성</a>
 				</td>
 			</tr>
 			<tr>
 				<th>배송 문의 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${m.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${map.orderCode}">문의 작성</a>
 				</td>
 			</tr>
 			<tr>
 				<th>구매 확정 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${m.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
 				</td>
 			</tr>
 		</table>
@@ -99,7 +99,6 @@
 	<form action="${pageContext.request.contextPath}/orders/removeOrders" method="post">
 		<input type="hidden" name="orderCode" value="${map.orderCode}">
 		<input type="hidden" name="createdate" value="${map.createdate}">
-		<input type="hidden" name="orderState" value="${map.orderState}">
 		<div>
 			비밀번호 입력 : 
 			<input type="password" name="customerPw">

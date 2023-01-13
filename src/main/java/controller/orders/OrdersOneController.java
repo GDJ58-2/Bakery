@@ -53,7 +53,7 @@ public class OrdersOneController extends HttpServlet {
 			return;
 		} else {
 			createdate = request.getParameter("createdate");
-			createdate = createdate.substring(0, 10);
+			// createdate = createdate.substring(0, 10);
 		}
 		// 디버깅 코드
 		// System.out.println("orderCode : " + orderCode);
@@ -63,9 +63,11 @@ public class OrdersOneController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		OrdersService ordersService = new OrdersService();
 		map = ordersService.getOrdersOne(orderCode);
+		String orderdate = ((String)map.get("createdate")).substring(0, 10);
 		list = ordersService.getOrdersOneList(createdate, customerId);
 		
 		request.setAttribute("map", map);
+		request.setAttribute("orderdate", orderdate);
 		request.setAttribute("list", list);
 		request.getRequestDispatcher("/WEB-INF/view/orders/ordersOne.jsp").forward(request, response);
 	}

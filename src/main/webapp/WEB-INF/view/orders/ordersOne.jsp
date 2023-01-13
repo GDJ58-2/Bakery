@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>주문상세</h1>
-	<h3>주문 일자 : ${map.createdate}</h3>
+	<h3>주문 일자 : ${orderdate}</h3>
 	<br>
 	<div style="color:red;">
 	${msg}
@@ -53,13 +53,13 @@
 			<tr>
 				<th>리뷰 작성 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/review/addReview?orderCode=${map.orderCode}">리뷰 작성</a>
 				</td>
 			</tr>
 			<tr>
 				<th>배송 문의 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${map.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${map.orderCode}">문의 작성</a>
 				</td>
 			</tr>
 			<tr>
@@ -98,7 +98,7 @@
 	
 	<div>
 		<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
-		<a href="${pageContext.request.contextPath}/orders/removeOrders?orderCode=${map.orderCode}&createdate=${map.createdate}">주문 취소</a>
+		<a href="${pageContext.request.contextPath}/orders/removeOrders?orderCode=${map.orderCode}&createdate=${map.createdate}">주문 내역 삭제</a>
 	</div>
 </body>
 </html>
