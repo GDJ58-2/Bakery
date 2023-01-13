@@ -38,6 +38,10 @@ public class AddEmpController extends HttpServlet {
 		this.empService = new EmpService();
 		int row = empService.addEmp(emp);
 		System.out.println(row+"<--AddEmpController row");
+		if(row==1) {
+			response.sendRedirect(request.getContextPath()+"/emp/addEmp");
+			return;
+		}
 		response.sendRedirect(request.getContextPath()+"/emp/empList");
 	}
 }
