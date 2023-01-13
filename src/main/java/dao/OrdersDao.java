@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,7 +164,7 @@ public class OrdersDao {
 	}
 	
 	// UPDATE
-	public int updateOrdersByCustomer(Connection conn, Orders orders) throws Exception { // 주문자 취소, 구매확정
+	public int updateOrders(Connection conn, Orders orders) throws Exception { // 주문자 취소, 구매확정
 		int row = 0;
 		String sql = "UPDATE orders SET order_state=? WHERE order_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -173,19 +174,7 @@ public class OrdersDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public int updateOrdersByAdmin(Connection conn, Orders orders) throws Exception { // modifyOrders
-		int row = 0;
-		String sql = "UPDATE orders SET order_quantity=?, order_price=?, order_state=? WHERE order_code=?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, orders.getOrderQuantity());
-		stmt.setInt(2, orders.getOrderPrice());
-		stmt.setString(3, orders.getOrderState());
-		stmt.setInt(4, orders.getOrderCode());
-		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, null);
-		return row;
-	}
-	
+
 	// DELETE
 	public int deleteOrders(Connection conn, String createdate) throws Exception { // 주문 삭제
 		int row = 0;
@@ -198,5 +187,38 @@ public class OrdersDao {
 		// System.out.println("dao row : " + row);
 		DBUtil.close(null, stmt, null);
 		return row;
+	}
+	// 관리자 주문내역 보기 
+	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename\r\n"
+				+ "	FROM orders o INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename\r\n"
+				+ "									FROM goods g \r\n"
+				+ "									INNER JOIN goods_img img\r\n"
+				+ "									ON g.goods_code = img.goods_code) g\r\n"
+				+ "							ON o.goods_code = g.goods_code\r\n"
+				+ "	ORDER BY createdate DESC, (case when o.order_state LIKE '결제' then 5\r\n"
+				+ "									when o.order_state LIKE '배송중' then 4\r\n"
+				+ "									when o.order_state LIKE '배송완료' then 3\r\n"
+				+ "									when o.order_state LIKE '구매확정' then 2\r\n"
+				+ "									ELSE 1 END) asc";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("orderCode", rs.getInt("orderCode"));
+			map.put("goodsCode", rs.getInt("goodsCode"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("addressCode", rs.getInt("addressCode"));
+			map.put("orderQuantity", rs.getInt("orderQuantity"));
+			map.put("orderPrice", rs.getInt("orderPrice"));
+			map.put("orderState", rs.getString("orderState"));
+			map.put("createdate", rs.getString("createdate"));
+			map.put("goodsName", rs.getString("goodsName"));
+			map.put("filename", rs.getString("filename"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
 	}
 }

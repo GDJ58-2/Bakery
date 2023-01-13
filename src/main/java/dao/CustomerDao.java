@@ -252,13 +252,12 @@ public class CustomerDao {
 	}
 	
 	// 회원탈퇴
-	public int customerDelete(Connection conn, Customer customer) throws Exception {
+	public int customerDelete(Connection conn, String customerId) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM customer"
-				+ " WHERE customer_id = ? and customer_pw = PASSWORD(?)";
+				+ " WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
-		stmt.setString(2, customer.getCustomerPw());
+		stmt.setString(1, customerId);
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
