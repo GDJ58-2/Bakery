@@ -27,7 +27,7 @@
 	
 	<!-- 주문 조회 -->
 	<div>
-		<a href = "${pageContext.request.contextPath}/">
+		<a href = "${pageContext.request.contextPath}/orders/ordersList">
 			<button type = "button" id = "cartBtn">주문목록</button>
 		</a>
 	</div>
