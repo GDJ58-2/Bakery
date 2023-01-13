@@ -15,7 +15,7 @@ import vo.Customer;
 import vo.Cart;
 
 @WebServlet("/cart/cartList")
-public class selectCartListController extends HttpServlet {
+public class SelectCartListController extends HttpServlet {
 	private CartService cartService;
 	// 장바구니 조회
 	@SuppressWarnings("unchecked")
@@ -41,7 +41,7 @@ public class selectCartListController extends HttpServlet {
 				int result = 0;
 				for(HashMap<String, Object> user : userList) {
 					cart.setGoodsCode((int)user.get("goodsCode"));
-					cart.setCartQuantity((int)user.get("goodsQuantity"));
+					cart.setCartQuantity((int)user.get("cartQuantity"));
 					cart.setCustomerId(custmerId);
 					this.cartService = new CartService();
 					result = cartService.addCart(cart);
@@ -54,7 +54,7 @@ public class selectCartListController extends HttpServlet {
 				session.removeAttribute("userList");
 			}
 		} else { // 비회원
-			//System.out.println("userList: "+userList);
+			//System.out.println("userList: "+userList);	
 			request.setAttribute("loginCustomer", loginCustomer);
 			request.setAttribute("userList", userList);
 		}

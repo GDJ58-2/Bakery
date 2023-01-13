@@ -18,16 +18,15 @@
 						<table>
 						<c:forEach var = "user" items = "${userList}">
 							<tr>
-								<td>
-									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-									 	<button type = "button">X</button>
-									</a>
-								<input type="hidden" name="goodsCode" value="${user.goodsCode}"></td>
+								<td><input type="hidden" name="goodsCode" value="${user.goodsCode}"></td>
 								<td><input type="checkbox" name="checkedGoodsCode" id = "checkGoodsCode" value="${user.goodsCode}"></td>
 								<td><input type="text" name="goodsName" value="${user.goodsName}" readonly="readonly"></td>
 								<td>
 									<input type="number" name="cartQuantity" value="${user.cartQuantity}" readonly ="readonly">개
 									<a href = "${pageContext.request.contextPath}/cart/modifyCart"><button type = "button">수량변경</button></a>	
+									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
+									 	<button type = "button">x</button>
+									</a>
 								</td>
 							</tr>
 						</c:forEach>
@@ -38,17 +37,15 @@
 						<table>
 						<c:forEach var = "customer" items = "${customerList}">
 							<tr>
-								<td>
-									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
-								 		<button type = "button">X</button>
-									</a>
-									<input type="hidden" name="goodsCode" value="${customer.goodsCode}">
-								</td>
+								<td><input type="hidden" name="goodsCode" value="${customer.goodsCode}"></td>
 								<td><input type="checkbox" name="checkedGoodsCode" value="${customer.goodsCode}"></td>
 								<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
 								<td>
 									<input type="number" name="cartQuantity" value="${customer.cartQuantity}">개
 									<a href = "${pageContext.request.contextPath}/cart/modifyCart"><button type = "button">수량변경</button></a>
+									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
+								 		<button type = "button">x</button>
+									</a>
 								</td>
 							</tr>
 						</c:forEach>
