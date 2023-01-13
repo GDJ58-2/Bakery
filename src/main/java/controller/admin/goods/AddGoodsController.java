@@ -20,6 +20,17 @@ import vo.GoodsImg;
 @WebServlet("/admin/goods/addGoods")
 public class AddGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 로그인 후에만 진입가능
+		/*
+		HttpSession session = request.getSession();
+		
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
+		if(loginMember == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			return;
+		}
+		*/
+		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/addGoods.jsp");
 		
@@ -27,6 +38,18 @@ public class AddGoodsController extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		// 로그인 후에만 진입가능
+		/*
+		HttpSession session = request.getSession();
+		
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
+		if(loginMember == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			return;
+		}
+		*/
+		
 		// 프로젝트안 upload폴더의 실제 물리적 위치를 반환
 		String dir = request.getServletContext().getRealPath("/upload");
 		int maxFileSize = 1024 * 1024 * 100; // 100Mbyte

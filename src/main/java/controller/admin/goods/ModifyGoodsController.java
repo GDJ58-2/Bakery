@@ -22,13 +22,13 @@ import vo.GoodsImg;
 @WebServlet("/admin/goods/modifyGoods")
 public class ModifyGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
 		// 로그인 후에만 진입가능
+		/*
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
 		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
 			return;
 		}
 		*/
@@ -62,13 +62,13 @@ public class ModifyGoodsController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		/*
 		// 로그인 후에만 진입가능
+		/*
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
 		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
 			return;
 		}
 		*/
