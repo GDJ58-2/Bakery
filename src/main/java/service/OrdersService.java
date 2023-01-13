@@ -148,46 +148,14 @@ public class OrdersService {
 	}
 	
 	// UPDATE
-	public int modifyOrdersByAdmin(Orders orders) { // 주문수정-관리자
+	public int modifyOrders(Orders orders) { // 주문수정
 		int row = 0;
 		this.ordersDao = new OrdersDao();
 		this.pointHistoryDao = new PointHistoryDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = ordersDao.updateOrdersByAdmin(conn, orders);
-			if(orders.getOrderState().equals("취소")) {
-				pointHistoryDao.deletePoint(conn, orders.getOrderCode());
-			} else if(orders.getOrderState().equals("구매확정")) {
-				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
-				pointHistoryDao.insertPoint(conn, p);
-			}
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				DBUtil.close(null, null, conn);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return row;
-	}
-	
-	public int modifyOrdersByCustomer(Orders orders) { // 주문수정- 고객
-		int row = 0;
-		this.ordersDao = new OrdersDao();
-		this.pointHistoryDao = new PointHistoryDao();
-		Connection conn = null;
-		try {
-			conn = DBUtil.getConnection();
-			row = ordersDao.updateOrdersByAdmin(conn, orders);
+			row = ordersDao.updateOrders(conn, orders);
 			if(orders.getOrderState().equals("취소")) {
 				pointHistoryDao.deletePoint(conn, orders.getOrderCode());
 			} else if(orders.getOrderState().equals("구매확정")) {
@@ -237,5 +205,31 @@ public class OrdersService {
 			}
 		}
 		return row;
+	}
+	
+	// 관리자 기능 - 모든 주문내역 보기 
+	public ArrayList<HashMap<String, Object>> getOrdersListByAdmin() {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.ordersDao = new OrdersDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = ordersDao.selectOrdersListByAdmin(conn);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
 	}
 }

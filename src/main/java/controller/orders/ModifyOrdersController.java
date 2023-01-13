@@ -16,6 +16,7 @@ import vo.Orders;
 @WebServlet("/orders/modifyOrders")
 public class ModifyOrdersController extends HttpServlet {
 	private OrdersService ordersService;
+	// modify Orders form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request.getParameter("orderCode")==null||request.getParameter("orderCode").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/orders/ordersList");
@@ -48,7 +49,7 @@ public class ModifyOrdersController extends HttpServlet {
 		System.out.println(orders);
 		
 		this.ordersService = new OrdersService();
-		int row = ordersService.modifyOrdersByAdmin(orders);
+		int row = ordersService.modifyOrders(orders);
 		System.out.println(row+"<--ModifyOrdersController row");
 		response.sendRedirect(request.getContextPath()+"/orders/ordersOne?orderCode="+orderCode);
 	}
