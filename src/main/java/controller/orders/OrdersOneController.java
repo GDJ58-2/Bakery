@@ -20,12 +20,15 @@ public class OrdersOneController extends HttpServlet {
 		/*
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
 		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
 		*/
+		
+		// 세션의 로그인 된 아이디로 수정 예정
+		String customerId = "test";
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -60,7 +63,7 @@ public class OrdersOneController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		OrdersService ordersService = new OrdersService();
 		map = ordersService.getOrdersOne(orderCode);
-		list = ordersService.getOrdersOneList(createdate);
+		list = ordersService.getOrdersOneList(createdate, customerId);
 		
 		request.setAttribute("map", map);
 		request.setAttribute("list", list);

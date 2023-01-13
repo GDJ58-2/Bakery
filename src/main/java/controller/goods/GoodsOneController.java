@@ -24,9 +24,9 @@ public class GoodsOneController extends HttpServlet {
 		/*
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
+		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
 		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
 		*/

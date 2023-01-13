@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>ordersOne.jsp</title>
+<title>removeOrders.jsp</title>
 </head>
 <body>
 	<h1>주문상세</h1>
@@ -13,59 +13,59 @@
 	<div style="color:red;">
 	${msg}
 	</div>
-	<c:forEach var="map" items="${list}">
+	<c:forEach var="m" items="${list}">
 		<table border="1">
 			<tr>
 				<td rowspan="12">
-					<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
+					<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="400" height="400">
 				</td>
 				<th>상품 번호 : </th>
-				<td>${map.goodsCode}</td>
+				<td>${m.goodsCode}</td>
 			</tr>
 			<tr>
 				<th>상품 이름 : </th>
-				<td>${map.goodsName}</td>
+				<td>${m.goodsName}</td>
 			</tr>
 			<tr>
 				<th>상품 종류 : </th>
-				<td>${map.categoryName}</td>
+				<td>${m.categoryName}</td>
 			</tr>
 			<tr>
 				<th>상품 수량 : </th>
-				<td>${map.orderQuantity}개</td>
+				<td>${m.orderQuantity}개</td>
 			</tr>
 			<tr>
 				<th>상품 가격 : </th>
-				<td>${map.goodsPrice}원</td>
+				<td>${m.goodsPrice}원</td>
 			</tr>
 			<tr>
 				<th>상품 배송상태 : </th>
-				<td>${map.orderState}</td>
+				<td>${m.orderState}</td>
 			</tr>
 			<tr>
 				<th>주문 날짜 : </th>
-				<td>${map.createdate}</td>
+				<td>${m.createdate}</td>
 			</tr>
 			<tr>
 				<th>주문 가격 : </th>
-				<td>${map.orderPrice}원</td>
+				<td>${m.orderPrice}원</td>
 			</tr>
 			<tr>
 				<th>리뷰 작성 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${m.orderCode}">주문 수정</a>
 				</td>
 			</tr>
 			<tr>
 				<th>배송 문의 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${map.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${m.orderCode}">주문 수정</a>
 				</td>
 			</tr>
 			<tr>
 				<th>구매 확정 : </th>
 				<td>
-					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
+					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${m.orderCode}">주문 수정</a>
 				</td>
 			</tr>
 		</table>
@@ -95,10 +95,16 @@
 			<td>${map.address}</td>
 		</tr>
 	</table>
-	
-	<div>
-		<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
-		<a href="${pageContext.request.contextPath}/orders/removeOrders?orderCode=${map.orderCode}&createdate=${map.createdate}">주문 취소</a>
-	</div>
+	<br>
+	<form action="${pageContext.request.contextPath}/orders/removeOrders" method="post">
+		<input type="hidden" name="orderCode" value="${map.orderCode}">
+		<input type="hidden" name="createdate" value="${map.createdate}">
+		<input type="hidden" name="orderState" value="${map.orderState}">
+		<div>
+			비밀번호 입력 : 
+			<input type="password" name="customerPw">
+		</div>
+	<button type="submit">주문 취소</button>
+	</form>
 </body>
 </html>
