@@ -3,13 +3,16 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import dao.EmpDao;
 import util.DBUtil;
 import vo.Emp;
 
 public class EmpService {
 	private EmpDao empDao;
-	public Emp loginByEmp(Emp paramEmp) { // login
+	// login
+	public Emp loginByEmp(Emp paramEmp) { 
 		Emp returnEmp = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;
@@ -33,7 +36,35 @@ public class EmpService {
 		}
 		return returnEmp;
 	}
-	public int addEmp(Emp emp) { // emp 추가
+	
+	// 아이디 중복확인
+	public boolean checkId(String empId) {
+		boolean checkId = false;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			checkId = empDao.selectId(conn, empId);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return checkId;
+	}
+	
+	 // 회원가입 - emp
+	public int addEmp(Emp emp) {
 		int row = 0;
 		boolean checkId = false;
 		this.empDao = new EmpDao();
@@ -41,7 +72,7 @@ public class EmpService {
 		try {
 			conn = DBUtil.getConnection();
 			checkId = empDao.selectId(conn, emp.getEmpId());
-			if(checkId) { // 아이디 사용 불가 시 강제로 예외를 발생시켜 emp추가하지 않기 
+			if(checkId) { 
 				return row;
 			}
 			row = empDao.insertEmp(conn, emp);
@@ -62,13 +93,15 @@ public class EmpService {
 		}
 		return row;
 	}
-	public int modifyEmpPw(Emp emp) { // empPw 수정
+	
+	// 비밀번호 변경 - emp
+	public int modifyEmpPw(HashMap<String, Object> map) { 
 		int row = 0;
 		this.empDao = new EmpDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = empDao.updateEmpPw(conn, emp);
+			row = empDao.updateEmpPw(conn, map);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -86,7 +119,9 @@ public class EmpService {
 		}
 		return row;
 	}
-	public Emp getEmpOne(int empCode) { // modifyEmpPw form
+	
+	// 상세보기 
+	public Emp getEmpOne(int empCode) { 
 		Emp emp = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;
@@ -110,7 +145,9 @@ public class EmpService {
 		}
 		return emp;
 	}
-	public int modifyEmpByAdmin(Emp emp) { // 권한, 활성상태 수정
+	
+	// 권한, 활성상태 수정
+	public int modifyEmpByAdmin(Emp emp) {
 		int row = 0;
 		this.empDao = new EmpDao();
 		Connection conn = null;
@@ -140,7 +177,9 @@ public class EmpService {
 		}
 		return row;
 	}
-	public ArrayList<Emp> getEmpListByAdmin() { // empList 출력
+	
+	// empList 출력
+	public ArrayList<Emp> getEmpListByAdmin() { 
 		ArrayList<Emp> list = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;

@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.CartDao;
+import dao.GoodsDao;
 import dao.OrdersDao;
 import dao.PointHistoryDao;
 import util.DBUtil;
 import vo.Cart;
 import vo.CustomerAddress;
+import vo.Goods;
 import vo.Orders;
 import vo.PointHistory;
 
@@ -18,6 +20,7 @@ public class OrdersService {
 	private PointHistoryDao pointHistoryDao;
 	private OrdersDao ordersDao;
 	private CartDao cartDao;
+	private GoodsDao goodsDao;
 	private CustomerAddressService customerAddressService;
 	
 	// GET
@@ -108,13 +111,14 @@ public class OrdersService {
 		this.customerAddressService = new CustomerAddressService();
 		this.ordersDao = new OrdersDao();
 		this.cartDao = new CartDao();
+		this.goodsDao = new GoodsDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
 			int addressCode = customerAddressService.addAddress(address);
 			System.out.println(addressCode+"<--OrdersService addressCode");
-			// 주문추가
+			// 주문추가 
 			for(Orders o : ordersList) {
 				o.setAddressCode(addressCode);
 				orderCode = ordersDao.insertOrders(conn, o);
@@ -122,13 +126,17 @@ public class OrdersService {
 				// 장바구니 삭제
 				Cart cart = new Cart(o.getGoodsCode(), o.getCustomerId(), o.getOrderQuantity(), null);
 				cartDao.deleteCartList(conn, cart);
-				// 포인트 내역 추가
+				// 포인트 사용 내역 추가 -> 적립은 구매확정 후 
 				PointHistory usePoint = new PointHistory(orderCode, "사용", paramUsePoint, null);
 				if(paramUsePoint!=0) {
 					pointHistoryDao.insertPoint(conn, usePoint);
 				}
+				// goods 재고 변경
+				Goods goods = new Goods();
+				goods.setGoodsCode(o.getGoodsCode());
+				goods.setGoodsStock(o.getOrderQuantity());
+				goodsDao.updateGoodsStock(conn, goods);
 			}
-		
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -148,7 +156,7 @@ public class OrdersService {
 	}
 	
 	// UPDATE
-	public int modifyOrders(Orders orders) { // 주문수정
+	public int modifyOrders(Orders orders) { // 주문 상태 수정
 		int row = 0;
 		this.ordersDao = new OrdersDao();
 		this.pointHistoryDao = new PointHistoryDao();

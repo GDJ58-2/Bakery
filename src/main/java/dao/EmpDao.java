@@ -1,13 +1,17 @@
 package dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.DBUtil;
 import vo.Emp;
 
 public class EmpDao { 
-	public Emp selectIdPwByEmp(Connection conn, Emp paramEmp) throws Exception { // login session
+	// login
+	public Emp selectIdPwByEmp(Connection conn, Emp paramEmp) throws Exception {
 		Emp returnEmp = null;
 		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, auth_code authCode, active FROM emp WHERE emp_id=? AND emp_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -20,6 +24,8 @@ public class EmpDao {
 		DBUtil.close(rs, stmt, null);
 		return returnEmp;
 	}
+	
+	// insert
 	public int insertEmp(Connection conn, Emp emp) throws Exception { // addEmp
 		int row = 0;
 		String sql = "INSERT INTO emp(emp_id, emp_pw, emp_name, active, auth_code, createdate) VALUES(?,PASSWORD(?),?,?,?,NOW())";
@@ -33,7 +39,9 @@ public class EmpDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public boolean selectId(Connection conn, String empId) throws Exception { // id 중복 검사
+
+	// id 중복 검사
+	public boolean selectId(Connection conn, String empId) throws Exception { 
 		boolean check = false;
 		String sql = "SELECT t.userId"
 				+ "		FROM("
@@ -51,16 +59,20 @@ public class EmpDao {
 		DBUtil.close(rs, stmt, null);
 		return check;
 	}
-	public int updateEmpPw(Connection conn, Emp emp) throws Exception { // modifyEmpPw
+	
+	// UPDATE 
+	public int updateEmpPw(Connection conn, HashMap<String, Object> map) throws Exception { 
 		int row = 0;
-		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_id = ?";
+		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_id = ? AND emp_pw = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, emp.getEmpPw());
-		stmt.setString(2, emp.getEmpId());
+		stmt.setString(1, (String)map.get("newEmpPw"));
+		stmt.setString(2, (String)map.get("empId"));
+		stmt.setString(3, (String)map.get("empPw"));
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
+	
 	public int updateEmpByAdmin(Connection conn, Emp emp) throws Exception { // modifyEmp
 		int row = 0;
 		String sql = "UPDATE emp SET active=?, auth_code=? WHERE emp_id=?";
@@ -68,14 +80,13 @@ public class EmpDao {
 		stmt.setString(1, emp.getActive());
 		stmt.setInt(2, emp.getAuthCode());
 		stmt.setString(3, emp.getEmpId());
-		System.out.println(emp.getActive());
-		System.out.println(emp.getAuthCode());
-		System.out.println( emp.getEmpId());
 		row=stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public Emp selectEmpOne(Connection conn, int empCode) throws Exception { // modifyEmp form
+	
+	// 상세보기
+	public Emp selectEmpOne(Connection conn, int empCode) throws Exception { 
 		Emp emp = null;
 		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, active, auth_code authCode, createdate FROM emp WHERE emp_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -87,7 +98,9 @@ public class EmpDao {
 		DBUtil.close(rs, stmt, null);
 		return emp;
 	}
-	public ArrayList<Emp> selectEmpListByAdmin(Connection conn) throws Exception { // empList
+	
+	// empList 
+	public ArrayList<Emp> selectEmpListByAdmin(Connection conn) throws Exception { 
 		ArrayList<Emp> list = new ArrayList<Emp>();
 		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, active, a.auth_code authCode, a.auth_memo authMemo, e.createdate FROM emp e INNER JOIN auth_info a ON e.auth_code=a.auth_code ORDER BY active ASC, e.auth_code DESC";
 		PreparedStatement stmt = conn.prepareStatement(sql);
