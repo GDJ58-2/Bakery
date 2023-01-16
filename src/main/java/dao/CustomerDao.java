@@ -242,19 +242,19 @@ public class CustomerDao {
 	}
 
 	// 회원탈퇴 전 삭제되어야 하는 db들 - cart(cartDao), point_history, pw_history
-	// 4) point_history 삭제
-	public int deleteCustomerPointHistory(Connection conn, String customerId) throws Exception {
+	// 1) point_history 삭제
+	public int deleteCustomerPointHistory(Connection conn, Customer customer) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM point_history"
 				+ " WHERE order_code IN (SELECT order_code FROM orders WHERE customer_id = ?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customerId);
+		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
 	
-	// 6) pw_history 삭제 
+	// 2) pw_history 삭제 
 	public int deletePwHistory(Connection conn, String customerId) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM pw_history WHERE customer_id = ?";
@@ -266,12 +266,12 @@ public class CustomerDao {
 	}
 	
 	// 회원탈퇴
-	public int customerDelete(Connection conn, String customerId) throws Exception {
+	public int customerDelete(Connection conn, Customer customer) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM customer"
 				+ " WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customerId);
+		stmt.setString(1, customer.getCustomerId());
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
 		return row;
