@@ -93,39 +93,14 @@ public class CustomerAddressService {
 		return ca;
 	}
 
-	public int getAddressCode(CustomerAddress address) {
-		int addressCode = 0;
-		this.customerAddressDao = new CustomerAddressDao();
-		Connection conn = null;
-		try {
-			conn = DBUtil.getConnection();
-			addressCode = customerAddressDao.selectAddressCode(conn, address);
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				DBUtil.close(null, null, conn);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return addressCode;
-	}
-
 	// ADD
-	public int addAddressOne(CustomerAddress address) {
-		int row = 0;
+	public HashMap<String, Object> addAddress(CustomerAddress address) {
+		HashMap<String, Object> map = null;
 		this.customerAddressDao = new CustomerAddressDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = customerAddressDao.insertAddressOne(conn, address);
+			map = customerAddressDao.insertAddress(conn, address);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -141,7 +116,7 @@ public class CustomerAddressService {
 				e.printStackTrace();
 			}
 		}
-		return row;
+		return map;
 	}
 	
 	// MODIFY
