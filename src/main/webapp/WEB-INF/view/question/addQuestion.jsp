@@ -17,9 +17,14 @@
 	<form action="${pageContext.request.contextPath}/question/addQuestion" method="post">
 		<table border="1">
 			<tr>
-				<th>주문 번호 : </th>
+				<th>주문내역 </th>
 				<td>
-					<input type="number" name="orderCode" value="${orderCode}" readonly="readonly">
+					<select>
+						<option>===</option>
+						<c:forEach var = "order" items = "${orderCodeList}">
+							<option>${order.orderCode} / ${order.goodsName} / ${order.orderQuantity}개</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -28,7 +33,6 @@
 					<select name="category">
 						<option value="배송">배송</option>
 						<option value="반품">반품</option>
-						<option value="교환">교환</option>
 						<option value="기타">기타</option>
 					</select>
 				</td>
