@@ -26,21 +26,17 @@
 			<tr>
 				<th>상품 종류 : </th>
 				<td>
-					<select name="categoryNo">
-						<option value="${map.categoryNo}">${map.categoryName}</option>
-						<!-- 카테고리 리스트 만들면 현재 값 외의 옵션이 나오게 수정 필요-->
-						<option value="1">식빵</option>
-						<option value="2">간식빵</option>
-						<option value="3">파이</option>
-						<option value="4">도넛</option>
-						<option value="5">생크림케이크</option>
-						<option value="6">스페셜케이크</option>
-						<option value="7">조각케이크</option>
-						<option value="8">샌드위치</option>
-						<option value="9">샐러드</option>
-						<option value="10">디저트</option>
-						<option value="11">티</option>
-						<option value="12">에이드</option>
+					<select name= "categoryNo" id="categoryNo">
+						<option value="${map.categoryNo}">
+							${map.categoryKind} ${map.categoryName}
+						</option>
+						<c:forEach var="gc" items="${list}">
+							<c:if test="${gc.categoryNo != map.categoryNo}">
+								<option value="${gc.categoryNo}">
+									${gc.categoryKind} ${gc.categoryName}
+								</option>
+							</c:if>
+						</c:forEach>
 					</select>
 				</td>
 			</tr>

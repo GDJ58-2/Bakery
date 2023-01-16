@@ -173,11 +173,11 @@ public class OrdersDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-
+	
 	// DELETE
 	public int deleteOrders(Connection conn, String createdate) throws Exception { // 주문 삭제
 		int row = 0;
-		String sql = "DELETE orders WHERE createdate LIKE ?";
+		String sql = "DELETE FROM orders WHERE createdate LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+createdate+"%");
 		row = stmt.executeUpdate();

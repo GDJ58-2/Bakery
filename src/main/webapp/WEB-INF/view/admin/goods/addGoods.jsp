@@ -123,19 +123,12 @@
 			<tr>
 				<th>상품 종류 : </th>
 				<td>
-					<select name="categoryNo" id="categoryNo">
-						<option value="1">식빵</option>
-						<option value="2">간식빵</option>
-						<option value="3">파이</option>
-						<option value="4">도넛</option>
-						<option value="5">생크림케이크</option>
-						<option value="6">스페셜케이크</option>
-						<option value="7">조각케이크</option>
-						<option value="8">샌드위치</option>
-						<option value="9">샐러드</option>
-						<option value="10">디저트</option>
-						<option value="11">티</option>
-						<option value="12">에이드</option>
+					<select name= "categoryNo" id="categoryNo">
+						<c:forEach var="gc" items="${list}">
+							<option value="${gc.categoryNo}">
+								${gc.categoryKind} ${gc.categoryName}
+							</option>
+						</c:forEach>
 					</select>
 				</td>
 			</tr>

@@ -7,7 +7,23 @@
 <title>goodsListByAdmin.jsp</title>
 </head>
 <body>
-<h1>페스츄리/파이</h1>
+<h1>상품 안내</h1>
+	<c:choose>
+		<c:when test="${categoryKind == null || categoryKind eq ''}">
+			<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryKind=">전체</a>
+			<c:forEach var="gc" items="${gcList}">
+				<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
+			</c:forEach>
+		</c:when>
+		<c:otherwise>
+			<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryKind=">전체</a>
+			<c:forEach var="gc" items="${gcList}">
+				<c:if  test="${categoryKind eq gc.categoryKind}">
+					<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
+				</c:if>
+			</c:forEach>
+		</c:otherwise>
+	</c:choose>
 	<table border="1">
 		<tr>
 			<!-- 

@@ -18,14 +18,14 @@ public class GoodsService {
 	
 	// GET
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> getGoodsList() {
+	public ArrayList<HashMap<String, Object>> getGoodsList(int categoryNo) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			list = goodsDao.selectgoodsList(conn);
+			list = goodsDao.selectgoodsList(conn, categoryNo);
 			conn.commit();
 		} catch(Exception e) {
 			try {

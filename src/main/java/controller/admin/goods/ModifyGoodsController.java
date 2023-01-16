@@ -3,6 +3,7 @@ package controller.admin.goods;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -15,8 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import service.GoodsCategoryService;
 import service.GoodsService;
 import vo.Goods;
+import vo.GoodsCategory;
 import vo.GoodsImg;
 
 @WebServlet("/admin/goods/modifyGoods")
@@ -53,6 +56,11 @@ public class ModifyGoodsController extends HttpServlet {
 		map = goodsService.getGoodsOne(goodsCode);
 		
 		request.setAttribute("map", map);
+		
+		// 상품 카테고리 출력 -> select 태그
+		GoodsCategoryService goodsCategoryService = new GoodsCategoryService();
+		ArrayList<GoodsCategory> list = goodsCategoryService.getGoodsCategoryList();
+		request.setAttribute("list", list);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/modifyGoods.jsp");

@@ -47,14 +47,8 @@
 					${question.createdate}
 				</td>
 			</tr>
-			<tr>
-				<th>비밀번호 입력 : </th>
-				<td>
-					<input type="password" name="customerPw">
-				</td>
-			</tr>
 		</table>
-		<button type="submit">수정</button>
+		<button type="submit">삭제</button>
 	</form>
 </body>
 </html>

@@ -99,11 +99,7 @@
 	<form action="${pageContext.request.contextPath}/orders/removeOrders" method="post">
 		<input type="hidden" name="orderCode" value="${map.orderCode}">
 		<input type="hidden" name="createdate" value="${map.createdate}">
-		<div>
-			비밀번호 입력 : 
-			<input type="password" name="customerPw">
-		</div>
-	<button type="submit">주문 취소</button>
+	<button type="submit">주문 내역 삭제</button>
 	</form>
 </body>
 </html>
