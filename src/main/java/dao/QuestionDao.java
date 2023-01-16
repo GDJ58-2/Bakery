@@ -121,6 +121,7 @@ public class QuestionDao {
 				map.put("goodsName", rs.getString("goodsName"));
 				list.add(map);
 			}
+			DBUtil.close(rs, stmt, null);
 			return list;
 		}
 }

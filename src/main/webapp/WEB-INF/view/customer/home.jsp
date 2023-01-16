@@ -5,6 +5,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function() {
+		$('#logoutBtn').click(function() {
+			var out = confirm('로그아웃하시겠습니까?') 
+			if(out == true) {
+				alert('로그아웃되었습니다');
+			} else {
+				alert('로그아웃 취소');
+				return false;
+			}
+		});
+	});
+</script>
 </head>
 <body>
 	<div>
