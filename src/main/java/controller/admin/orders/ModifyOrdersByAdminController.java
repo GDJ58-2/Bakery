@@ -39,6 +39,8 @@ public class ModifyOrdersByAdminController extends HttpServlet {
 				Orders orders = new Orders();
 				orders.setOrderState(orderState);
 				orders.setOrderCode(i);
+				HashMap<String, Object> map = ordersService.getOrdersOne(i);
+				orders.setOrderPrice((int)map.get("orderPrice"));
 				ordersService.modifyOrders(orders);
 		}
 		response.sendRedirect(request.getContextPath()+"/admin/orders/modifyOrders");

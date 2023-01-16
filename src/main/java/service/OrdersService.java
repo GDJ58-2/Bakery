@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.CartDao;
+import dao.CustomerAddressDao;
 import dao.GoodsDao;
 import dao.OrdersDao;
 import dao.PointHistoryDao;
@@ -21,7 +22,7 @@ public class OrdersService {
 	private OrdersDao ordersDao;
 	private CartDao cartDao;
 	private GoodsDao goodsDao;
-	private CustomerAddressService customerAddressService;
+	private CustomerAddressDao customerAddressDao;
 	
 	// GET
 	// 회원의 주문 내역
@@ -106,9 +107,9 @@ public class OrdersService {
 	
 	// ADD
 	public HashMap<String, Object> addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
-		HashMap<String, Object> map = null;		
+		HashMap<String, Object> map = null;	
 		this.pointHistoryDao = new PointHistoryDao();
-		this.customerAddressService = new CustomerAddressService();
+		this.customerAddressDao = new CustomerAddressDao();
 		this.ordersDao = new OrdersDao();
 		this.cartDao = new CartDao();
 		this.goodsDao = new GoodsDao();
@@ -116,9 +117,14 @@ public class OrdersService {
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
-			HashMap<String, Object> addressMap = customerAddressService.addAddress(address);
-			int addressCode = (int)addressMap.get("addressCode");
-			//System.out.println(addressCode+"<--OrdersService addressCode");
+			int addressCode = 0;
+			if(address.getAddress()==null||address.getAddress().equals("")) { // 직접입력하지 않음(->이미 사용했던 주소 중 선택)
+				addressCode = customerAddressDao.selectAddressCode(conn, address);
+			} else {
+				HashMap<String, Object> addressMap = customerAddressDao.insertAddress(conn, address);
+				addressCode = (int)addressMap.get("addressCode");
+			}
+			System.out.println(addressCode+"<--OrdersService addressCode");
 			// 주문추가 
 			for(Orders o : ordersList) {
 				o.setAddressCode(addressCode);
@@ -153,7 +159,7 @@ public class OrdersService {
 				e.printStackTrace();
 			}
 		}
-		return map;
+		return map; // (int)map.get("row")==1 -> 추가 성공
 	}
 	
 	// UPDATE
@@ -176,6 +182,7 @@ public class OrdersService {
 				goods.setGoodsStock((int)stock.get("goodsStock")+orders.getOrderQuantity());
 			} else if(orders.getOrderState().equals("구매확정")) {
 				// 포인트 내역 추가 (적립)
+				System.out.print((int)(orders.getOrderPrice()*0.05));
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
 				pointHistoryDao.insertPoint(conn, p);
 			}

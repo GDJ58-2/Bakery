@@ -35,7 +35,7 @@ public class CustomerAddressDao {
 				+ "		FROM customer_address ca"
 				+ "	INNER JOIN (SELECT address_kind, max(createdate) maxDate"
 				+ "				FROM customer_address"
-				+ "				WHERE customer_id = 'test'"
+				+ "				WHERE customer_id = ?"
 				+ "				GROUP BY address_kind) t"
 				+ "		ON ca.address_kind = t.address_kind AND ca.createdate=t.maxDate";
 		PreparedStatement stmt = conn.prepareStatement(sql);

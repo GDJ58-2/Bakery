@@ -50,13 +50,19 @@
 					<th>주문 날짜 </th>
 					<th>리뷰 작성 </th>
 					<th>문의 </th>
-					
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach var="map" items="${ordersList}">
 					<tr>
-						<td><input type="checkbox" name="orderCode" value="${map.orderCode}"></td>
+						<td>
+							<c:if test="${map.orderState eq '구매확정'}">
+								&nbsp;
+							</c:if>
+							<c:if test="${map.orderState ne '구매확정'}">
+								<input type="checkbox" name="orderCode" value="${map.orderCode}">
+							</c:if>
+						</td>
 						<td>${map.customerId}</td>
 						<td>${map.goodsCode}</td>
 						<td>

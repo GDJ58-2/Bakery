@@ -1,6 +1,7 @@
 package controller.orders;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -38,12 +39,13 @@ public class AddOrdersController extends HttpServlet {
 		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
 		String addressKind = request.getParameter("addressKind");
 		String address = request.getParameter("address");
-		if(goodsCodeStr==null||cartQuantityStr==null||addressKind==null||addressKind.equals("")||address==null||address.equals("")) {
+		if(goodsCodeStr==null||cartQuantityStr==null||addressKind==null||addressKind.equals("")) {
 			response.sendRedirect(request.getContextPath()+"/cart/cartList");
 			return;
 		}
+		
 		int usePoint = 0;
-		if(request.getParameter("usePoint")!=null) {
+		if(request.getParameter("usePoint")!=null||!request.getParameter("usePoint").equals("")) {
 			usePoint = Integer.parseInt(request.getParameter("usePoint"));
 		}
 		
@@ -63,7 +65,7 @@ public class AddOrdersController extends HttpServlet {
 		
 		this.cartService = new CartService();
 		ArrayList<HashMap<String, Object>> list = cartService.selectCartList(loginCustomer.getCustomerId(), goodsCodeInt);
-		ArrayList<Orders> ordersList = new ArrayList<Orders>(); // 최종 주문목록 배열
+		ArrayList<Orders> ordersList = new ArrayList<Orders>(); // 최종 주문목록 
 		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null); 
 		// ArrayList<HashMap<String, Object>>  ---> ArrayList<Orders>
 		for(HashMap<String, Object> map : list) {
@@ -71,7 +73,19 @@ public class AddOrdersController extends HttpServlet {
 			ordersList.add(orders);
 		}
 		this.ordersService = new OrdersService();
-		ordersService.addOrders(ordersList, paramAddress, usePoint);
-		response.sendRedirect(request.getContextPath()+"/orders/ordersList");
+		HashMap<String, Object> map = ordersService.addOrders(ordersList, paramAddress, usePoint);
+		String msg = "<script>alert('주문 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/cart/cartList'; </script>";
+		if((int)map.get("row")==1) { // 주문 성공
+			int currentPoint = loginCustomer.getPoint();
+			loginCustomer.setPoint(currentPoint-usePoint); // 세션에 저장된 포인트값 변경
+			System.out.println(loginCustomer.getPoint()+"<--AddOrdersController point");
+			msg = "주문이 완료되었습니다.";
+			response.sendRedirect(request.getContextPath()+"/orders/ordersOne?orderCode="+(int)map.get("orderCode")+"&msg="+msg);
+		} else {
+			response.setContentType("text/html; charset=UTF-8");
+			PrintWriter out = response.getWriter();
+			out.println(msg);
+			out.flush();
+		}
 	}
 }

@@ -30,7 +30,7 @@ public class AddOrdersListController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-
+		
 		// 파라메타 값 유효성검사
 		String[] checkedGoodsCodeStr = request.getParameterValues("checkedGoodsCode");
 		if(checkedGoodsCodeStr==null) {
@@ -51,6 +51,7 @@ public class AddOrdersListController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
 		int orderPrice = 0;
 		for(HashMap<String, Object> map : orderList) {
+			map.put("saveupPoint", (int)((int)map.get("goodsPrice")*(int)map.get("cartQuantity")*0.05));
 			orderPrice += (int)map.get("goodsPrice")*(int)map.get("cartQuantity");
 		}
 		request.setAttribute("addressList", addressList);
