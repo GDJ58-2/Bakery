@@ -20,9 +20,10 @@
 							<tr>
 								<td><input type="hidden" name="goodsCode" value="${user.goodsCode}"></td>
 								<td><input type="checkbox" name="checkedGoodsCode" id = "checkGoodsCode" value="${user.goodsCode}"></td>
+								<td><img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "50" height = "50"></td>
 								<td><input type="text" name="goodsName" value="${user.goodsName}" readonly="readonly"></td>
 								<td>
-									<input type="number" name="cartQuantity" value="${user.cartQuantity}" readonly ="readonly">개
+									<input type="number" name="cartQuantity" value = "${user.cartQuantity}" readonly ="readonly">개
 									<a href = "${pageContext.request.contextPath}/cart/modifyCart"><button type = "button">수량변경</button></a>	
 									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
 									 	<button type = "button">x</button>
@@ -39,6 +40,7 @@
 							<tr>
 								<td><input type="hidden" name="goodsCode" value="${customer.goodsCode}"></td>
 								<td><input type="checkbox" name="checkedGoodsCode" value="${customer.goodsCode}"></td>
+								<td><img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "50" height = "50"></td>
 								<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
 								<td>
 									<input type="number" name="cartQuantity" value="${customer.cartQuantity}">개
@@ -67,39 +69,5 @@
 			</a>
 		</c:if>
 	</div>
-	
-	<!--  
-	<c:choose>
-		<c:when test = "${userList != null}">
-			<table>
-			<c:forEach var = "user" items = "${userList}">
-				<tr>
-					<td>${user.goodsCode}</td>
-					<td>${user.goodsName}</td>
-					<td>${user.goodsQuantity}</td>
-				</tr>
-			</c:forEach>
-			</table>
-		</c:when>
-		
-		<c:when test = "${customerList != null}">
-			<form action="${pageContext.request.contextPath}/orders/addOrdersList" method="post">
-				<table>
-				<c:forEach var = "customer" items = "${customerList}">
-					<tr>
-						<td><input type="hidden" name="goodsCode" value="${customer.goodsCode}"></td>
-						<td><input type="checkbox" name="checkedGoodsCode" value="${customer.goodsCode}"></td>
-						<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
-						<td><input type="number" name="cartQuantity" value="${customer.cartQuantity}">개</td>
-					</tr>
-				</c:forEach>
-				</table>
-				<c:if test = "${loginCustomer != null}">
-					<button type = "submit">결제하기</button>
-				</c:if>
-			</form>
-		</c:when>
-	</c:choose>
-	-->
 </body>
 </html>

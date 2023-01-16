@@ -92,8 +92,10 @@ public class CustomerService {
 				pKind = (String)map.get("pointKind");
 				if(pKind.equals("적립")) {
 					plusPoint = (int)map.get("point");
+					minusPoint = 0;
 				} else {
 					minusPoint = (int)map.get("point");
+					plusPoint = 0;
 				}
 				totalPoint = totalPoint + (plusPoint - minusPoint);
 			}
@@ -121,6 +123,7 @@ public class CustomerService {
 		}
 		return customer;
 	}
+	
 	
 	// 회원정보수정
 	public int modifyCustomer(Customer customer) { // 이름, 전화번호 변경
@@ -203,7 +206,7 @@ public class CustomerService {
 			conn = DBUtil.getConnection();
 			this.customerDao = new CustomerDao();
 			CartDao cartDao = new CartDao();
-			int pointHistory = customerDao.deleteCustomerPointHistory(conn, customer.getCustomerId());
+			int pointHistory = customerDao.deleteCustomerPointHistory(conn, customer);
 			int deleteCartList = cartDao.deleteCartList(conn, customer.getCustomerId());
 			// 디버깅
 			if(pointHistory == 1) {
@@ -220,7 +223,7 @@ public class CustomerService {
 			//System.out.println(pointHistory+","+pwHistory+","+deleteCartList);
 			if(pointHistory == 0 || pointHistory == 1 || pwHistory == 0 || pwHistory == 1 
 					|| deleteCartList == 0 || deleteCartList == 1) {
-				row = customerDao.customerDelete(conn, customer.getCustomerId());
+				row = customerDao.customerDelete(conn, customer);
 				if(row == 1) {
 					customerDao.insertOutid(conn, customer);
 					System.out.println("CustomerService: 탈퇴완료");

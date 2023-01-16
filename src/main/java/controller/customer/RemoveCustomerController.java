@@ -24,6 +24,7 @@ public class RemoveCustomerController extends HttpServlet {
 		}
 
 		// View
+		session.setAttribute("loginCustomer", loginCustomer);
 	    request.getRequestDispatcher("/WEB-INF/view/customer/removeCustomer.jsp").forward(request, response);
 	}
 	
@@ -37,12 +38,9 @@ public class RemoveCustomerController extends HttpServlet {
 		}
 	
 		request.setCharacterEncoding("utf-8");
-		String pw = request.getParameter("pw");
-
+		String id = request.getParameter("id");
 		Customer customer = new Customer();
-		customer.setCustomerId(loginCustomer.getCustomerId());
-		customer.setCustomerPw(pw);
-		
+		customer.setCustomerId(id);
 		CustomerService customerService = new CustomerService();
 		int result = customerService.removeCustomer(customer);
 		if(result == 1) {

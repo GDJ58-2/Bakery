@@ -33,12 +33,15 @@ public class CartDao {
 		String sql = "SELECT c.goods_code goodsCode"
 				+ ", g.goods_name goodsName"
 				+ ", g.goods_price goodsPrice"
+				+ ", i.filename filename"
 				+ ", c.customer_id customerId"
 				+ ", c.cart_quantity cartQuantity"
 				+ ", c.createdate"
 				+ " FROM cart c"
 				+ " INNER JOIN goods g"
 				+ " ON c.goods_code = g.goods_code"
+				+ " INNER JOIN goods_img i"
+				+ " ON g.goods_code = i.goods_code"
 				+ " WHERE c.customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
@@ -48,6 +51,7 @@ public class CartDao {
 			m.put("goodsCode", rs.getInt("goodsCode"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("goodsPrice", rs.getInt("goodsPrice"));
+			m.put("filename", rs.getString("filename"));
 			m.put("customerId", rs.getString("customerId"));
 			m.put("cartQuantity", rs.getInt("cartQuantity"));
 			m.put("createdate", rs.getString("createdate"));
@@ -56,6 +60,21 @@ public class CartDao {
 		DBUtil.close(rs, stmt, null);
 		return list;
 	}
+	   
+	// 비회원 장바구니 이미지 불러오기
+	public String getGoodsImg(Connection conn, int goodsCode) throws Exception {
+		String result = null;
+		String sql = "SELECT filename FROM goods_img WHERE goods_code = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goodsCode);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			result = rs.getString("filename");
+		}
+		DBUtil.close(rs, stmt, null);
+		return result;
+	}
+	   
 	
 	// 이미 담겨있는 상품인지 확인하기
 	public boolean duplGoods(Connection conn, Cart cart) throws Exception {

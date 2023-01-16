@@ -101,6 +101,31 @@ public class CartService {
 		return list;
 	}
 	
+	public String getGoodsImg(int goodsCode) {
+		String result = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.cartDao = new CartDao();
+			result = cartDao.getGoodsImg(conn, goodsCode);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
 	public int removeCartList(Cart cart) {
 		int row = 0;
 		Connection conn = null;
