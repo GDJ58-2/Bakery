@@ -10,12 +10,12 @@
 		$('#submitBtn').click(function(){
 			if($('#empId').val().length==0){
 				$('#msg').text('아이디를 입력해주세요.');
-				this.focus();
+				$('#empId').focus();
 				return;
 			}
 			if($('#empPw').val().length==0){
 				$('#msg').text('비밀번호를 입력해주세요.');
-				this.focus();
+				$('#empPw').focus();
 				return;
 			}
 			$('#loginEmpForm').submit();

@@ -24,6 +24,9 @@
 			}
 			if($('#newEmpPw').val()!=$('#checkEmpPw').val()) {
 				alert('새 비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+				$('#newEmpPw').val('');
+				$('#checkEmpPw').val('');
+				$('#newEmpPw').focus();
 				return;
 			}
 			$('#modifyEmpPwForm').submit();

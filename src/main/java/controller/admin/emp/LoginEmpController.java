@@ -20,7 +20,7 @@ public class LoginEmpController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 검사 
 		String msg = request.getParameter("msg");
-		System.out.println(msg+"<--LoginEmpController msg");
+		//System.out.println(msg+"<--LoginEmpController msg");
 		if(msg!=null&&msg.equals("로그인 실패")) {
 			msg = "아이디 또는 비밀번호를 잘못 입력했습니다. 다시 시도해주세요.";
 			request.setAttribute("msg", msg);
@@ -44,7 +44,7 @@ public class LoginEmpController extends HttpServlet {
 		
 		this.empService = new EmpService();
 		Emp loginEmp = empService.loginByEmp(paramEmp);
-		System.out.println(loginEmp+"<--LoginEmpController loginEmp");
+		//System.out.println(loginEmp+"<--LoginEmpController loginEmp");
 		// 로그인 실패 시
 		String msg = URLEncoder.encode("로그인 실패","UTF-8"); 
 		String redirectUrl = "/admin/emp/loginEmp?msg="+msg;

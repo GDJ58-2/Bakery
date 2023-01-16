@@ -116,7 +116,7 @@ public class GoodsDao {
 	// 재고 변경
 	public int updateGoodsStock(Connection conn, Goods goods) throws Exception {
 		int row = 0;
-		String sql = "UPDATE goods SET goods_stock=goods_stock-? WHERE goods_code=?";
+		String sql = "UPDATE goods SET goods_stock=? WHERE goods_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, goods.getGoodsStock());
 		stmt.setInt(2, goods.getGoodsCode());

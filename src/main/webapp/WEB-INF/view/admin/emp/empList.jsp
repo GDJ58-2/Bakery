@@ -20,7 +20,7 @@
 				<th>활성화</th>
 				<th>권한</th>
 				<th>등록일</th>
-				<th>수정</th>
+				<th>권한 수정</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -30,7 +30,7 @@
 					<td>${e.empId}</td>
 					<td>${e.empName}</td>
 					<td>${e.active}</td>
-					<td>${e.authCode}</td>
+					<td>${e.authCode} ${e.authMemo}</td>
 					<td>${e.createdate}</td>
 					<td><a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a></td>
 				</tr>

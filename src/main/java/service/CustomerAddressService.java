@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dao.CustomerAddressDao;
 import util.DBUtil;
@@ -117,29 +118,16 @@ public class CustomerAddressService {
 		return addressCode;
 	}
 	
-	// ADD
-	// addressKind(집, 회사, 기타)별로 한개씩만 입력가능 
-	public int addAddress(CustomerAddress address) {
+	// ADD 
+	public HashMap<String, Object> addAddress(CustomerAddress address) {
+		HashMap<String, Object> map = null;
 		int addressCode = 0;
 		this.customerAddressDao = new CustomerAddressDao();
 		Connection conn = null;
-		System.out.println(address);
+		//System.out.println(address);
 		try {
 			conn = DBUtil.getConnection();
-			int count = customerAddressDao.selectAddressCount(conn, address.getCustomerId(), address.getAddressKind());
-			System.out.println(count+"<--<--CustomerAddressService count");
-			if(count==0) {
-				addressCode=customerAddressDao.insertAddress(conn, address);
-			} else {
-				addressCode=customerAddressDao.selectAddressCode(conn, address);
-				if(address.getAddressKind().equals("기타")) { // 기타선택시 업데이트
-					System.out.println(address.getAddressKind()+"<--CustomerAddressService getAddressKind()");
-					System.out.println(addressCode+"<--CustomerAddressService addressCode");
-					address.setAddressCode(addressCode);
-					int row = customerAddressDao.updateAddress(conn, address);
-					System.out.println(row+"<--<--CustomerAddressService row");
-				}
-			}
+			map=customerAddressDao.insertAddress(conn, address);
 			System.out.print(addressCode+"<--CustomerAddressService addressCode");
 			conn.commit();
 		} catch (Exception e) {
@@ -156,7 +144,7 @@ public class CustomerAddressService {
 				e.printStackTrace();
 			}
 		}
-		return addressCode;
+		return map;
 	}
 	
 	// MODIFY

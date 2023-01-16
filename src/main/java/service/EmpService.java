@@ -179,8 +179,8 @@ public class EmpService {
 	}
 	
 	// empList 출력
-	public ArrayList<Emp> getEmpListByAdmin() { 
-		ArrayList<Emp> list = null;
+	public ArrayList<HashMap<String, Object>> getEmpListByAdmin() { 
+		ArrayList<HashMap<String, Object>> list = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;
 		try {

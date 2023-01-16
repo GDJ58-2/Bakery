@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
+	// 비밀번호 길이 제한
 	$(document).ready(function(){
 		$('#submitBtn').click(function(){
 			$('#empNameMsg').text('');

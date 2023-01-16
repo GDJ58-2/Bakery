@@ -100,14 +100,21 @@ public class EmpDao {
 	}
 	
 	// empList 
-	public ArrayList<Emp> selectEmpListByAdmin(Connection conn) throws Exception { 
-		ArrayList<Emp> list = new ArrayList<Emp>();
-		String sql = "SELECT emp_code empCode, emp_id empId, emp_name empName, active, a.auth_code authCode, a.auth_memo authMemo, e.createdate FROM emp e INNER JOIN auth_info a ON e.auth_code=a.auth_code ORDER BY active ASC, e.auth_code DESC";
+	public ArrayList<HashMap<String, Object>> selectEmpListByAdmin(Connection conn) throws Exception { 
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT e.emp_code empCode, e.emp_id empId, e.emp_name empName, e.active, a.auth_code authCode, a.auth_memo authMemo, e.createdate FROM emp e INNER JOIN auth_info a ON e.auth_code=a.auth_code ORDER BY active ASC, e.auth_code DESC";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
-			Emp emp = new Emp(rs.getInt("empCode"),rs.getString("empId"),null,rs.getString("empName"),rs.getString("active"),rs.getInt("authCode"),rs.getString("createdate"));
-			list.add(emp);
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("empCode", rs.getInt("empCode"));
+			map.put("empId", rs.getString("empId"));
+			map.put("empName", rs.getString("empName"));
+			map.put("active", rs.getString("active"));
+			map.put("authCode", rs.getInt("authCode"));
+			map.put("authMemo", rs.getString("authMemo"));
+			map.put("createdate", rs.getString("createdate"));
+			list.add(map);
 		}
 		DBUtil.close(rs, stmt, null);
 		return list;
