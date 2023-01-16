@@ -152,4 +152,29 @@ public class QuestionService {
 		}
 		return row;
 	}
+	
+	public ArrayList<HashMap<String, Object>> getOrderCodeList(String customerId) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.questionDao = new QuestionDao();
+			list = questionDao.ordersCodeList(conn, customerId);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 }

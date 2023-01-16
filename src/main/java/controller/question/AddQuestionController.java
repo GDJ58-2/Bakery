@@ -3,6 +3,8 @@ package controller.question;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import service.QuestionService;
+import vo.Customer;
 import vo.Question;
 
 @WebServlet("/question/addQuestion")
@@ -22,16 +25,16 @@ public class AddQuestionController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// 로그인 후에만 진입가능
-		/*
+
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
-		
+
+		/*
 		int orderCode = 4;
 		// 방어코드
 		
@@ -41,8 +44,11 @@ public class AddQuestionController extends HttpServlet {
 		} else {
 			orderCode = Integer.parseInt(request.getParameter("orderCode"));
 		}
+		*/
 		
-		request.setAttribute("orderCode", orderCode);
+		this.questionService = new QuestionService();
+		ArrayList<HashMap<String, Object>> orderCodeList = questionService.getOrderCodeList(loginCustomer.getCustomerId());
+		request.setAttribute("orderCodeList", orderCodeList);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/question/addQuestion.jsp");

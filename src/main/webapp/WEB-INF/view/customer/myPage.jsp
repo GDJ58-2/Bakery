@@ -31,6 +31,10 @@
 			내 리뷰 관리
 		</a>
 		
+		<a href = "${pageContext.request.contextPath}/question/questionList">
+			내 문의내역
+		</a>
+		
 		<a href = "${pageContext.request.contextPath}/customerAddress/customerAddressList">
 			내 주소 관리
 		</a>
