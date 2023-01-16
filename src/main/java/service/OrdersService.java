@@ -116,7 +116,8 @@ public class OrdersService {
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
-			int addressCode = customerAddressService.addAddress(address);
+			HashMap<String, Object> addressMap = customerAddressService.addAddress(address);
+			int addressCode = (int)addressMap.get("addressCode");
 			//System.out.println(addressCode+"<--OrdersService addressCode");
 			// 주문추가 
 			for(Orders o : ordersList) {
