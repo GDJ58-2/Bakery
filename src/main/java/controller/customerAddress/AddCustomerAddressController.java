@@ -84,7 +84,7 @@ public class AddCustomerAddressController extends HttpServlet {
 		} else {
 			address = request.getParameter("address");
 		}
-		
+		/*
 		if(addressKind.equals("집")) {
 			this.customerAddressService = new CustomerAddressService();
 			int count = customerAddressService.getAddressCount(customerId, addressKind);
@@ -112,7 +112,7 @@ public class AddCustomerAddressController extends HttpServlet {
 				return;
 			}
 		}
-		
+		*/
 		CustomerAddress customerAddress = new CustomerAddress();
 		customerAddress.setCustomerId(customerId);
 		customerAddress.setAddressKind(addressKind);
@@ -124,7 +124,7 @@ public class AddCustomerAddressController extends HttpServlet {
 		System.out.println("address : " + address);
 		
 		this.customerAddressService = new CustomerAddressService();
-		int addressCode = customerAddressService.addAddress(customerAddress);
+		int addressCode = customerAddressService.addAddressOne(customerAddress);
 		if(addressCode != 0){
 			System.out.println("입력성공");
 	    	

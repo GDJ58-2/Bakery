@@ -8,17 +8,18 @@
 </head>
 <body>
 <h1>나의 주문 내역</h1>
-	<table border="1">
-		<tr>
-			<th>주문 번호</th>
-			<th>상품</th>
-			<th>상품 이름</th>
-			<th>주문 수량</th>
-			<th>주문 가격</th>
-			<th>주문 날짜</th>
-			<th>주문 상태</th>
-		</tr>
-		<c:forEach var="m" items="${list}">
+	<c:forEach var="m" items="${list}">
+		<h3>주문 날짜 : ${m.createdate}</h3>
+		<table border="1">
+			<tr>
+				<th>주문 번호</th>
+				<th>상품</th>
+				<th>상품 이름</th>
+				<th>주문 수량</th>
+				<th>주문 가격</th>
+				<th>주문 날짜</th>
+				<th>주문 상태</th>
+			</tr>
 			<tr>
 				<td>
 					<a href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
@@ -48,7 +49,7 @@
 					${m.orderState}
 				</td>
 			</tr>
-		</c:forEach>
-	</table>
+		</table>
+	</c:forEach>
 </body>
 </html>

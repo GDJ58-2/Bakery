@@ -117,18 +117,15 @@ public class CustomerAddressService {
 		}
 		return addressCode;
 	}
-	
-	// ADD 
-	public HashMap<String, Object> addAddress(CustomerAddress address) {
-		HashMap<String, Object> map = null;
-		int addressCode = 0;
+
+	// ADD
+	public int addAddressOne(CustomerAddress address) {
+		int row = 0;
 		this.customerAddressDao = new CustomerAddressDao();
 		Connection conn = null;
-		//System.out.println(address);
 		try {
 			conn = DBUtil.getConnection();
-			map=customerAddressDao.insertAddress(conn, address);
-			System.out.print(addressCode+"<--CustomerAddressService addressCode");
+			row = customerAddressDao.insertAddressOne(conn, address);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -139,12 +136,12 @@ public class CustomerAddressService {
 			e.printStackTrace();
 		} finally {
 			try {
-				DBUtil.close(null, null, conn); // db 자원반납
+				DBUtil.close(null, null, conn);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return map;
+		return row;
 	}
 	
 	// MODIFY

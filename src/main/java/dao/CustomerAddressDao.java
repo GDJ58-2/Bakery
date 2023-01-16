@@ -30,8 +30,10 @@ public class CustomerAddressDao {
 	public ArrayList<CustomerAddress> selectAddressList(Connection conn, String customerId) throws Exception {
 		ArrayList<CustomerAddress> list = new ArrayList<CustomerAddress>();
 		String sql = "SELECT address_code addressCode, customer_id customerId, address_kind addressKind, address, createdate\r\n"
-					+ "FROM customer_address\r\n"
-					+ "WHERE customer_id = ?";
+				+ "FROM customer_address\r\n"
+				+ "WHERE customer_id = ?\r\n"
+				+ "ORDER BY createdate DESC\r\n"
+				+ "LIMIT 0, 5";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
 		ResultSet rs = stmt.executeQuery();
@@ -79,6 +81,19 @@ public class CustomerAddressDao {
 		return addressCode;
 	}
 	// INSERT
+	// AddCustomerAddressController
+	public int insertAddressOne(Connection conn, CustomerAddress address) throws Exception {
+		int row = 0;
+		String sql = "INSERT INTO customer_address(customer_id, address_kind, address, createdate) VALUES(?, ?, ?, NOW())";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, address.getCustomerId());
+		stmt.setString(2, address.getAddressKind());
+		stmt.setString(3, address.getAddress());
+		row = stmt.executeUpdate();
+		DBUtil.close(null, stmt, null);
+		return row;
+	}
+	
 	public int insertAddress(Connection conn, CustomerAddress address) throws Exception {
 		int addressCode = 0;
 		String sql = "INSERT INTO customer_address(customer_id, address_kind, address, createdate) VALUES(?,?,?,NOW())";
