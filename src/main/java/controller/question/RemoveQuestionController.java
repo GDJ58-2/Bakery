@@ -78,22 +78,11 @@ public class RemoveQuestionController extends HttpServlet {
 		request.setAttribute("msg", msg);
 		
 		int questionCode = 0;
-		String customerPw = null;
 		// 방어코드
 		if(request.getParameter("questionCode") != null){
 			questionCode = Integer.parseInt(request.getParameter("questionCode"));
 			System.out.println("questionCode : " + questionCode);
 		} 
-		if(request.getParameter("customerPw") != null){
-			customerPw = request.getParameter("customerPw");
-			System.out.println("customerPw : " + customerPw);
-		}
-		
-		/*
-		if(customerPw.equals(loginMember.getCustomerPw()) {
-			// 비밀번호 확인 후 서비스 실행
-		}
-		*/
 		
 		QuestionService questionService = new QuestionService();
 		int row = questionService.removeQuestion(questionCode);

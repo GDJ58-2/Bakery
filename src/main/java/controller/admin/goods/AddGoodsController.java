@@ -2,6 +2,7 @@ package controller.admin.goods;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,8 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
+import service.GoodsCategoryService;
 import service.GoodsService;
 import vo.Goods;
+import vo.GoodsCategory;
 import vo.GoodsImg;
 
 @WebServlet("/admin/goods/addGoods")
@@ -30,6 +33,10 @@ public class AddGoodsController extends HttpServlet {
 			return;
 		}
 		*/
+		
+		GoodsCategoryService goodsCategoryService = new GoodsCategoryService();
+		ArrayList<GoodsCategory> list = goodsCategoryService.getGoodsCategoryList();
+		request.setAttribute("list", list);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/addGoods.jsp");

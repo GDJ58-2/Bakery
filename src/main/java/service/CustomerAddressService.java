@@ -118,6 +118,31 @@ public class CustomerAddressService {
 	}
 	
 	// ADD
+	public int addAddressOne(CustomerAddress address) {
+		int row = 0;
+		this.customerAddressDao = new CustomerAddressDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			row = customerAddressDao.insertAddressOne(conn, address);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return row;
+	}
+		
 	// addressKind(집, 회사, 기타)별로 한개씩만 입력가능 
 	public int addAddress(CustomerAddress address) {
 		int addressCode = 0;

@@ -87,7 +87,6 @@ public class RemoveOrdersController extends HttpServlet {
 		// 주문 삭제
 		int orderCode = 0;
 		String createdate = null;
-		String customerPw = null;
 		
 		// 방어코드
 		if(request.getParameter("orderCode") == null || request.getParameter("orderCode").equals("")){
@@ -102,44 +101,28 @@ public class RemoveOrdersController extends HttpServlet {
 		} else {
 			createdate = request.getParameter("createdate");
 		}
-		if(request.getParameter("customerPw") == null || request.getParameter("customerPw").equals("")){
-			response.sendRedirect(request.getContextPath()+"/orders/ordersOne");
-			return;
-		} else {
-			customerPw = request.getParameter("customerPw");
-		}
 		
 		// 디버깅 코드
 		// System.out.println("orderCode : " + orderCode);
 		// System.out.println("createdate : " + createdate);
-		// System.out.println("customerPw : " + customerPw);
 		
-		if(customerPw.equals("1234")) {
-			int row = 0;
-			OrdersService ordersService = new OrdersService();
-			row = ordersService.removeOrders(createdate);
-			if(row != 0) {
-				System.out.println("삭제성공");    	
-		    	
-		    	response.setContentType("text/html; charset=UTF-8");
-		    	
-		    	PrintWriter out = response.getWriter();
-		    	 
-		    	out.println("<script>alert('주문이 취소되었습니다.'); location.href='/bakery/orders/ordersList';</script>");
-		    	
-		    	out.flush();
-			} else {
-				System.out.println("삭제실패");
-		    	
-		    	String msg = URLEncoder.encode("주문취소를 실패하였습니다.", "utf-8");
-		    	
-		    	// View
-		    	response.sendRedirect(request.getContextPath()+"/orders/removeOrders?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
-			}
+		int row = 0;
+		OrdersService ordersService = new OrdersService();
+		row = ordersService.removeOrders(createdate);
+		if(row != 0) {
+			System.out.println("삭제성공");    	
+	    	
+	    	response.setContentType("text/html; charset=UTF-8");
+	    	
+	    	PrintWriter out = response.getWriter();
+	    	 
+	    	out.println("<script>alert('주문내역이 삭제되었습니다.'); location.href='/bakery/orders/ordersList';</script>");
+	    	
+	    	out.flush();
 		} else {
 			System.out.println("삭제실패");
 	    	
-	    	String msg = URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
+	    	String msg = URLEncoder.encode("주문삭제를 실패하였습니다.", "utf-8");
 	    	
 	    	// View
 	    	response.sendRedirect(request.getContextPath()+"/orders/removeOrders?orderCode="+orderCode+"&createdate="+createdate+"&msg="+msg);
