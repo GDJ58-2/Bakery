@@ -41,7 +41,7 @@
 								<td><input type="checkbox" name="checkedGoodsCode" value="${customer.goodsCode}"></td>
 								<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
 								<td>
-									<input type="number" name="cartQuantity" value="${customer.cartQuantity}">개
+									<input type="number" name="cartQuantity" value="${customer.cartQuantity}" readonly="readonly">개
 									<a href = "${pageContext.request.contextPath}/cart/modifyCart"><button type = "button">수량변경</button></a>
 									<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
 								 		<button type = "button">x</button>

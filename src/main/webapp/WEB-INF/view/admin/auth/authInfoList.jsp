@@ -7,10 +7,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
+	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
+	<jsp:include page="../../inc/menu.jsp"></jsp:include>
 	<h1>권한 목록</h1>
-	<a href="${pageContext.request.contextPath}/auth/addAuthInfo">추가</a>
+	<a href="${pageContext.request.contextPath}/admin/auth/addAuthInfo">추가</a>
 	<table border="1">
 		<thead>
 			<tr>
@@ -26,8 +26,8 @@
 				<td>${a.authMemo}</td>
 				<td>${a.createdate}</td>
 				<td>
-					<a href="${pageContext.request.contextPath}/auth/modifyAuthInfo?authCode=${a.authCode}">수정</a>
-					<a href="${pageContext.request.contextPath}/auth/removeAuthInfo?authCode=${a.authCode}">삭제</a>
+					<a href="${pageContext.request.contextPath}/admin/auth/modifyAuthInfo?authCode=${a.authCode}">수정</a>
+					<a href="${pageContext.request.contextPath}/admin/auth/removeAuthInfo?authCode=${a.authCode}">삭제</a>
 				</td>
 			</tr>
 		</c:forEach>

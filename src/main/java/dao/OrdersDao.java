@@ -143,7 +143,9 @@ public class OrdersDao {
 	}
 	
 	// INSERT
-	public int insertOrders(Connection conn, Orders orders) throws Exception { // addOrders
+	public HashMap<String, Object> insertOrders(Connection conn, Orders orders) throws Exception { // addOrders		
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		int row = 0;
 		int orderCode = 0;
 		String sql = "INSERT INTO orders(goods_code,customer_id,address_code,order_quantity,order_price,order_state,createdate) VALUES(?,?,?,?,?,?,NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
@@ -153,13 +155,15 @@ public class OrdersDao {
 		stmt.setInt(4, orders.getOrderQuantity());
 		stmt.setInt(5, orders.getOrderPrice());
 		stmt.setString(6, "결제");
-		stmt.executeUpdate();
+		row = stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
 		if(rs.next()) {
 			orderCode = rs.getInt(1);
 		}
+		map.put("row", row);
+		map.put("orderCode", orderCode);
 		DBUtil.close(null, stmt, null);
-		return orderCode;
+		return map;
 	}
 	
 	// UPDATE

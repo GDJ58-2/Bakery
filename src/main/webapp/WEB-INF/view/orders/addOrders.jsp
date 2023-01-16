@@ -4,6 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	
+</script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -21,12 +25,12 @@
 				<tr>
 					<td><img src="${pageContext.request.contextPath}/upload/${o.filename}" width="100" height="100"></td>
 					<td>${o.goodsName}</td>
-					<td><input type="number" name="cartQuantity" value="${o.cartQuantity}"></td>
+					<td><input type="number" name="cartQuantity" value="${o.cartQuantity}" readonly="readonly"></td>
 				</tr>
 			</table>
 			<table>
 				<tr>
-					<td>포인트 적립 5%</td>
+					<td>구매확정 시 포인트 적립 5% 예정</td>
 					<td><input type="number" name="saveupPoint" value="${o.goodsPrice*o.cartQuantity/20}"></td>
 				</tr>
 				<tr>
@@ -37,11 +41,11 @@
 		</c:forEach>
 		<div>					
 			포인트 사용
-			<input type="number" name="usePoint" value="0">/${loginCustomer.point}
+			<input type="number" name="usePoint"> /${loginCustomer.point}
 		</div>
 		<div>
 			가격 
-			<input type="number" name="price" value="${orderPrice}">
+			<input type="number" name="price" value="${orderPrice}" readonly="readonly">
 		</div>
 		<div>
 			<!-- 직접입력 / 배송지 선택하기 -->
