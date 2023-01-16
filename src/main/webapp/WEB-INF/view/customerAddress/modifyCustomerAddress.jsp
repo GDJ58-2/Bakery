@@ -17,7 +17,8 @@
 		<table border="1">
 			<tr>
 				<th>주소 이름 : </th>
-				<td>${ca.addressKind}
+				<td>
+					<input type="text" name="addressKind" value="${ca.addressKind}" readonly="readonly">
 				</td>
 			</tr>
 			<tr>

@@ -2,6 +2,7 @@ package controller.customerAddress;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -124,8 +125,9 @@ public class AddCustomerAddressController extends HttpServlet {
 		System.out.println("address : " + address);
 		
 		this.customerAddressService = new CustomerAddressService();
-		int addressCode = customerAddressService.addAddressOne(customerAddress);
-		if(addressCode != 0){
+		HashMap<String, Object> map = customerAddressService.addAddress(customerAddress);
+		int row = (Integer)map.get("row");
+		if(row == 1){
 			System.out.println("입력성공");
 	    	
 	    	String msg = URLEncoder.encode("주소가 입력되었습니다.", "utf-8");

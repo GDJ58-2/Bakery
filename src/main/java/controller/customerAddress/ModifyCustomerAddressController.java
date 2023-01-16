@@ -2,6 +2,7 @@ package controller.customerAddress;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -68,11 +69,14 @@ public class ModifyCustomerAddressController extends HttpServlet {
 		}
 		*/
 		
+		String customerId = "test";
+		
 		// 파라미터 값 받기
 		request.setCharacterEncoding("UTF-8");
 		
 		int addressCode = 0;
 		String address = null;
+		String addressKind = null;
 		
 		// 방어코드
 		if(request.getParameter("addressCode") == null || (request.getParameter("addressCode")).equals("")) {
@@ -87,26 +91,37 @@ public class ModifyCustomerAddressController extends HttpServlet {
 		} else {
 			address = request.getParameter("address");
 		}
+		if(request.getParameter("addressKind") == null || (request.getParameter("addressKind")).equals("")) {
+			response.sendRedirect(request.getContextPath()+"/customerAddress/modifyCustomerAddress?addressCode="+addressCode);
+			return;
+		} else {
+			addressKind = request.getParameter("addressKind");
+		}
 		
 		CustomerAddress customerAddress = new CustomerAddress();
-		customerAddress.setAddressCode(addressCode);
+		// customerAddress.setAddressCode(addressCode);
 		customerAddress.setAddress(address);
+		customerAddress.setAddressKind(addressKind);
+		customerAddress.setCustomerId(customerId);
 		
 		// 디버깅 코드
-		System.out.println("addressCode : " + addressCode);
+		// System.out.println("addressCode : " + addressCode);
 		System.out.println("address : " + address);
+		System.out.println("addressKind : " + addressKind);
+		System.out.println("customerId : " + customerId);
 		
 		this.customerAddressService = new CustomerAddressService();
-		int row = customerAddressService.modifyAddress(customerAddress);
+		HashMap<String, Object> map = customerAddressService.addAddress(customerAddress);
+		int row = (Integer)map.get("row");
 		if(row == 1){
-			System.out.println("수정성공");
+			System.out.println("입력성공");
 	    	
 	    	String msg = URLEncoder.encode("주소가 수정되었습니다.", "utf-8");
 	    	
 	    	// View
 	    	response.sendRedirect(request.getContextPath()+"/customerAddress/customerAddressList?msg="+msg);
 	    } else {
-	    	System.out.println("수정실패");
+	    	System.out.println("입력실패");
 	    	
 	    	String msg = URLEncoder.encode("주소 수정에 실패하였습니다.", "utf-8");
 	    	
