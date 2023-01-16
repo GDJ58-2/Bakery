@@ -22,6 +22,7 @@ public class AddOrdersListController extends HttpServlet {
 	private CartService cartService;
 	// addOrders form
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		// 로그인 세션 검사
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
@@ -30,24 +31,14 @@ public class AddOrdersListController extends HttpServlet {
 			return;
 		}
 
-		// 최종 orderList 출력
-		String[] goodsCodeStr = request.getParameterValues("goodsCode");
-		int[] goodsCodeInt = new int[goodsCodeStr.length];
-		for(int i=0; i<goodsCodeStr.length; i++) {
-			int j = Integer.parseInt(goodsCodeStr[i]);
-			goodsCodeInt[i] = j;
-			//System.out.println(goodsCodeStr[i]+"<----goodsCodeStr[i]");
-		}
-		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
-		int[] cartQuantityArr = new int[cartQuantityStr.length];
-		for(int i=0; i<cartQuantityStr.length; i++) {
-			int j = Integer.parseInt(cartQuantityStr[i]);
-			cartQuantityArr[i] = j;
-			//System.out.println(cartQuantityArr[i]+"<----cartQuantityArr[i]");
+		// 파라메타 값 유효성검사
+		String[] checkedGoodsCodeStr = request.getParameterValues("checkedGoodsCode");
+		if(checkedGoodsCodeStr==null) {
+			response.sendRedirect(request.getContextPath()+"/cart/cartList");
+			return;
 		}
 		
-		// 체크된 goodsCode 목록 
-		String[] checkedGoodsCodeStr = request.getParameterValues("checkedGoodsCode");
+		// 최종 orderList 출력 : 체크된 goodsCode 목록 
 		int[] checkedGoodsCodeInt = new int[checkedGoodsCodeStr.length];
 		for(int i=0; i<checkedGoodsCodeStr.length; i++) {
 			int j = Integer.parseInt(checkedGoodsCodeStr[i]);
@@ -62,7 +53,6 @@ public class AddOrdersListController extends HttpServlet {
 		for(HashMap<String, Object> map : orderList) {
 			orderPrice += (int)map.get("goodsPrice")*(int)map.get("cartQuantity");
 		}
-
 		request.setAttribute("addressList", addressList);
 		request.setAttribute("orderList", orderList);		
 		request.setAttribute("orderPrice", orderPrice);

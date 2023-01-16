@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import dao.CartDao;
+import dao.GoodsDao;
 import dao.OrdersDao;
 import dao.PointHistoryDao;
 import util.DBUtil;
 import vo.Cart;
 import vo.CustomerAddress;
+import vo.Goods;
 import vo.Orders;
 import vo.PointHistory;
 
@@ -18,6 +20,7 @@ public class OrdersService {
 	private PointHistoryDao pointHistoryDao;
 	private OrdersDao ordersDao;
 	private CartDao cartDao;
+	private GoodsDao goodsDao;
 	private CustomerAddressService customerAddressService;
 	
 	// GET
@@ -102,33 +105,39 @@ public class OrdersService {
 	}
 	
 	// ADD
-	public int addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
-		int orderCode = 0;
+	public HashMap<String, Object> addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
+		HashMap<String, Object> map = null;		
 		this.pointHistoryDao = new PointHistoryDao();
 		this.customerAddressService = new CustomerAddressService();
 		this.ordersDao = new OrdersDao();
 		this.cartDao = new CartDao();
+		this.goodsDao = new GoodsDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
-			int addressCode = customerAddressService.addAddress(address);
-			System.out.println(addressCode+"<--OrdersService addressCode");
-			// 주문추가
+			HashMap<String, Object> addressMap = customerAddressService.addAddress(address);
+			int addressCode = (int)addressMap.get("addressCode");
+			//System.out.println(addressCode+"<--OrdersService addressCode");
+			// 주문추가 
 			for(Orders o : ordersList) {
 				o.setAddressCode(addressCode);
-				orderCode = ordersDao.insertOrders(conn, o);
-				System.out.println(orderCode+"<--OrdersService orderCode");
+				map = ordersDao.insertOrders(conn, o);
 				// 장바구니 삭제
 				Cart cart = new Cart(o.getGoodsCode(), o.getCustomerId(), o.getOrderQuantity(), null);
 				cartDao.deleteCartList(conn, cart);
-				// 포인트 내역 추가
-				PointHistory usePoint = new PointHistory(orderCode, "사용", paramUsePoint, null);
+				// 포인트 사용 내역 추가 -> 적립은 구매확정 후 
 				if(paramUsePoint!=0) {
+					PointHistory usePoint = new PointHistory((int)map.get("orderCode"), "사용", paramUsePoint, null);
 					pointHistoryDao.insertPoint(conn, usePoint);
 				}
+				// goods 재고 변경
+				HashMap<String, Object> stock = this.goodsDao.selectgoodsOne(conn, o.getGoodsCode());
+				Goods goods = new Goods();
+				goods.setGoodsCode(o.getGoodsCode());
+				goods.setGoodsStock((int)stock.get("goodsStock")-o.getOrderQuantity());
+				goodsDao.updateGoodsStock(conn, goods);
 			}
-		
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -144,21 +153,29 @@ public class OrdersService {
 				e.printStackTrace();
 			}
 		}
-		return orderCode;
+		return map;
 	}
 	
 	// UPDATE
-	public int modifyOrders(Orders orders) { // 주문수정
+	public int modifyOrders(Orders orders) { // 주문 상태 수정
 		int row = 0;
 		this.ordersDao = new OrdersDao();
 		this.pointHistoryDao = new PointHistoryDao();
+		this.goodsDao = new GoodsDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			row = ordersDao.updateOrders(conn, orders);
 			if(orders.getOrderState().equals("취소")) {
+				// 포인트 내역 삭제
 				pointHistoryDao.deletePoint(conn, orders.getOrderCode());
+				// 재고 변경
+				HashMap<String, Object> stock = this.goodsDao.selectgoodsOne(conn, orders.getGoodsCode());
+				Goods goods = new Goods();
+				goods.setGoodsCode(orders.getGoodsCode());
+				goods.setGoodsStock((int)stock.get("goodsStock")+orders.getOrderQuantity());
 			} else if(orders.getOrderState().equals("구매확정")) {
+				// 포인트 내역 추가 (적립)
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
 				pointHistoryDao.insertPoint(conn, p);
 			}

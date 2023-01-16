@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.DBUtil;
 import vo.CustomerAddress;
@@ -27,13 +28,16 @@ public class CustomerAddressDao {
 		return count;
 	}
 	
+	// address_kind 별 가장 최근 추가된 데이터 출력
 	public ArrayList<CustomerAddress> selectAddressList(Connection conn, String customerId) throws Exception {
 		ArrayList<CustomerAddress> list = new ArrayList<CustomerAddress>();
-		String sql = "SELECT address_code addressCode, customer_id customerId, address_kind addressKind, address, createdate\r\n"
-				+ "FROM customer_address\r\n"
-				+ "WHERE customer_id = ?\r\n"
-				+ "ORDER BY createdate DESC\r\n"
-				+ "LIMIT 0, 5";
+		String sql = "SELECT ca.address_code addressCode, ca.customer_id customerId, ca.address_kind addressKind, ca.address, ca.createdate"
+				+ "		FROM customer_address ca"
+				+ "	INNER JOIN (SELECT address_kind, max(createdate) maxDate"
+				+ "				FROM customer_address"
+				+ "				WHERE customer_id = 'test'"
+				+ "				GROUP BY address_kind) t"
+				+ "		ON ca.address_kind = t.address_kind AND ca.createdate=t.maxDate";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
 		ResultSet rs = stmt.executeQuery();
@@ -80,34 +84,26 @@ public class CustomerAddressDao {
 		DBUtil.close(rs, stmt, null);
 		return addressCode;
 	}
-	// INSERT
-	// AddCustomerAddressController
-	public int insertAddressOne(Connection conn, CustomerAddress address) throws Exception {
-		int row = 0;
-		String sql = "INSERT INTO customer_address(customer_id, address_kind, address, createdate) VALUES(?, ?, ?, NOW())";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, address.getCustomerId());
-		stmt.setString(2, address.getAddressKind());
-		stmt.setString(3, address.getAddress());
-		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, null);
-		return row;
-	}
 	
-	public int insertAddress(Connection conn, CustomerAddress address) throws Exception {
+	// INSERT	
+	public HashMap<String, Object> insertAddress(Connection conn, CustomerAddress address) throws Exception {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		int row = 0;
 		int addressCode = 0;
 		String sql = "INSERT INTO customer_address(customer_id, address_kind, address, createdate) VALUES(?,?,?,NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Statement.RETURN_GENERATED_KEYS : 쿼리 실행 후 생성된 auto_increment 값을 ResultSet에 반환
 		stmt.setString(1, address.getCustomerId());
 		stmt.setString(2, address.getAddressKind());
 		stmt.setString(3, address.getAddress());
-		stmt.executeUpdate();
+		row = stmt.executeUpdate();
 		ResultSet rs = stmt.getGeneratedKeys();
 		if(rs.next()) {
 			addressCode = rs.getInt(1);
 		}
+		map.put("row", row);
+		map.put("addressCode", addressCode);
 		DBUtil.close(rs, stmt, null);
-		return addressCode;
+		return map;
 	}
 	
 	// UPDATE
