@@ -3,12 +3,11 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import util.DBUtil;
 import vo.Cart;
+import vo.Goods;
 
 public class CartDao {
 	
@@ -178,5 +177,19 @@ public class CartDao {
 		}
 		DBUtil.close(rs, stmt, null);
 		return list;
+	}
+	
+	// 재고조회
+	public int getGoodsStock(Connection conn, int goodsCode) throws Exception {
+		int stock = 0;
+		String sql = "SELECT goods_stock goodsStock FROM goods WHERE goods_code = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goodsCode);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			stock = rs.getInt("goodsStock");
+		}
+		DBUtil.close(rs, stmt, null);
+		return stock;
 	}
 }
