@@ -44,7 +44,7 @@ public class CartService {
 		} finally {
 			try {
 				conn.close();
-			} catch(SQLException e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -94,7 +94,7 @@ public class CartService {
 		} finally {
 			try {
 				conn.close();
-			} catch(SQLException e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -147,7 +147,7 @@ public class CartService {
 		} finally {
 			try {
 				conn.close();
-			} catch(SQLException e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -172,10 +172,36 @@ public class CartService {
 		} finally {
 			try {
 				conn.close();
-			} catch(SQLException e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
 		return list;
+	}
+	
+	// 재고조회
+	public int getGoodsStock(int goodsCode) {
+		int stock = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.cartDao = new CartDao();
+			stock = cartDao.getGoodsStock(conn, goodsCode);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return stock;
 	}
 }

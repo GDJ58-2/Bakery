@@ -57,12 +57,14 @@
 	
 	<!-- 리뷰목록 -->
 	<div>
+	<table>
 		<c:forEach var = "m" items = "${list}" varStatus = "i">
-		<tr>
-			<td>${m.customerId}</td>
-			<td>${m.reviewMemo}</td>
-		</tr>
+			<tr>
+				<td>${m.customerId}</td>
+				<td>${m.reviewMemo}</td>
+			</tr>
 		</c:forEach>
+	</table>
 	</div>
 </body>
 </html>

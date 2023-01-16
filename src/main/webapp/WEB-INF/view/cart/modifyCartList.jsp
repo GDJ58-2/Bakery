@@ -21,7 +21,8 @@
 							<tr>
 								<td><input type="hidden" name="goodsCode" value="${user.goodsCode}"></td>
 								<td></td>
-								<td><input type="text" name="goodsName" value="${user.goodsName}" readonly="readonly"></td>
+								<td><img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "50" height = "50"></td>
+								<td><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</td>
 								<td>
 									<form action = "${pageContext.request.contextPath}/cart/modifyCart" method="post">
 										<input type="hidden" name="goodsCode" value="${user.goodsCode}">
@@ -39,7 +40,8 @@
 							<tr>
 								<td><input type="hidden" name="goodsCode" value="${customer.goodsCode}"></td>
 								<td></td>
-								<td><input type="text" name="goodsName" value="${customer.goodsName}" readonly="readonly"></td>
+								<td><img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "50" height = "50"></td>
+								<td><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</td>
 								<td>
 									<form action="${pageContext.request.contextPath}/cart/modifyCart" method="post">
 										<input type="hidden" name="goodsCode" value="${customer.goodsCode}">
