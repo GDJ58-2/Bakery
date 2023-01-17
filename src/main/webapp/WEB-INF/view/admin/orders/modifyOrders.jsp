@@ -40,6 +40,7 @@
 			<thead>
 				<tr>
 					<th>#</th>
+					<th>주문 번호</th>
 					<th>고객 아이디</th>
 					<th>상품 번호</th>
 					<th>상품 이미지 </th>
@@ -63,6 +64,7 @@
 								<input type="checkbox" name="orderCode" value="${map.orderCode}">
 							</c:if>
 						</td>
+						<td>${map.orderCode}</td>
 						<td>${map.customerId}</td>
 						<td>${map.goodsCode}</td>
 						<td>

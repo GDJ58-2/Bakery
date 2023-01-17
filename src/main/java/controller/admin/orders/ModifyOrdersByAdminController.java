@@ -9,8 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.OrdersService;
+import vo.Emp;
 import vo.Orders;
 
 
@@ -19,15 +21,40 @@ public class ModifyOrdersByAdminController extends HttpServlet {
 	private OrdersService ordersService;
 	// modifyOrdersByAdmin form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 관리자 유효성 검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<1) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
+	
 		this.ordersService = new OrdersService();
 		ArrayList<HashMap<String, Object>> list = ordersService.getOrdersListByAdmin();
-		System.out.println(list);
+		//System.out.println(list);
 		request.setAttribute("ordersList", list);
 		request.getRequestDispatcher("/WEB-INF/view/admin/orders/modifyOrders.jsp").forward(request, response);
 	}
+	
 	// modifyOrdersByAdmin action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<1) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		String orderState = request.getParameter("orderState");
 		// 선택된 orderCode list 파라메타값 저장 후
@@ -45,5 +72,4 @@ public class ModifyOrdersByAdminController extends HttpServlet {
 		}
 		response.sendRedirect(request.getContextPath()+"/admin/orders/modifyOrders");
 	}
-		
 }

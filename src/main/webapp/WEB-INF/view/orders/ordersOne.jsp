@@ -51,19 +51,19 @@
 				<td>${map.orderPrice}원</td>
 			</tr>
 			<tr>
-				<th>리뷰 작성 : </th>
+				<th>리뷰 작성 : </th> <!-- orderState이 구매확정일 때만 -->
 				<td>
 					<a href="${pageContext.request.contextPath}/review/addReview?orderCode=${map.orderCode}">리뷰 작성</a>
 				</td>
 			</tr>
 			<tr>
-				<th>배송 문의 : </th>
+				<th>배송 문의 : </th> <!-- orderState이 구매확정이 아닐때만 -->
 				<td>
 					<a href="${pageContext.request.contextPath}/question/addQuestion?orderCode=${map.orderCode}">문의 작성</a>
 				</td>
 			</tr>
 			<tr>
-				<th>구매 확정 : </th>
+				<th>구매 확정 : </th> <!-- orderState이 배송완료일 때만 -->
 				<td>
 					<a href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
 				</td>

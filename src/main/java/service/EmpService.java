@@ -19,6 +19,9 @@ public class EmpService {
 		try {
 			conn = DBUtil.getConnection();
 			returnEmp = empDao.selectIdPwByEmp(conn, paramEmp);
+			if(returnEmp.getAuthCode()==0) { // 비활성화 상태 시 emp 로그인불가
+				return null;
+			}
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -151,12 +154,6 @@ public class EmpService {
 		int row = 0;
 		this.empDao = new EmpDao();
 		Connection conn = null;
-		if(emp.getActive().equals("N")) { // 비활성화상태라면 관리자권한도 비활성화(0)
-			emp.setAuthCode(0);
-		}
-		if(emp.getAuthCode()==0) { 
-			emp.setActive("N");
-		}
 		try {
 			conn = DBUtil.getConnection();
 			row = empDao.updateEmpByAdmin(conn, emp);

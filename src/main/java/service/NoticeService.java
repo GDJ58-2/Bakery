@@ -3,6 +3,7 @@ package service;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import dao.NoticeDao;
 import util.DBUtil;
@@ -10,13 +11,14 @@ import vo.Notice;
 
 public class NoticeService {
 	private NoticeDao noticeDao;
-	public int addNotice(Notice notice) { // notice 추가
-		int row = 0;
+	// add
+	public HashMap<String, Object> addNotice(Notice notice) { 
+		HashMap<String, Object> map = null;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			row = noticeDao.insertNotice(conn, notice);
+			map = noticeDao.insertNotice(conn, notice);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -32,9 +34,11 @@ public class NoticeService {
 				e.printStackTrace();
 			}
 		}
-		return row;
+		return map;
 	}
-	public int modifyNotice(Notice notice) { // notice 수정
+	
+	// modify
+	public int modifyNotice(Notice notice) { 
 		int row = 0;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
@@ -58,7 +62,9 @@ public class NoticeService {
 		}
 		return row;
 	}
-	public int removeNotice(int noticeCode) { // notice 삭제
+	
+	// remove
+	public int removeNotice(int noticeCode) { 
 		int row = 0;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
@@ -82,6 +88,8 @@ public class NoticeService {
 		}
 		return row;
 	}
+	
+	// 상세보기
 	public Notice getNoticeOne(int noticeCode) { // modifyNotice form
 		Notice notice = null;
 		this.noticeDao = new NoticeDao();
@@ -107,7 +115,9 @@ public class NoticeService {
 		}
 		return notice;
 	}
-	public ArrayList<Notice> getNoticeList(String search, int currentPage, int rowPerPage) { // noticeList 출력
+	
+	// list 출력
+	public ArrayList<Notice> getNoticeList(String search, int currentPage, int rowPerPage) { 
 		ArrayList<Notice> list = null;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;

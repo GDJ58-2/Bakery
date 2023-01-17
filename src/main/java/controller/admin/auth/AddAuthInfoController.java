@@ -8,17 +8,29 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.AuthInfoService;
 import vo.AuthInfo;
+import vo.Emp;
 
 @WebServlet("/admin/auth/addAuthInfo")
 public class AddAuthInfoController extends HttpServlet {
 	private AuthInfoService authInfoService;
 	// addAuthInfo form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// 로그인, 관리자권한 유효성검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<3) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		request.getRequestDispatcher("/WEB-INF/view/admin/auth/addAuthInfo.jsp").forward(request, response);
 	}
@@ -26,7 +38,18 @@ public class AddAuthInfoController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.setCharacterEncoding("UTF-8"); 인코딩 --> 필터처리
 		
-		// 로그인, 관리자권한 유효성검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<3) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		// 파라메타값 받기, 유효성검사, 디버깅
 		String authMemo = request.getParameter("authMemo");
@@ -41,6 +64,7 @@ public class AddAuthInfoController extends HttpServlet {
 		this.authInfoService = new AuthInfoService();
 		int row = authInfoService.addAuthInfo(authInfo);
 		System.out.println(row+"<--AddAuthInfoController row");
+		
 		String msg = "<script>alert('등록을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/auth/addAuthInfo';</script>";
 		if(row==1) { 
 			msg = "<script>alert('등록되었습니다.'); location.href='/bakery/admin/auth/authInfoList';</script>";

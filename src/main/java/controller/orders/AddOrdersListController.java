@@ -22,7 +22,6 @@ public class AddOrdersListController extends HttpServlet {
 	private CartService cartService;
 	// addOrders form
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// 로그인 세션 검사
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
