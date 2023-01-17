@@ -11,8 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.GoodsService;
+import vo.Emp;
 import vo.Goods;
 import vo.GoodsImg;
 
@@ -20,15 +22,13 @@ import vo.GoodsImg;
 public class RemoveGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 후에만 진입가능
-		/*
 		HttpSession session = request.getSession();
 		
-		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp == null) { // 로그아웃 상태
 			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
 			return;
 		}
-		*/
 		
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
@@ -66,15 +66,13 @@ public class RemoveGoodsController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 후에만 진입가능
-		/*
 		HttpSession session = request.getSession();
 		
-		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp == null) { // 로그아웃 상태
 			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
 			return;
 		}
-		*/
 		
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;

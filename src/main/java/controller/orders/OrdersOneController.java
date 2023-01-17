@@ -55,6 +55,7 @@ public class OrdersOneController extends HttpServlet {
 			createdate = request.getParameter("createdate");
 			// createdate = createdate.substring(0, 10);
 		}
+		
 		// 디버깅 코드
 		// System.out.println("orderCode : " + orderCode);
 		// System.out.println("createdate : " + createdate);

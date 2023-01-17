@@ -25,7 +25,7 @@ public class GoodsService {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			list = goodsDao.selectgoodsList(conn, categoryNo);
+			list = goodsDao.selectGoodsList(conn, categoryNo);
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -52,7 +52,7 @@ public class GoodsService {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			map = goodsDao.selectgoodsOne(conn, goodsCode);
+			map = goodsDao.selectGoodsOne(conn, goodsCode);
 			conn.commit();
 		} catch(Exception e) {
 			try {

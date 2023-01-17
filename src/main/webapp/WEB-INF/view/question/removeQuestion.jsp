@@ -3,8 +3,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>removeQuestion.jsp</title>
+	<meta charset="UTF-8">
+	<title>removeQuestion.jsp</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<!-- 자바스크립트로 유효성 확인 -->
+	<script>
+		$(document).ready(function(){ // 페이지가 로드되고 나면 실행
+			$('#deleteBtn').focus();
+			
+			$('#deleteBtn').click(function(){
+				
+				if(!confirm("문의 삭제하시면 관련 게시글도 전부 삭제됩니다.\n문의를 삭제하시겠습니까?")){
+					$('#deleteBtn').focus();
+					return false;
+				} else {
+					$('#deleteForm').submit();
+				}
+			});
+		});
+	</script>
 </head>
 <body>
 	<jsp:include page="../inc/customer.jsp"></jsp:include>
@@ -14,7 +32,7 @@
 	<div style="color:red;">
 	${msg}
 	</div>
-	<form action="${pageContext.request.contextPath}/question/removeQuestion" method="post">
+	<form action="${pageContext.request.contextPath}/question/removeQuestion" method="post" id="deleteForm">
 		<table border="1">
 			<tr>
 				<th>문의 번호 : </th>
@@ -48,7 +66,7 @@
 				</td>
 			</tr>
 		</table>
-		<button type="submit">삭제</button>
+		<button type="submit" id="deleteBtn">삭제</button>
 	</form>
 </body>
 </html>
