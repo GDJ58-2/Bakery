@@ -12,7 +12,7 @@ import vo.Goods;
 public class GoodsDao {
 	// SELECT
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> selectgoodsList(Connection conn, int categoryNo) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectGoodsList(Connection conn, int categoryNo) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -46,7 +46,7 @@ public class GoodsDao {
 	}
 	
 	// 상품 상세페이지
-	public HashMap<String, Object> selectgoodsOne(Connection conn, int goodsCode) throws Exception {
+	public HashMap<String, Object> selectGoodsOne(Connection conn, int goodsCode) throws Exception {
 		HashMap<String, Object> map = null;
 		String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.category_kind categoryKind, g.category_name categoryName, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_content goodsContent, g.goods_stock goodsStock, g.emp_id empId, g.hit hit, g.createdate createdate, img.filename filename, img.origin_name originName"
 				   + "	FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_content, g.goods_stock, g.emp_id, g.hit, g.createdate, c.category_kind, c.category_name"

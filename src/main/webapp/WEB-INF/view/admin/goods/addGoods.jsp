@@ -57,11 +57,11 @@
 				}
 			});
 			
-			// 상품 설명 유효성 검사
-			$('#goodsContent').blur(function(){
-				if($('#goodsContent').val() == ''){
-					$('#msg').text('상품 설명을 입력해주세요.');
-					$('#goodsContent').focus();
+			// 상품 재고 유효성 검사
+			$('#goodsStock').blur(function(){
+				if($('#goodsStock').val() == ''){
+					$('#msg').text('상품 재고를 입력해주세요.');
+					$('#goodsStock').focus();
 				} else {
 					$('#msg').text('');
 					$('#empId').focus();
@@ -107,7 +107,7 @@
 					$('#categoryNo').focus();
 					return false;
 				}
-				$('#addGoodsForm').submit();
+				$('#addForm').submit();
 			});
 		});
 	</script>
@@ -115,10 +115,10 @@
 <body>
 	<h1>상품 등록</h1>
 	<br>
-	<div style="color:red;">
+	<div style="color:red;" id="msg">
 	${msg}
 	</div>
-	<form action="${pageContext.request.contextPath}/admin/goods/addGoods" method="post" enctype="multipart/form-data" id="addGoodsForm">
+	<form action="${pageContext.request.contextPath}/admin/goods/addGoods" method="post" enctype="multipart/form-data" id="addForm">
 		<table border="1">
 			<tr>
 				<th>상품 종류 : </th>
