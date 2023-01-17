@@ -26,6 +26,14 @@ public class QuestionListController extends HttpServlet {
 		}
 		String customerId = loginCustomer.getCustomerId();
 		System.out.println(customerId);
+		
+		// 메시지가 있을 경우
+		request.setCharacterEncoding("UTF-8");
+		String msg = null;
+		if(request.getParameter("msg") != null) {
+			msg = request.getParameter("msg");
+		}
+		request.setAttribute("msg", msg);
 	
 		questionService = new QuestionService();
 		ArrayList<HashMap<String, Object>> list = questionService.getQuestionList(customerId);

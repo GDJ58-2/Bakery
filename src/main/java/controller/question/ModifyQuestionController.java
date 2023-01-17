@@ -123,7 +123,7 @@ public class ModifyQuestionController extends HttpServlet {
 	    	String msg = URLEncoder.encode("문의가 수정되었습니다.", "utf-8");
 	    	
 	    	// View
-	    	response.sendRedirect(request.getContextPath()+"/question/questionOne?questionCode="+questionCode+"&msg="+msg);
+	    	response.sendRedirect(request.getContextPath()+"/question/questionList"+"?msg="+msg);
 	    } else {
 	    	System.out.println("수정실패");
 	    	

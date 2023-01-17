@@ -3,14 +3,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>removeOrders.jsp</title>
+	<meta charset="UTF-8">
+	<title>removeOrders.jsp</title>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<!-- 자바스크립트로 유효성 확인 -->
+	<script>
+		$(document).ready(function(){ // 페이지가 로드되고 나면 실행
+			$('#deleteBtn').focus();
+			
+			$('#deleteBtn').click(function(){
+				
+				if(!confirm("주문내역을 삭제하시면 관련 게시글도 전부 삭제됩니다.\n주문내역을 삭제하시겠습니까?")){
+					$('#deleteBtn').focus();
+					return false;
+				} else {
+					$('#deleteForm').submit();
+				}
+			});
+		});
+	</script>	
 </head>
 <body>
 	<h1>주문상세</h1>
 	<h3>주문 일자 : ${orderdate}</h3>
 	<br>
-	<div style="color:red;">
+	<div style="color:red;" id="msg">
 	${msg}
 	</div>
 	<c:forEach var="m" items="${list}">
@@ -96,10 +114,10 @@
 		</tr>
 	</table>
 	<br>
-	<form action="${pageContext.request.contextPath}/orders/removeOrders" method="post">
+	<form action="${pageContext.request.contextPath}/orders/removeOrders" method="post" id="deleteForm">
 		<input type="hidden" name="orderCode" value="${map.orderCode}">
 		<input type="hidden" name="createdate" value="${map.createdate}">
-	<button type="submit">주문 내역 삭제</button>
+	<button type="submit" id="deleteBtn">주문 내역 삭제</button>
 	</form>
 </body>
 </html>
