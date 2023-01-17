@@ -12,8 +12,22 @@ import vo.Orders;
 
 public class OrdersDao {
 	// SELECT
+	// 페이징 전체 주문 개수
+	public int selectOrdersCount(Connection conn) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count FROM orders";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		
+		return count;
+	}
+	
 	// 회원의 주문 내역
-	public ArrayList<HashMap<String, Object>> selectOrdersList(Connection conn, String customerId) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectOrdersList(Connection conn, String customerId, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename, g.origin_name originName\r\n"
 				+ "	FROM orders o INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename, img.origin_name\r\n"
@@ -21,9 +35,12 @@ public class OrdersDao {
 				+ "											ON g.goods_code = img.goods_code) g\r\n"
 				+ "		ON o.goods_code = g.goods_code\r\n"
 				+ "WHERE customer_id = ?\r\n"
-				+ "ORDER BY createdate DESC";
+				+ "ORDER BY createdate DESC\r\n"
+				+ "LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
+		stmt.setInt(2, beginRow);
+		stmt.setInt(3, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();

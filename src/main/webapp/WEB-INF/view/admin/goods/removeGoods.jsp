@@ -9,28 +9,11 @@
 	<!-- 자바스크립트로 유효성 확인 -->
 	<script>
 		$(document).ready(function(){ // 페이지가 로드되고 나면 실행
-			let allCk = false;
-			$('#empPw').focus();
-			
-			// 비밀번호 유효성 검사
-			$('#empPw').blur(function(){
-				if($('#empPw').val() == ''){
-					$('#msg').text('비밀번호를 입력해주세요.');
-					$('#empPw').focus();
-				} else {
-					$('#msg').text('');
-					$('#deleteBtn').focus();
-					allCk = true;
-				}
-			});
+			$('#deleteBtn').focus();
 			
 			$('#deleteBtn').click(function(){
-				if(allCk == false){
-					$('#empPw').focus();
-					return false;
-				}
 				if(!confirm("상품을 삭제하시면 관련 게시글도 전부 삭제됩니다.\n상품을 삭제하시겠습니까?")){
-					$('#empPw').focus();
+					$('#deleteBtn').focus();
 					return false;
 				} else {
 					$('#deleteForm').submit();
@@ -84,12 +67,6 @@
 			<tr>
 				<th>출시 일자 : </th>
 				<td>${map.createdate}</td>
-			</tr>
-			<tr>
-				<th>비밀 번호 입력 : </th>
-				<td>
-					<input type="password" name="empPw">
-				</td>
 			</tr>
 			<tr>
 			<td colspan="3">

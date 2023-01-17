@@ -25,14 +25,41 @@ public class OrdersService {
 	private CustomerAddressDao customerAddressDao;
 	
 	// GET
+	// 페이징 전체 상품 개수
+	public int getOrdersCount() {
+		int count = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			ordersDao = new OrdersDao();
+			count = ordersDao.selectOrdersCount(conn);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+	
 	// 회원의 주문 내역
-	public ArrayList<HashMap<String, Object>> getOrdersList(String customerId){
+	public ArrayList<HashMap<String, Object>> getOrdersList(String customerId, int beginRow, int rowPerPage){
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			this.ordersDao = new OrdersDao();
-			list = ordersDao.selectOrdersList(conn, customerId);
+			list = ordersDao.selectOrdersList(conn, customerId, beginRow, rowPerPage);
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -138,7 +165,7 @@ public class OrdersService {
 					pointHistoryDao.insertPoint(conn, usePoint);
 				}
 				// goods 재고 변경
-				HashMap<String, Object> stock = this.goodsDao.selectgoodsOne(conn, o.getGoodsCode());
+				HashMap<String, Object> stock = this.goodsDao.selectGoodsOne(conn, o.getGoodsCode());
 				Goods goods = new Goods();
 				goods.setGoodsCode(o.getGoodsCode());
 				goods.setGoodsStock((int)stock.get("goodsStock")-o.getOrderQuantity());
@@ -176,7 +203,7 @@ public class OrdersService {
 				// 포인트 내역 삭제
 				pointHistoryDao.deletePoint(conn, orders.getOrderCode());
 				// 재고 변경
-				HashMap<String, Object> stock = this.goodsDao.selectgoodsOne(conn, orders.getGoodsCode());
+				HashMap<String, Object> stock = this.goodsDao.selectGoodsOne(conn, orders.getGoodsCode());
 				Goods goods = new Goods();
 				goods.setGoodsCode(orders.getGoodsCode());
 				goods.setGoodsStock((int)stock.get("goodsStock")+orders.getOrderQuantity());

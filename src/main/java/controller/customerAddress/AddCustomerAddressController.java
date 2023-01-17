@@ -10,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.CustomerAddressService;
+import vo.Customer;
 import vo.CustomerAddress;
 
 @WebServlet("/customerAddress/addCustomerAddress")
@@ -19,15 +21,13 @@ public class AddCustomerAddressController extends HttpServlet {
 	private CustomerAddressService customerAddressService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 후에만 진입가능
-		/*
 		HttpSession session = request.getSession();
 		
-		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -37,8 +37,8 @@ public class AddCustomerAddressController extends HttpServlet {
 		}
 		request.setAttribute("msg", msg);
 		
-		// 세션의 로그인 된 아이디로 수정 예정
-		String customerId = "test";
+		// 세션의 로그인 된 아이디
+		String customerId = loginCustomer.getCustomerId();
 		request.setAttribute("customerId", customerId);
 		
 		// View
@@ -48,16 +48,14 @@ public class AddCustomerAddressController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		// 파라미터 값 받기
 		request.setCharacterEncoding("UTF-8");

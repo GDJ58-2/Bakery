@@ -11,13 +11,53 @@ import vo.PointHistory;
 
 public class PointHistoryDao {
 	// SELECT
+	// 페이징 전체 포인트 내역 개수
+	public int selectPointHistoryCount(Connection conn) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count FROM point_history";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		
+		return count;
+	}
+	
+	// 포인트 내역 조회
+	public ArrayList<HashMap<String, Object>> selectPointHistoryByPage(Connection conn, String customerId, int beginRow, int rowPerPage) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT o.order_code orderCode, o.customer_id customerId, p.point_kind pointKind, p.point point, p.createdate createdate\r\n"
+				+ "	FROM orders o INNER JOIN point_history p\r\n"
+				+ "		ON o.order_code = p.order_code\r\n"
+				+ "	WHERE customer_id = ?"
+				+ "	LIMIT ?, ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		stmt.setInt(2, beginRow);
+		stmt.setInt(3, rowPerPage);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("orderCode", rs.getInt("orderCode"));
+			map.put("customerId", rs.getString("customerId"));
+			map.put("pointKind", rs.getString("pointKind"));
+			map.put("point", rs.getInt("point"));
+			map.put("createdate", rs.getString("createdate"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
 	// 포인트 내역 조회
 	public ArrayList<HashMap<String, Object>> selectPointHistory(Connection conn, String customerId) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT o.order_code orderCode, o.customer_id customerId, p.point_kind pointKind, p.point point, p.createdate createdate\r\n"
 				+ "	FROM orders o INNER JOIN point_history p\r\n"
 				+ "		ON o.order_code = p.order_code\r\n"
-				+ "WHERE customer_id = ?";
+				+ "	WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
 		ResultSet rs = stmt.executeQuery();

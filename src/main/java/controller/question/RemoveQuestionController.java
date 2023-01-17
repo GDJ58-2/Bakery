@@ -10,24 +10,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.QuestionService;
+import vo.Customer;
 import vo.Question;
 
 @WebServlet("/question/removeQuestion")
 public class RemoveQuestionController extends HttpServlet {
 	private QuestionService questionService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -39,10 +39,13 @@ public class RemoveQuestionController extends HttpServlet {
 		
 		int questionCode = 0;
 		// 방어코드
-		if(request.getParameter("questionCode") != null){
+		if(request.getParameter("questionCode") == null){
+			response.sendRedirect(request.getContextPath()+"/question/questionList");
+			return;
+		} else {
 			questionCode = Integer.parseInt(request.getParameter("questionCode"));
 			System.out.println("questionCode : " + questionCode);
-		} 
+		}
 		
 		Question question = new Question();
 		this.questionService = new QuestionService();
@@ -58,16 +61,14 @@ public class RemoveQuestionController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -79,10 +80,13 @@ public class RemoveQuestionController extends HttpServlet {
 		
 		int questionCode = 0;
 		// 방어코드
-		if(request.getParameter("questionCode") != null){
+		if(request.getParameter("questionCode") == null){
+			response.sendRedirect(request.getContextPath()+"/question/questionList");
+			return;
+		} else {
 			questionCode = Integer.parseInt(request.getParameter("questionCode"));
 			System.out.println("questionCode : " + questionCode);
-		} 
+		}
 		
 		QuestionService questionService = new QuestionService();
 		int row = questionService.removeQuestion(questionCode);

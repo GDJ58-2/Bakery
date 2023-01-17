@@ -11,8 +11,22 @@ import vo.Question;
 
 public class QuestionDao {
 	// SELECT
+	// 페이징 전체 문의 개수
+	public int selectQuestionCount(Connection conn) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count FROM question";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		
+		return count;
+	}
+	
 	// 리스트
-	public ArrayList<HashMap<String, Object>> selectQuestionList(Connection conn, String customerId) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectQuestionList(Connection conn, String customerId, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT q.question_code questionCode, q.category category, q.question_memo questionMemo, q.createdate, qc.comment_code commentCode, o.customer_id customerId, o.order_state orderState, o.order_code orderCode"
 				+ "		FROM question q"
@@ -21,9 +35,12 @@ public class QuestionDao {
 				+ "		INNER JOIN orders o"
 				+ "		WHERE o.customer_id LIKE ?"	
 				+ "		GROUP BY q.question_code "
-				+ "		ORDER BY qc.createdate ASC, q.createdate DESC";
+				+ "		ORDER BY qc.createdate ASC, q.createdate DESC"
+				+ "		LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
+		stmt.setInt(2, beginRow);
+		stmt.setInt(3, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();

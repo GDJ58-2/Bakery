@@ -32,10 +32,11 @@ public class ModifyGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
+		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
 		if(request.getParameter("msg") != null) {
@@ -46,9 +47,12 @@ public class ModifyGoodsController extends HttpServlet {
 		int goodsCode = 0;
 		// 방어코드
 		if(request.getParameter("goodsCode") != null){
+			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			return;
+		} else {
 			goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
 			System.out.println("goodsCode : " + goodsCode);
-		} 
+		}
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		GoodsService goodsService = new GoodsService();
@@ -75,7 +79,7 @@ public class ModifyGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
@@ -146,11 +150,15 @@ public class ModifyGoodsController extends HttpServlet {
 			hit = Integer.parseInt(mreq.getParameter("hit"));
 		}
 		
-		// 방어 코드
 		String contentType = null;
 		String originalFileName = null;
-		String fileSystemName = null;			
+		String fileSystemName = null;		
+		
+		// 방어 코드
 		if(mreq.getContentType("goodsImg") != null) {
+			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			return;
+		} else {
 			// input type=file 바이너리 파일은 마임타입형태의 파일로 변환되어 upload폴더의 자동으로 저장
 			contentType = mreq.getContentType("goodsImg");
 			originalFileName = mreq.getOriginalFileName("goodsImg"); // 원본 파일 이름
