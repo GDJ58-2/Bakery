@@ -61,7 +61,7 @@ public class CartDao {
 	}
 	   
 	// 비회원 장바구니 이미지 불러오기
-	public String getGoodsImg(Connection conn, int goodsCode) throws Exception {
+	public String selectGoodsImg(Connection conn, int goodsCode) throws Exception {
 		String result = null;
 		String sql = "SELECT filename FROM goods_img WHERE goods_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -180,7 +180,7 @@ public class CartDao {
 	}
 	
 	// 재고조회
-	public int getGoodsStock(Connection conn, int goodsCode) throws Exception {
+	public int selectGoodsStock(Connection conn, int goodsCode) throws Exception {
 		int stock = 0;
 		String sql = "SELECT goods_stock goodsStock FROM goods WHERE goods_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);

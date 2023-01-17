@@ -12,7 +12,7 @@ import vo.Customer;
 import service.CustomerService;
 
 @WebServlet("/customer/selectOneCustomer")
-public class SelectOneCustomerController extends HttpServlet {
+public class CustomerOneController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();

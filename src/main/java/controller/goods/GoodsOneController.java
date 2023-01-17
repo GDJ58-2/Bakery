@@ -42,10 +42,18 @@ public class GoodsOneController extends HttpServlet {
 		request.setAttribute("map", map);
 		
 		// 리뷰글보기
+		int currentPage = 1;
+		if(request.getParameter("currentPage") != null) {
+		currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		int rowPerPage = 5;
 		ReviewService reviewService = new ReviewService();
-		ArrayList<HashMap<String, Object>> list = reviewService.getReviewList(goodsCode);
+		int reviewCnt = reviewService.getReviewPaging(goodsCode);
+		int endPage = (int)Math.ceil((double) reviewCnt / rowPerPage);
+		ArrayList<HashMap<String, Object>> list = reviewService.getReviewList(goodsCode, currentPage, rowPerPage);
 		request.setAttribute("list", list);
-		
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("endPage", endPage);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/goods/goodsOne.jsp");

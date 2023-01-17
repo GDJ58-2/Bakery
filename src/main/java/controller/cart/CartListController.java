@@ -15,7 +15,7 @@ import vo.Customer;
 import vo.Cart;
 
 @WebServlet("/cart/cartList")
-public class SelectCartListController extends HttpServlet {
+public class CartListController extends HttpServlet {
 	private CartService cartService;
 	// 장바구니 조회
 	@SuppressWarnings("unchecked")
@@ -37,7 +37,7 @@ public class SelectCartListController extends HttpServlet {
 		if(loginCustomer != null) { // 회원
 			String customerId = loginCustomer.getCustomerId();
 			if(userList == null) { // 비회원장바구니가 비어있을 때
-				customerList = cartService.selectCartList(customerId);
+				customerList = cartService.getCartList(customerId);
 				for(HashMap<String, Object> m : customerList) {
 					listStock = (int)m.get("cartQuantity");
 					listGoodsCode = (int)m.get("goodsCode");
@@ -51,13 +51,13 @@ public class SelectCartListController extends HttpServlet {
 						System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
 					}
 				}
-				customerList = cartService.selectCartList(customerId);
+				customerList = cartService.getCartList(customerId);
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
 				request.setAttribute("stockMsg", stockMsg);
 				session.removeAttribute("userList");
 			} else { // 비회원장바구니가 비어있지 않을 때
-				customerList = cartService.selectCartList(customerId);
+				customerList = cartService.getCartList(customerId);
 				Cart cart = null;
 				cart = new Cart();
 				int addResult = 0;
@@ -83,7 +83,7 @@ public class SelectCartListController extends HttpServlet {
 						}
 					}
 				}
-				customerList = cartService.selectCartList(customerId);
+				customerList = cartService.getCartList(customerId);
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
 				request.setAttribute("stockMsg", stockMsg);

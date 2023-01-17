@@ -33,7 +33,7 @@ public class ModifyCartController extends HttpServlet {
 			request.setAttribute("userList", userList);
 		} else {
 			String custmerId = loginCustomer.getCustomerId();
-			customerList = cartService.selectCartList(custmerId);
+			customerList = cartService.getCartList(custmerId);
 			request.setAttribute("loginCustomer", loginCustomer);
 			request.setAttribute("customerList", customerList);
 		}
