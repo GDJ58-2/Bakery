@@ -25,72 +25,68 @@ public class SelectCartListController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> userList = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 		ArrayList<HashMap<String,Object>> customerList = new ArrayList<HashMap<String,Object>>();
 		this.cartService = new CartService();
-		int realGoodsStock = 0;
-		int listStock =0;
+		int listStock = 0;
 		int listGoodsCode = 0;
-		int resultStock = 0;
+		String stockMsg = null;
+		String modifyCart = request.getParameter("msg");
+		if(modifyCart == null) {
+			modifyCart = "";
+		} else if(modifyCart.equals("x") && modifyCart != null) {
+			stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+		} 
 		if(loginCustomer != null) { // 회원
-			String custmerId = loginCustomer.getCustomerId();
+			String customerId = loginCustomer.getCustomerId();
 			if(userList == null) { // 비회원장바구니가 비어있을 때
-				customerList = cartService.selectCartList(custmerId);
-				
+				customerList = cartService.selectCartList(customerId);
 				for(HashMap<String, Object> m : customerList) {
 					listStock = (int)m.get("cartQuantity");
 					listGoodsCode = (int)m.get("goodsCode");
-					realGoodsStock = cartService.getGoodsStock(listGoodsCode);
-					System.out.println("listStock: "+listStock+"/ listGoodsCode: "+listGoodsCode+"/ realGoodsStock: "+realGoodsStock);
-					if(Math.floorDiv(realGoodsStock, listGoodsCode) == 0) { // 재고부족
-						//String msg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다."; 메세지 띄우기
-						resultStock = Math.floorMod(realGoodsStock, listGoodsCode);
-						Cart updateCart = new Cart();
-						updateCart.setCustomerId(custmerId);
-						updateCart.setGoodsCode(listGoodsCode);
-						updateCart.setCartQuantity(resultStock);
-						int row2 = cartService.modifyCart(updateCart);
-						if(row2 == 1) {
-							System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
-						}
+					Cart updateCart = new Cart();
+					updateCart.setCustomerId(customerId);
+					updateCart.setGoodsCode(listGoodsCode);
+					updateCart.setCartQuantity(listStock);
+					boolean result = cartService.modifyCart(updateCart);
+					if(result) {
+						stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+						System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
+						customerList = cartService.selectCartList(customerId);
 					}
 				}
-				
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
+				request.setAttribute("stockMsg", stockMsg);
 				session.removeAttribute("userList");
 			} else { // 비회원장바구니가 비어있지 않을 때
-				customerList = cartService.selectCartList(custmerId);
+				customerList = cartService.selectCartList(customerId);
 				Cart cart = null;
 				cart = new Cart();
-				int result = 0;
+				int addResult = 0;
 				for(HashMap<String, Object> user : userList) {
 					cart.setGoodsCode((int)user.get("goodsCode"));
 					cart.setCartQuantity((int)user.get("cartQuantity"));
-					cart.setCustomerId(custmerId);
+					cart.setCustomerId(customerId);
 					this.cartService = new CartService();
-					result = cartService.addCart(cart);
+					addResult = cartService.addCart(cart);
 				}
-				if(result == 1) {
+				if(addResult == 1) {
 					for(HashMap<String, Object> m : customerList) {
 						listStock = (int)m.get("cartQuantity");
 						listGoodsCode = (int)m.get("goodsCode");
-						realGoodsStock = cartService.getGoodsStock(listGoodsCode);
-						System.out.println("listStock: "+listStock+"/ listGoodsCode: "+listGoodsCode+"/ realGoodsStock: "+realGoodsStock);
-						if(Math.floorDiv(realGoodsStock, listGoodsCode) == 0) { // 재고부족
-							//String msg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다."; 메세지 띄우기
-							resultStock = Math.floorMod(realGoodsStock, listGoodsCode);
-							Cart updateCart = new Cart();
-							updateCart.setCustomerId(custmerId);
-							updateCart.setGoodsCode(listGoodsCode);
-							updateCart.setCartQuantity(resultStock);
-							int row2 = cartService.modifyCart(updateCart);
-							if(row2 == 1) {
-								System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
-							}
+						Cart updateCart = new Cart();
+						updateCart.setCustomerId(customerId);
+						updateCart.setGoodsCode(listGoodsCode);
+						updateCart.setCartQuantity(listStock);
+						boolean result = cartService.modifyCart(updateCart);
+						if(result) {
+							stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+							System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
+							customerList = cartService.selectCartList(customerId);
 						}
 					}
 				}
-				
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
+				request.setAttribute("stockMsg", stockMsg);
 				session.removeAttribute("userList");
 			}
 		} else { // 비회원
@@ -98,24 +94,24 @@ public class SelectCartListController extends HttpServlet {
 			for(HashMap<String, Object> m : userList) {
 				listStock = (int)m.get("cartQuantity");
 				listGoodsCode = (int)m.get("goodsCode");
-				realGoodsStock = cartService.getGoodsStock(listGoodsCode);
-				System.out.println("listStock: "+listStock+"/ listGoodsCode: "+listGoodsCode+"/ realGoodsStock: "+realGoodsStock);
-				if(Math.floorDiv(realGoodsStock, listGoodsCode) == 0) { // 재고부족
-					//String msg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다."; 메세지 띄우기
-					resultStock = Math.floorMod(realGoodsStock, listGoodsCode);
+				int realGoodsStock = cartService.getGoodsStock(listGoodsCode);
+				if(Math.floorDiv(realGoodsStock, listStock) == 0) { // 재고부족
+					int resultStock = Math.floorMod(realGoodsStock, listStock);
 					for(HashMap<String, Object> p : userList) {
 						int listGoodsCode2 = (int)p.get("goodsCode");
 						if(listGoodsCode2 == listGoodsCode) {
 							p.put("cartQuantity", resultStock);
 						}
 					}
+					stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
 					System.out.println("SelectCartListController: 구매가능한 수량으로 변경(비회원)");
 				}
 			}
 			request.setAttribute("loginCustomer", loginCustomer);
+			request.setAttribute("stockMsg", stockMsg);
 			request.setAttribute("userList", userList);
 		}
-		
+		//System.out.println(stockMsg);
 		// view
 		request.getRequestDispatcher("/WEB-INF/view/cart/cartList.jsp").forward(request, response);
 	}

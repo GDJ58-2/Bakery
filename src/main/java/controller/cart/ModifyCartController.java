@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
 import service.CartService;
 import service.CustomerAddressService;
 import vo.Cart;
@@ -52,9 +50,9 @@ public class ModifyCartController extends HttpServlet {
 		ArrayList<HashMap<String, Object>> userList = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 		int cartQuantity = Integer.parseInt(request.getParameter("cartQuantity"));
 		int goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
-		System.out.println(cartQuantity + "," + goodsCode);
+		//System.out.println(cartQuantity + "," + goodsCode);
 		this.cartService = new CartService();
-	
+		String msg = null;
 		if(loginCustomer == null) { // 비회원
 			int goodsNum = 0;
 			int quantityNum = 0;
@@ -72,11 +70,15 @@ public class ModifyCartController extends HttpServlet {
 			cart.setCustomerId(loginCustomer.getCustomerId());
 			cart.setGoodsCode(goodsCode);
 			cart.setCartQuantity(cartQuantity);
-			int row = cartService.modifyCart(cart);
-			if(row == 1) {
-				System.out.println("ModifyCartList: 회원장바구니 수량변경완료");
+			boolean result = cartService.modifyCart(cart);
+			if(result) {
+				System.out.println("ModifyCartList: 회원장바구니 수량변경완료(재고없음)");
+				msg = "x";
+				
+			} else {
+				System.out.println("ModifyCartList: 회원장바구니 수량변경완료(재고있음)");
 			}
-			response.sendRedirect(request.getContextPath() + "/cart/cartList");
+			response.sendRedirect(request.getContextPath() + "/cart/cartList?msg="+msg);
 		}
 	}
 }

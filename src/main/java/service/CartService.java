@@ -51,13 +51,23 @@ public class CartService {
 		return row; 
 	}
 	// 장바구니 수량 변경
-	public int modifyCart(Cart cart) {
-		int row = 0;
+	public boolean modifyCart(Cart cart) {
+		boolean result = false; 
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
-			row = cartDao.updateCartsQuantity(conn, cart);
+			int realStock = cartDao.getGoodsStock(conn, cart.getGoodsCode());
+			if(Math.floorDiv(realStock, cart.getCartQuantity()) == 0) { // 재고부족
+				int updateStock = Math.floorMod(realStock, cart.getCartQuantity());
+				cart.setCartQuantity(updateStock);
+				cartDao.updateCartsQuantity(conn, cart);
+				result = true;
+				System.out.println("CartService: 재고없음");
+			} else {
+				cartDao.updateCartsQuantity(conn, cart);
+				System.out.println("CartService: 재고있음");
+			}
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -65,6 +75,7 @@ public class CartService {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			e.printStackTrace();
 		} finally {
 			try {
 				DBUtil.close(null, null, conn);
@@ -72,7 +83,7 @@ public class CartService {
 				e.printStackTrace();
 			}
 		}
-		return row;
+		return result;
 	}
 	// 장바구니 목록 불러오기 
 	public ArrayList<HashMap<String, Object>> selectCartList(String customerId) {
