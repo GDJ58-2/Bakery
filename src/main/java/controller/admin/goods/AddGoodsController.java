@@ -30,9 +30,17 @@ public class AddGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
+		// 메시지가 있을 경우
+		request.setCharacterEncoding("UTF-8");
+		String msg = null;
+		if(request.getParameter("msg") != null) {
+			msg = request.getParameter("msg");
+		}
+		request.setAttribute("msg", msg);
 		
 		GoodsCategoryService goodsCategoryService = new GoodsCategoryService();
 		ArrayList<GoodsCategory> list = goodsCategoryService.getGoodsCategoryList();
@@ -50,7 +58,7 @@ public class AddGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
@@ -72,52 +80,62 @@ public class AddGoodsController extends HttpServlet {
 		
 		// 방어 코드
 		if(mreq.getParameter("categoryNo") == null || mreq.getParameter("categoryNo").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			categoryNo = Integer.parseInt(mreq.getParameter("categoryNo"));
 		}
 		if(mreq.getParameter("goodsName") == null || mreq.getParameter("goodsName").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			goodsName = mreq.getParameter("goodsName");
 		}
 		if(mreq.getParameter("goodsPrice") == null || mreq.getParameter("goodsPrice").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			goodsPrice = Integer.parseInt(mreq.getParameter("goodsPrice"));
 		}
 		if(mreq.getParameter("goodsContent") == null || mreq.getParameter("goodsContent").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			goodsContent = mreq.getParameter("goodsContent");
 		}
 		if(mreq.getParameter("goodsStock") == null || mreq.getParameter("goodsStock").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			goodsStock = Integer.parseInt(mreq.getParameter("goodsStock"));
 		}
 		if(mreq.getParameter("empId") == null || mreq.getParameter("empId").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			empId = mreq.getParameter("empId");
 		}
 		if(mreq.getParameter("hit") == null || mreq.getParameter("hit").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
 			return;
 		} else {
 			hit = Integer.parseInt(mreq.getParameter("hit"));
 		}
 		
-		// input type=file 바이너리 파일은 마임타입형태의 파일로 변환되어 upload폴더의 자동으로 저장
-		String contentType = mreq.getContentType("goodsImg");
-		String originalFileName = mreq.getOriginalFileName("goodsImg"); // 원본 파일 이름
-		String fileSystemName = mreq.getFilesystemName("goodsImg"); // 저장된 파일 이름
+		String contentType = null;
+		String originalFileName = null;
+		String fileSystemName = null;		
+		
+		// 방어 코드
+		if(mreq.getContentType("goodsImg") != null) {
+			response.sendRedirect(request.getContextPath()+"/admin/goods/addGoods");
+			return;
+		} else {
+			// input type=file 바이너리 파일은 마임타입형태의 파일로 변환되어 upload폴더의 자동으로 저장
+			contentType = mreq.getContentType("goodsImg");
+			originalFileName = mreq.getOriginalFileName("goodsImg"); // 원본 파일 이름
+			fileSystemName = mreq.getFilesystemName("goodsImg"); // 저장된 파일 이름
+		}
 		
 		// 이미지 파일 검사
 		if(contentType.equals("image/jpeg") || contentType.equals("image/png")) {

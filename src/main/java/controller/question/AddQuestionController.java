@@ -25,7 +25,6 @@ public class AddQuestionController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// 로그인 후에만 진입가능
-
 		HttpSession session = request.getSession();
 		
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
@@ -33,7 +32,15 @@ public class AddQuestionController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-
+		
+		// 메시지가 있을 경우
+		request.setCharacterEncoding("UTF-8");
+		String msg = null;
+		if(request.getParameter("msg") != null) {
+			msg = request.getParameter("msg");
+		}
+		request.setAttribute("msg", msg);
+		
 		/*
 		int orderCode = 4;
 		// 방어코드
@@ -59,15 +66,13 @@ public class AddQuestionController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// 로그인 후에만 진입가능
-		/*
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		request.setCharacterEncoding("UTF-8");
 		
@@ -123,7 +128,7 @@ public class AddQuestionController extends HttpServlet {
 	    	String msg = URLEncoder.encode("문의 등록에 실패하였습니다.", "utf-8");
 	    	
 	    	// View
-	    	response.sendRedirect(request.getContextPath()+"/question/addQuestion");
+	    	response.sendRedirect(request.getContextPath()+"/question/addQuestion?msg="+msg);
 	    }
 	}
 }

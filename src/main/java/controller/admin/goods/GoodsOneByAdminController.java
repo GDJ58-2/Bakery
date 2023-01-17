@@ -24,7 +24,7 @@ public class GoodsOneByAdminController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
@@ -50,12 +50,6 @@ public class GoodsOneByAdminController extends HttpServlet {
 		map = goodsService.getGoodsOne(goodsCode);
 	    
 		request.setAttribute("map", map);
-		
-		// 리뷰글보기
-		ReviewService reviewService = new ReviewService();
-		ArrayList<HashMap<String, Object>> list = reviewService.getReviewList(goodsCode);
-		request.setAttribute("list", list);
-		
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/goodsOneByAdmin.jsp");

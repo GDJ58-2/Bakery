@@ -26,10 +26,11 @@ public class RemoveGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
+		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
 		if(request.getParameter("msg") != null) {
@@ -41,7 +42,7 @@ public class RemoveGoodsController extends HttpServlet {
 		// 방어코드
 		if(request.getParameter("goodsCode") == null){
 			// View
-			RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/goods/goodsList.jsp");
+			RequestDispatcher rd = request.getRequestDispatcher("/admin/goods/goodsListByAdmin");
 			
 			rd.forward(request, response);
 			
@@ -70,10 +71,11 @@ public class RemoveGoodsController extends HttpServlet {
 		
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/emp/loginEmp");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
 		
+		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
 		if(request.getParameter("msg") != null) {
@@ -82,58 +84,41 @@ public class RemoveGoodsController extends HttpServlet {
 		request.setAttribute("msg", msg);
 		
 		int goodsCode = 0;
-		String empPw = null;
 		
 		// 방어코드
-		if(request.getParameter("goodsCode") != null){
+		if(request.getParameter("goodsCode") == null || request.getParameter("goodsCode").equals("")){
+			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			return;
+		} else {
 			goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
 			System.out.println("goodsCode : " + goodsCode);
-		} 
-		if(request.getParameter("empPw") != null){
-			empPw = request.getParameter("empPw");
-			System.out.println("empPw : " + empPw);
 		}
 		
-		/*
-		if(empPw.equals(loginMember.getEmpPw()) {
-			// 비밀번호 확인 후 서비스 실행
-		}
-		*/
+		Goods goods = new Goods();
+		GoodsImg goodsImg = new GoodsImg();
 		
-		if(empPw.equals("1234")) {
-			Goods goods = new Goods();
-			GoodsImg goodsImg = new GoodsImg();
-			
-			goods.setGoodsCode(goodsCode);
-			goodsImg.setGoodsCode(goodsCode);
-			
-			GoodsService goodsService = new GoodsService();
-			int row = goodsService.removeGoods(goods, goodsImg);
-			if(row == 1){
-		    	System.out.println("삭제성공");
-		    	
-		    	response.setContentType("text/html; charset=UTF-8");
-		    	
-		    	PrintWriter out = response.getWriter();
-		    	
-		    	out.println("<script>alert('상품을 삭제하였습니다.'); location.href='/bakery/goods/goodsList';</script>");
-		    	
-		    	out.flush();
-		    } else {
-		    	System.out.println("삭제실패");
-		    	
-		    	msg = URLEncoder.encode("삭제에 실패하였습니다.", "utf-8");
-				
-				// View
-		    	response.sendRedirect(request.getContextPath()+"/admin/goods/removeGoods?goodsCode="+goodsCode+"&msg="+msg);
-		    }
-		} else {
-			System.out.println("삭제실패");
+		goods.setGoodsCode(goodsCode);
+		goodsImg.setGoodsCode(goodsCode);
+		
+		GoodsService goodsService = new GoodsService();
+		int row = goodsService.removeGoods(goods, goodsImg);
+		if(row == 1){
+	    	System.out.println("삭제성공");
 	    	
-			msg = URLEncoder.encode("비밀번호를 확인하세요.", "utf-8");
+	    	response.setContentType("text/html; charset=UTF-8");
+	    	
+	    	PrintWriter out = response.getWriter();
+	    	
+	    	out.println("<script>alert('상품을 삭제하였습니다.'); location.href='/bakery/goods/goodsList';</script>");
+	    	
+	    	out.flush();
+	    } else {
+	    	System.out.println("삭제실패");
+	    	
+	    	msg = URLEncoder.encode("삭제에 실패하였습니다.", "utf-8");
 			
 			// View
 	    	response.sendRedirect(request.getContextPath()+"/admin/goods/removeGoods?goodsCode="+goodsCode+"&msg="+msg);
-		}
+	    }
 	}
 }

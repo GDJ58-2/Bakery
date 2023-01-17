@@ -17,15 +17,42 @@ public class GoodsService {
 	private GoodsImgDao goodsImgDao;
 	
 	// GET
+	// 페이징 전체 상품 개수
+	public int getGoodsCount() {
+		int count = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			goodsDao = new GoodsDao();
+			count = goodsDao.selectGoodsCount(conn);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> getGoodsList(int categoryNo) {
+	public ArrayList<HashMap<String, Object>> getGoodsList(int categoryNo, int beginRow, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			list = goodsDao.selectGoodsList(conn, categoryNo);
+			list = goodsDao.selectGoodsList(conn, categoryNo, beginRow, rowPerPage);
 			conn.commit();
 		} catch(Exception e) {
 			try {

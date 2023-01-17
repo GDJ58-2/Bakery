@@ -11,24 +11,44 @@ import vo.Goods;
 
 public class GoodsDao {
 	// SELECT
+	// 페이징 전체 상품 개수
+	public int selectGoodsCount(Connection conn) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count FROM goods";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		
+		return count;
+	}
+	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> selectGoodsList(Connection conn, int categoryNo) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectGoodsList(Connection conn, int categoryNo, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		if(categoryNo == 0) {
 			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_stock goodsStock, img.filename filename"
 					   + "	FROM goods g INNER JOIN goods_img img"
-					   + "	ON g.goods_code = img.goods_code";
+					   + "	ON g.goods_code = img.goods_code"
+					   + "	LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, beginRow);
+			stmt.setInt(2, rowPerPage);
 			rs = stmt.executeQuery();
 		} else {
 			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_stock goodsStock, img.filename filename"
 					   + "	FROM goods g INNER JOIN goods_img img"
 					   + "	ON g.goods_code = img.goods_code"
-					   + "	WHERE category_no = ?";
+					   + "	WHERE category_no = ?"
+					   + "	LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, categoryNo);
+			stmt.setInt(2, beginRow);
+			stmt.setInt(3, rowPerPage);
 			rs = stmt.executeQuery();
 		}
 		while(rs.next()) {

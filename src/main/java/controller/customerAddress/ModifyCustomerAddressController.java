@@ -10,8 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.CustomerAddressService;
+import vo.Customer;
 import vo.CustomerAddress;
 
 @WebServlet("/customerAddress/modifyCustomerAddress")
@@ -19,15 +21,13 @@ public class ModifyCustomerAddressController extends HttpServlet {
     private CustomerAddressService customerAddressService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 후에만 진입가능
-		/*
 		HttpSession session = request.getSession();
 		
-		HashMap<String, Object> loginMember = (HashMap<String, Object>)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -39,10 +39,13 @@ public class ModifyCustomerAddressController extends HttpServlet {
 		
 		int addressCode = 0;
 		// 방어코드
-		if(request.getParameter("addressCode") != null){
+		if(request.getParameter("addressCode") == null || request.getParameter("addressCode").equals("")){
+			response.sendRedirect(request.getContextPath()+"/customerAddress/customerAddressList");
+			return;
+		} else {
 			addressCode = Integer.parseInt(request.getParameter("addressCode"));
 			System.out.println("addressCode : " + addressCode);
-		} 
+		}
 		
 		CustomerAddress ca = new CustomerAddress();
 		this.customerAddressService = new CustomerAddressService();
@@ -58,18 +61,16 @@ public class ModifyCustomerAddressController extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
-		Member loginMember = (Member)session.getAttribute("loginMember");
-		if(loginMember == null) { // 로그아웃 상태
-			response.sendRedirect(request.getContextPath()+"/member/login");
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer == null) { // 로그아웃 상태
+			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		*/
 		
-		String customerId = "test";
+		String customerId = loginCustomer.getCustomerId();
 		
 		// 파라미터 값 받기
 		request.setCharacterEncoding("UTF-8");

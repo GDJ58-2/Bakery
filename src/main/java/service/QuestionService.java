@@ -14,8 +14,35 @@ public class QuestionService {
 	private QuestionDao questionDao;
 	private QuestionCommentDao questionCommentDao;
 	// GET
+	// 페이징 전체 문의 개수
+	public int getQuestionCount() {
+		int count = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			questionDao = new QuestionDao();
+			count = questionDao.selectQuestionCount(conn);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	}
+	
 	// 리스트
-	public ArrayList<HashMap<String, Object>> getQuestionList(String customerId) {
+	public ArrayList<HashMap<String, Object>> getQuestionList(String customerId, int beginRow, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		this.questionDao = new QuestionDao();
 		Connection conn = null;
@@ -24,7 +51,7 @@ public class QuestionService {
 		}
 		try {
 			conn = DBUtil.getConnection();
-			list = questionDao.selectQuestionList(conn, customerId);
+			list = questionDao.selectQuestionList(conn, customerId, beginRow, rowPerPage);
 			conn.commit();
 		} catch (Exception e) {
 			try {

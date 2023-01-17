@@ -87,5 +87,20 @@
 			</c:otherwise>
 		</c:choose>
 	</c:forEach>
+	
+	</table>
+	<br>
+	<!-- 페이징 -->
+	<div>
+		<a type="button" href="${pageContext.request.contextPath}/orders/ordersList?currentPage=1">처음</a>
+			<c:if test="${currentPage > 1}">
+				<a type="button" href="${pageContext.request.contextPath}/orders/ordersList?currentPage=${currentPage-1}">이전</a>
+			</c:if>
+			<span>${currentPage}</span>
+			<c:if test="${currentPage < lastPage}">
+				<a type="button" href="${pageContext.request.contextPath}/orders/ordersList?currentPage=${currentPage+1}">다음</a>
+			</c:if>
+		<a type="button" href="${pageContext.request.contextPath}/orders/ordersList?currentPage=${lastPage}">마지막</a>
+	</div>
 </body>
 </html>
