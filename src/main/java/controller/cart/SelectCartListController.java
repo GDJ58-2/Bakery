@@ -32,7 +32,7 @@ public class SelectCartListController extends HttpServlet {
 		if(modifyCart == null) {
 			modifyCart = "";
 		} else if(modifyCart.equals("x") && modifyCart != null) {
-			stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+			stockMsg = "선택하신 상품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
 		} 
 		if(loginCustomer != null) { // 회원
 			String customerId = loginCustomer.getCustomerId();
@@ -47,11 +47,11 @@ public class SelectCartListController extends HttpServlet {
 					updateCart.setCartQuantity(listStock);
 					boolean result = cartService.modifyCart(updateCart);
 					if(result) {
-						stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+						stockMsg = "선택하신 상품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
 						System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
-						customerList = cartService.selectCartList(customerId);
 					}
 				}
+				customerList = cartService.selectCartList(customerId);
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
 				request.setAttribute("stockMsg", stockMsg);
@@ -78,12 +78,12 @@ public class SelectCartListController extends HttpServlet {
 						updateCart.setCartQuantity(listStock);
 						boolean result = cartService.modifyCart(updateCart);
 						if(result) {
-							stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+							stockMsg = "선택하신 상품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
 							System.out.println("SelectCartListController: 구매가능한 수량으로 변경(회원)");
-							customerList = cartService.selectCartList(customerId);
 						}
 					}
 				}
+				customerList = cartService.selectCartList(customerId);
 				request.setAttribute("loginCustomer", loginCustomer);
 				request.setAttribute("customerList", customerList);
 				request.setAttribute("stockMsg", stockMsg);
@@ -103,7 +103,7 @@ public class SelectCartListController extends HttpServlet {
 							p.put("cartQuantity", resultStock);
 						}
 					}
-					stockMsg = "선택하신 제품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
+					stockMsg = "선택하신 상품의 재고가 부족하여 구매가능한 최대 수량으로 변경됩니다.";
 					System.out.println("SelectCartListController: 구매가능한 수량으로 변경(비회원)");
 				}
 			}
