@@ -16,6 +16,8 @@ import vo.Notice;
 public class NoticeOneController extends HttpServlet {
 	private NoticeService noticeService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 비회원 열람 가능
+		
 		// 파라메타값 유효성검사, 받기
 		if(request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");

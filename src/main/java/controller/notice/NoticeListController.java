@@ -17,6 +17,9 @@ public class NoticeListController extends HttpServlet {
 	private NoticeService noticeService;
 	// noticeList 출력
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 비회원 열람가능 
+		
+		// 검색기능, 페이징 
 		String search = request.getParameter("search");
 		int currentPage = 1;
 		if(request.getParameter("currentPage")!=null) {
@@ -26,6 +29,7 @@ public class NoticeListController extends HttpServlet {
 		if(request.getParameter("rowPerPage")!=null) {
 			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 		}
+		
 		this.noticeService = new NoticeService();
 		ArrayList<Notice> list = noticeService.getNoticeList(search, currentPage, rowPerPage);
 		request.setAttribute("noticeList", list);

@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.EmpService;
 import vo.Emp;
@@ -18,8 +19,13 @@ public class ModifyEmpPwController extends HttpServlet {
 	private EmpService empService;
 	// modifyEmpPw form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
 		
 		// 파라메타 값 유효성 검사
 		if(request.getParameter("empCode")==null||request.getParameter("empCode").equals("")) {
@@ -36,6 +42,13 @@ public class ModifyEmpPwController extends HttpServlet {
 	}
 	// modifyEmp action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
 		
 		// 파라메타값 유효성 검사
 		String empId = request.getParameter("empId");

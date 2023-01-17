@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.EmpService;
 import vo.Emp;
@@ -19,8 +20,13 @@ public class AddEmpController extends HttpServlet {
 	private EmpService empService;
 	// addEmp form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// 로그인 유효성 검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp!=null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		String msg = request.getParameter("msg");
 		if(msg!=null&&msg.equals("중복된 아이디")) {
@@ -33,7 +39,13 @@ public class AddEmpController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.setCharacterEncoding("UTF-8"); 인코딩 필터 처리
 		
-		// 로그인 유효성 검사 --> 세션 저장 후 작성
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp!=null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		// 파라메타값 유효성검사 , 파라메타값 저장
 		String empId = request.getParameter("empId");
@@ -64,7 +76,7 @@ public class AddEmpController extends HttpServlet {
 		// emp 회원가입 실패
 		String msg = "<script>alert('회원가입을 실패하였습니다. 다시 시도해주세요.'); location.href='/bakery/admin/emp/addEmp';</script>'"; 
 		if(row==1) { // emp 회원가입 성공
-			msg = "<script>alert('회원 가입을 축하합니다. 로그인 후 이용할 수 있습니다.'); location.href='/bakery/admin/emp/login';</script>'";
+			msg = "<script>alert('회원 가입을 축하합니다. 로그인 후 이용할 수 있습니다.'); location.href='/bakery/admin/emp/loginEmp';</script>'";
 		} 
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();

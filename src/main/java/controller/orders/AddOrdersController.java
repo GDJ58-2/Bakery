@@ -24,7 +24,6 @@ public class AddOrdersController extends HttpServlet {
 	private OrdersService ordersService;
 	// addOrders action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		// 로그인 세션 검사
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
@@ -64,7 +63,7 @@ public class AddOrdersController extends HttpServlet {
 		}
 		
 		this.cartService = new CartService();
-		ArrayList<HashMap<String, Object>> list = cartService.selectCartList(loginCustomer.getCustomerId(), goodsCodeInt);
+		ArrayList<HashMap<String, Object>> list = cartService.selectCartList(customerId, goodsCodeInt);
 		ArrayList<Orders> ordersList = new ArrayList<Orders>(); // 최종 주문목록 
 		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null); 
 		// ArrayList<HashMap<String, Object>>  ---> ArrayList<Orders>

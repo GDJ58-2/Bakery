@@ -193,17 +193,18 @@ public class OrdersDao {
 	// 관리자 주문내역 보기 
 	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename\r\n"
-				+ "	FROM orders o INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename\r\n"
-				+ "									FROM goods g \r\n"
-				+ "									INNER JOIN goods_img img\r\n"
-				+ "									ON g.goods_code = img.goods_code) g\r\n"
-				+ "							ON o.goods_code = g.goods_code\r\n"
-				+ "	ORDER BY createdate DESC, (case when o.order_state LIKE '결제' then 5\r\n"
-				+ "									when o.order_state LIKE '배송중' then 4\r\n"
-				+ "									when o.order_state LIKE '배송완료' then 3\r\n"
-				+ "									when o.order_state LIKE '구매확정' then 2\r\n"
-				+ "									ELSE 1 END) asc";
+		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename"
+				+ "		FROM orders o "
+				+ "	INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename"
+				+ "				FROM goods g "
+				+ "				INNER JOIN goods_img img"
+				+ "				ON g.goods_code = img.goods_code) g"
+				+ "	ON o.goods_code = g.goods_code"
+				+ "	ORDER BY (case when o.order_state LIKE '결제' then 5"
+				+ "					when o.order_state LIKE '배송중' then 4"
+				+ "					when o.order_state LIKE '배송완료' then 3"
+				+ "					when o.order_state LIKE '구매확정' then 2"
+				+ "					ELSE 1 END) desc, createdate DESC;";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {

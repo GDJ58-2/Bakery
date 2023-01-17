@@ -3,24 +3,37 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import util.DBUtil;
 import vo.Notice;
 
 public class NoticeDao {
-	public int insertNotice(Connection conn, Notice notice) throws Exception { // addNotice
+	// insert
+	public HashMap<String, Object> insertNotice(Connection conn, Notice notice) throws Exception { 
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		int noticeCode = 0;
 		int row = 0;
 		String sql = "INSERT INTO notice(notice_title, notice_content, emp_id, createdate) VALUES(?,?,?,NOW())";
-		PreparedStatement stmt = conn.prepareStatement(sql);
+		PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); // Statement.RETURN_GENERATED_KEYS : DB상에 AUTO_INCREMENT로 인해 자동으로 생성되어진 key(=id)를 가져오는 쿼리
 		stmt.setString(1,notice.getNoticeTitle());
 		stmt.setString(2, notice.getNoticeContent());
 		stmt.setString(3, notice.getEmpId());
 		row = stmt.executeUpdate();
-		DBUtil.close(null, stmt, null);
-		return row;
+		ResultSet rs = stmt.getGeneratedKeys();
+		if(rs.next()) {
+			noticeCode = rs.getInt(1);
+		}
+		map.put("row", row);
+		map.put("noticeCode", noticeCode);
+		DBUtil.close(rs, stmt, null);
+		return map;
 	}
-	public int updateNotice(Connection conn, Notice notice) throws Exception { // modifyNotice
+	
+	// update
+	public int updateNotice(Connection conn, Notice notice) throws Exception { 
 		int row = 0;
 		String sql = "UPDATE notice SET notice_title=?, notice_content=? WHERE notice_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -31,7 +44,9 @@ public class NoticeDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public int deleteNotice(Connection conn, int noticeCode) throws Exception { // removeNotice
+	
+	// delete
+	public int deleteNotice(Connection conn, int noticeCode) throws Exception { 
 		int row = 0;
 		String sql = "DELETE FROM notice WHERE notice_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -40,7 +55,9 @@ public class NoticeDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public Notice selectNoticeOne(Connection conn, int noticeCode) throws Exception { // modifyNotice Form
+	
+	// 상세보기
+	public Notice selectNoticeOne(Connection conn, int noticeCode) throws Exception { 
 		Notice notice = null;
 		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice WHERE notice_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -52,7 +69,9 @@ public class NoticeDao {
 		DBUtil.close(rs, stmt, null);
 		return notice;
 	}
-	public ArrayList<Notice> selectNoticeList(Connection conn, String search, int beginRow, int rowPerPage) throws Exception { // noticeList
+	
+	// list 
+	public ArrayList<Notice> selectNoticeList(Connection conn, String search, int beginRow, int rowPerPage) throws Exception { 
 		ArrayList<Notice> list = new ArrayList<Notice>();
 		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice WHERE notice_title LIKE ? ORDER BY createdate DESC LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
