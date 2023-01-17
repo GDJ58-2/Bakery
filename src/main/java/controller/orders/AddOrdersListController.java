@@ -47,7 +47,7 @@ public class AddOrdersListController extends HttpServlet {
 		this.customerAddressService = new CustomerAddressService();
 		this.cartService = new CartService();
 		ArrayList<CustomerAddress> addressList = customerAddressService.getAddressList(loginCustomer.getCustomerId());
-		ArrayList<HashMap<String, Object>> orderList = cartService.selectCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
+		ArrayList<HashMap<String, Object>> orderList = cartService.getCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
 		int orderPrice = 0;
 		for(HashMap<String, Object> map : orderList) {
 			map.put("saveupPoint", (int)((int)map.get("goodsPrice")*(int)map.get("cartQuantity")*0.05));

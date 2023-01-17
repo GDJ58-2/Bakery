@@ -57,7 +57,7 @@ public class CartService {
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
-			int realStock = cartDao.getGoodsStock(conn, cart.getGoodsCode());
+			int realStock = cartDao.selectGoodsStock(conn, cart.getGoodsCode());
 			if(Math.floorDiv(realStock, cart.getCartQuantity()) == 0) { // 재고부족
 				int updateStock = Math.floorMod(realStock, cart.getCartQuantity());
 				cart.setCartQuantity(updateStock);
@@ -86,7 +86,7 @@ public class CartService {
 		return result;
 	}
 	// 장바구니 목록 불러오기 
-	public ArrayList<HashMap<String, Object>> selectCartList(String customerId) {
+	public ArrayList<HashMap<String, Object>> getCartList(String customerId) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
@@ -118,7 +118,7 @@ public class CartService {
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
-			result = cartDao.getGoodsImg(conn, goodsCode);
+			result = cartDao.selectGoodsImg(conn, goodsCode);
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -165,7 +165,7 @@ public class CartService {
 		return row; 
 	}
 	// 최종적으로 결제하기 전 주문리스트
-	public ArrayList<HashMap<String, Object>> selectCartList(String customerId, int[] goodsCode) {
+	public ArrayList<HashMap<String, Object>> getCartList(String customerId, int[] goodsCode) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
@@ -197,7 +197,7 @@ public class CartService {
 		try {
 			conn = DBUtil.getConnection();
 			this.cartDao = new CartDao();
-			stock = cartDao.getGoodsStock(conn, goodsCode);
+			stock = cartDao.selectGoodsStock(conn, goodsCode);
 			conn.commit();
 		} catch(Exception e) {
 			try {
