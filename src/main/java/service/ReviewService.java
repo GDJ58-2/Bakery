@@ -40,14 +40,16 @@ public class ReviewService {
 		return row; 
 	}
 	
-	public ArrayList<HashMap<String, Object>> getReviewList(int goodsCode) {
+	// 리뷰 불러오기
+	public ArrayList<HashMap<String, Object>> getReviewList(int goodsCode, int currentPage, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			list = new ArrayList<HashMap<String, Object>>();
 			this.reviewDao = new ReviewDao();
-			list = reviewDao.reviewList(conn, goodsCode);
+			int beginRow = (currentPage - 1) * rowPerPage + 1; // n페이지의 첫 번째 글
+			list = reviewDao.reviewList(conn, goodsCode, beginRow, rowPerPage);
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -66,7 +68,33 @@ public class ReviewService {
 		return list;
 	}
 	
+	// 페이징 처리를 위한 전체 리뷰글 수 구하기 
+	public int getReviewPaging(int goodsCode) {
+		int cnt = 0;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			this.reviewDao = new ReviewDao();
+			cnt = reviewDao.reviewPaging(conn, goodsCode);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch(SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return cnt;
+	}
 	
+	// 회원별 리뷰 모아보기
 	public ArrayList<HashMap<String, Object>> getCustomerReviewList(String customerId) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;

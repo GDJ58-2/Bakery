@@ -12,11 +12,40 @@ import util.DBUtil;
 public class ReviewDao {
 	
 	// 상품목록에 띄울 리뷰
-	public ArrayList<HashMap<String, Object>> reviewList(Connection conn, int goodsCode) throws Exception {
+	public ArrayList<HashMap<String, Object>> reviewList(Connection conn, int goodsCode, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT r.review_memo reviewMemo"
 				+ ", o.customer_id customerId"
 				+ ", g.goods_name goodsName"
+				+ ", r.createdate createdate"
+				+ " FROM review r"
+				+ " INNER JOIN orders o"
+				+ " ON r.order_code = o.order_code"
+				+ " INNER JOIN goods g"
+				+ " ON o.goods_code = g.goods_code"
+				+ " WHERE g.goods_code = ?"
+				+ " ORDER BY r.createdate DESC LIMIT ? OFFSET ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, goodsCode);
+		stmt.setInt(2, rowPerPage);
+		stmt.setInt(3, beginRow);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("reviewMemo", rs.getString("reviewMemo"));
+			m.put("goodsName", rs.getString("goodsName"));
+			m.put("customerId", rs.getString("customerId"));
+			m.put("createdate", rs.getString("createdate"));
+			list.add(m);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;		
+	}
+	
+	// 리뷰글 페이징처리
+	public int reviewPaging(Connection conn, int goodsCode) throws Exception {
+		int cnt = 0;
+		String sql = "SELECT COUNT(*) cnt"
 				+ " FROM review r"
 				+ " INNER JOIN orders o"
 				+ " ON r.order_code = o.order_code"
@@ -26,15 +55,11 @@ public class ReviewDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, goodsCode);
 		ResultSet rs = stmt.executeQuery();
-		while(rs.next()) {
-			HashMap<String, Object> m = new HashMap<String, Object>();
-			m.put("reviewMemo", rs.getString("reviewMemo"));
-			m.put("goodsName", rs.getString("goodsName"));
-			m.put("customerId", rs.getString("customerId"));
-			list.add(m);
+		if(rs.next()) {
+			cnt = rs.getInt("cnt");
 		}
 		DBUtil.close(rs, stmt, null);
-		return list;		
+		return cnt;		
 	}
 	
 	// 리뷰글 불러오기
