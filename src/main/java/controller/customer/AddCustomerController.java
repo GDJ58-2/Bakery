@@ -38,15 +38,13 @@ public class AddCustomerController extends HttpServlet {
 		String id = request.getParameter("id");
 		String pw = request.getParameter("pw");
 		String name = request.getParameter("name");
-		String num1 = request.getParameter("phone1");
-		String num2 = request.getParameter("phone2");
-		String num3 = request.getParameter("phone3");
-		String phone = num1+"-"+num2+"-"+num3;
+		String phone = request.getParameter("phone");
 		String address = request.getParameter("address");
 		String addressKind = request.getParameter("addressKind");
-		
+		System.out.println(phone);
 		if(id.equals("") || pw.equals("") || name.equals("") || phone.equals("")
 				|| address.equals("") || addressKind.equals("")) {
+			System.out.print("AddCustomerController: 빈칸있음");
 			response.sendRedirect(request.getContextPath() + "/customer/addCustomer");
 			return;
 		}
@@ -66,9 +64,11 @@ public class AddCustomerController extends HttpServlet {
 		int result = customerService.addCustomer(customer);
 		CustomerAddressService addressService = new CustomerAddressService();
 		addressService.addAddress(customerAddress);
+		String addMsg = null;
 		if(result == 1) { 
 			System.out.println("AddCustomerController: 회원가입 완료");
-			response.sendRedirect(request.getContextPath() + "/customer/login");
+			addMsg = "hello";
+			response.sendRedirect(request.getContextPath() + "/customer/login?addMsg="+addMsg);
 		} else {
 			response.sendRedirect(request.getContextPath() + "/customer/addCustomer");
 		}
