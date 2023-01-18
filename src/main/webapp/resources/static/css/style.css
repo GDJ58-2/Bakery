@@ -164,7 +164,7 @@ ol {
 }
 
 .site-btn {
-  font-size: 14px;
+  font-size: 7px;
   color: #ffffff;
   background: #111111;
   font-weight: 600;
@@ -172,7 +172,7 @@ ol {
   text-transform: uppercase;
   display: inline-block;
   letter-spacing: 2px;
-  padding: 14px 30px;
+  padding: 7px 15px;
 }
 
 /* Preloder */
