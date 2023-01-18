@@ -26,25 +26,29 @@ public class GoodsDao {
 	}
 	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> selectGoodsList(Connection conn, int categoryNo, int beginRow, int rowPerPage) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectGoodsListByPage(Connection conn, int categoryNo, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		if(categoryNo == 0) {
-			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_stock goodsStock, img.filename filename"
-					   + "	FROM goods g INNER JOIN goods_img img"
-					   + "	ON g.goods_code = img.goods_code"
-					   + "	LIMIT ?, ?";
+			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+					+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+					+ "				FROM goods g INNER JOIN goods_img img"
+					+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+					+ "			ON g.category_no = gc.category_no"
+					+ "		LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, beginRow);
 			stmt.setInt(2, rowPerPage);
 			rs = stmt.executeQuery();
 		} else {
-			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_stock goodsStock, img.filename filename"
-					   + "	FROM goods g INNER JOIN goods_img img"
-					   + "	ON g.goods_code = img.goods_code"
-					   + "	WHERE category_no = ?"
-					   + "	LIMIT ?, ?";
+			String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+					+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+					+ "				FROM goods g INNER JOIN goods_img img"
+					+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+					+ "			ON g.category_no = gc.category_no"
+					+ "		WHERE g.category_no = ?"
+					+ "		LIMIT ?, ?";
 			stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, categoryNo);
 			stmt.setInt(2, beginRow);
@@ -55,8 +59,42 @@ public class GoodsDao {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("goodsCode", rs.getInt("goodsCode"));
 			m.put("categoryNo", rs.getInt("categoryNo"));
+			m.put("categoryName", rs.getString("categoryName"));
+			m.put("categoryKind", rs.getString("categoryKind"));
 			m.put("goodsStock", rs.getString("goodsStock"));
 			m.put("goodsName", rs.getString("goodsName"));
+			m.put("goodsPrice", rs.getString("goodsPrice"));
+			m.put("filename", rs.getString("filename"));
+			list.add(m);
+		}
+		DBUtil.close(rs, stmt, null);
+		
+		return list;
+	}
+	
+	// 연관 상품 추천 리스트
+	public ArrayList<HashMap<String, Object>> selectGoodsList(Connection conn, String categoryName) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+				+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+				+ "				FROM goods g INNER JOIN goods_img img"
+				+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+				+ "			ON g.category_no = gc.category_no"
+				+ "		WHERE gc.category_name = ?";
+		stmt = conn.prepareStatement(sql);
+		stmt.setString(1, categoryName);
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("goodsCode", rs.getInt("goodsCode"));
+			m.put("categoryNo", rs.getInt("categoryNo"));
+			m.put("categoryName", rs.getString("categoryName"));
+			m.put("categoryKind", rs.getString("categoryKind"));
+			m.put("goodsStock", rs.getString("goodsStock"));
+			m.put("goodsName", rs.getString("goodsName"));
+			m.put("goodsPrice", rs.getString("goodsPrice"));
 			m.put("filename", rs.getString("filename"));
 			list.add(m);
 		}
