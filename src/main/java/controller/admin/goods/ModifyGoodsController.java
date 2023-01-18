@@ -46,7 +46,7 @@ public class ModifyGoodsController extends HttpServlet {
 		
 		int goodsCode = 0;
 		// 방어코드
-		if(request.getParameter("goodsCode") != null){
+		if(request.getParameter("goodsCode") == null){
 			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
 			return;
 		} else {

@@ -45,14 +45,41 @@ public class GoodsService {
 	}
 	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> getGoodsList(int categoryNo, int beginRow, int rowPerPage) {
+	public ArrayList<HashMap<String, Object>> getGoodsListByPage(int categoryNo, int beginRow, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			list = goodsDao.selectGoodsList(conn, categoryNo, beginRow, rowPerPage);
+			list = goodsDao.selectGoodsListByPage(conn, categoryNo, beginRow, rowPerPage);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 연관 상품 추천 리스트
+	public ArrayList<HashMap<String, Object>> getGoodsList(String categoryName) {
+		ArrayList<HashMap<String, Object>> list = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			goodsDao = new GoodsDao();
+			list = goodsDao.selectGoodsList(conn, categoryName);
 			conn.commit();
 		} catch(Exception e) {
 			try {

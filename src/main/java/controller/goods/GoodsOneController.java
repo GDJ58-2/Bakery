@@ -41,6 +41,19 @@ public class GoodsOneController extends HttpServlet {
 	    
 		request.setAttribute("map", map);
 		
+		// 연관 상품 추천 리스트
+		String categoryName = null;
+		if(request.getParameter("categoryName") == null || request.getParameter("categoryName").equals("")) {
+			response.sendRedirect(request.getContextPath()+"/goods/goodsList");
+			return;
+		} else {
+			categoryName = request.getParameter("categoryName");
+		}
+		
+		ArrayList<HashMap<String, Object>> gList = new ArrayList<HashMap<String, Object>>();
+		gList = goodsService.getGoodsList(categoryName);
+		request.setAttribute("gList", gList);
+		
 		// 리뷰글보기
 		int currentPage = 1;
 		if(request.getParameter("currentPage") != null) {

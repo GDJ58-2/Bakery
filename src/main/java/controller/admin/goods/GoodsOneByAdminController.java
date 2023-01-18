@@ -1,7 +1,6 @@
 package controller.admin.goods;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import service.GoodsService;
-import service.ReviewService;
 import vo.Emp;
 
 @WebServlet("/admin/goods/goodsOneByAdmin")
@@ -39,11 +37,15 @@ public class GoodsOneByAdminController extends HttpServlet {
 		// 상품 상세보기
 		int goodsCode = 0;
 		
-		if(request.getParameter("goodsCode") != null){
+		// 방어 코드
+		if(request.getParameter("goodsCode") == null){
+			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
+			return;
+		} else {
 			goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
+			// 디버깅 코드
+			// System.out.println("goodsCode : " + goodsCode);
 		}
-		// 디버깅 코드
-		// System.out.println("goodsCode : " + goodsCode);
 		
 	    HashMap<String, Object> map = new HashMap<String, Object>();
 		GoodsService goodsService = new GoodsService();

@@ -58,7 +58,7 @@ public class GoodsListController extends HttpServlet {
 		request.setAttribute("categoryKind", categoryKind);
 		
 		goodsService = new GoodsService();
-		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsList(categoryNo, beginRow, ROW_PER_PAGE);
+		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryNo, beginRow, ROW_PER_PAGE);
 		request.setAttribute("list", list);
 		
 		// 상품 카테고리
