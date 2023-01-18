@@ -21,7 +21,13 @@ public class LoginController extends HttpServlet {
 	    	response.sendRedirect(request.getContextPath()+"/customer/home");
 	        return;
 	    }
-	 
+	    
+	    String addMsg = request.getParameter("addMsg");
+	    if(addMsg != null) {
+	    	System.out.println(addMsg);
+	    	request.setAttribute("addMsg", addMsg);
+	    }
+	    
 	    // View
 	    request.getRequestDispatcher("/WEB-INF/view/customer/login.jsp").forward(request, response);
 	}
