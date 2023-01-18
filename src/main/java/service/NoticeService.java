@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import dao.EmpDao;
 import dao.NoticeDao;
 import util.DBUtil;
 import vo.Notice;
@@ -149,5 +150,31 @@ public class NoticeService {
 			}
 		}
 		return list;
+	}
+	
+	// 페이징 - 전체 행수
+	public int getNoticeCount() {
+		int count = 0;
+		this.noticeDao = new NoticeDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			count = noticeDao.selectNoticeCount(conn);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
 	}
 }

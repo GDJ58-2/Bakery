@@ -176,13 +176,17 @@ public class EmpService {
 	}
 	
 	// empList 출력
-	public ArrayList<HashMap<String, Object>> getEmpListByAdmin() { 
+	public ArrayList<HashMap<String, Object>> getEmpListByAdmin(int currentPage, int rowPerPage, String search) { 
 		ArrayList<HashMap<String, Object>> list = null;
 		this.empDao = new EmpDao();
 		Connection conn = null;
+		if(search==null) {
+			search="";
+		}
+		int beginRow = (currentPage-1)*rowPerPage;
 		try {
 			conn = DBUtil.getConnection();
-			list = empDao.selectEmpListByAdmin(conn);
+			list = empDao.selectEmpListByAdmin(conn, beginRow, rowPerPage, search);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -199,5 +203,31 @@ public class EmpService {
 			}
 		}
 		return list;
+	}
+	
+	// 페이징 - 전체 행수
+	public int getEmpCount() {
+		int count = 0;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			count = empDao.selectEmpCount(conn);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
 	}
 }

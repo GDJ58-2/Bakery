@@ -29,12 +29,24 @@ public class NoticeListController extends HttpServlet {
 		if(request.getParameter("rowPerPage")!=null) {
 			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 		}
-		
 		this.noticeService = new NoticeService();
+		int count = noticeService.getNoticeCount();
+		int lastPage = count/rowPerPage;
+		if(count%rowPerPage!=0) {
+			lastPage+=1;
+		}
+		// 페이징 방어 코드
+		if(currentPage<1) {
+			currentPage = 1;
+		} else if(currentPage>lastPage) {
+			currentPage = lastPage;
+		}
+	
 		ArrayList<Notice> list = noticeService.getNoticeList(search, currentPage, rowPerPage);
 		request.setAttribute("noticeList", list);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("rowPerPage", rowPerPage);
+		request.setAttribute("lastPage", lastPage);
 		request.setAttribute("search", search);
 		request.getRequestDispatcher("/WEB-INF/view/notice/noticeList.jsp").forward(request, response);
 	}

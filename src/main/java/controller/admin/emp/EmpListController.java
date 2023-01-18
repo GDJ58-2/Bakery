@@ -33,9 +33,32 @@ public class EmpListController extends HttpServlet {
 			return;
 		}
 		
+		// 검색기능, 페이징
+		String search = request.getParameter("search");
+		int currentPage = 1;
+		if(request.getParameter("currentPage")!=null) {
+			currentPage = Integer.parseInt(request.getParameter("currentPage"));
+		}
+		int rowPerPage = 30;
+		System.out.println(search);
 		this.empService = new EmpService();
-		ArrayList<HashMap<String, Object>> list = empService.getEmpListByAdmin();
+		int count = empService.getEmpCount(); 
+		int lastPage = count/rowPerPage;
+		if(count%rowPerPage!=0) {
+			lastPage+=1;
+		}
+		// 페이징 방어 코드
+		if(currentPage<1) {
+			currentPage = 1;
+		} else if(currentPage>lastPage) {
+			currentPage = lastPage;
+		}
+		
+		ArrayList<HashMap<String, Object>> list = empService.getEmpListByAdmin(currentPage, rowPerPage, search);
 		request.setAttribute("empList", list);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("lastPage", lastPage);
+		request.setAttribute("search", search);
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/empList.jsp").forward(request, response);
 	}
 }

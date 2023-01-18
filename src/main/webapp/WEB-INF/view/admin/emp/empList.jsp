@@ -4,6 +4,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		$('#submitBtn').click(function(){
+			$('#searchForm').submit();
+		});
+	});
+</script>
 <title>empList</title>
 </head>
 <body>
@@ -11,6 +19,14 @@
 	<jsp:include page="../../inc/menu.jsp"></jsp:include>
 	<h1>직원 목록</h1>
 	<a href="${pageContext.request.contextPath}/admin/emp/addEmp">추가</a>
+	
+	<!-- 검색창 -->
+	<form action="${pageContext.request.contextPath}/admin/emp/empList" id="searchForm">
+		<input type="text" name="search" value="${search}" id="search">
+		<button type="submit" id="submitBtn">검색</button>
+	</form>
+	
+	<!-- empList 출력 -->
 	<table border="1">
 		<thead>
 			<tr>
@@ -37,5 +53,8 @@
 			</c:forEach>
 		</tbody>
 	</table>
+	<!-- 페이징 -->
+	<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage-1}&rowPerPage=${rowPerPage}&search=${search}">이전</a>
+	<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage+1}&rowPerPage=${rowPerPage}&search=${search}">다음</a>
 </body>
 </html>
