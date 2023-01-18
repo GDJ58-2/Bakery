@@ -20,6 +20,7 @@ import vo.GoodsCategory;
 public class GoodsListByAdminController extends HttpServlet {
 	private GoodsService goodsService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
@@ -28,7 +29,7 @@ public class GoodsListByAdminController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
-		
+		*/
 		// 페이징
 		int currentPage = 1;
 		if(request.getParameter("currentPage") != null) {
