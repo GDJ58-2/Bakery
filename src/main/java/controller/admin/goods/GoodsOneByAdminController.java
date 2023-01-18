@@ -1,6 +1,7 @@
 package controller.admin.goods;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -17,6 +18,7 @@ import vo.Emp;
 @WebServlet("/admin/goods/goodsOneByAdmin")
 public class GoodsOneByAdminController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
@@ -25,7 +27,7 @@ public class GoodsOneByAdminController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
-		
+		*/
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
@@ -52,6 +54,19 @@ public class GoodsOneByAdminController extends HttpServlet {
 		map = goodsService.getGoodsOne(goodsCode);
 	    
 		request.setAttribute("map", map);
+		
+		// 연관 상품 추천 리스트
+		String categoryName = null;
+		if(request.getParameter("categoryName") == null || request.getParameter("categoryName").equals("")) {
+			response.sendRedirect(request.getContextPath()+"/goods/goodsList");
+			return;
+		} else {
+			categoryName = request.getParameter("categoryName");
+		}
+		
+		ArrayList<HashMap<String, Object>> gList = new ArrayList<HashMap<String, Object>>();
+		gList = goodsService.getGoodsList(categoryName);
+		request.setAttribute("gList", gList);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/admin/goods/goodsOneByAdmin.jsp");

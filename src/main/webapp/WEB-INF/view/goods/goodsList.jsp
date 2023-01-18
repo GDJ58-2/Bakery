@@ -29,7 +29,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 </head>
 <body>
-
     <!-- Page Preloder -->
     <div id="preloder">
         <div class="loader"></div>
@@ -326,34 +325,34 @@
                             <li><a href="#">Site Map</a></li>
                         </ul>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
-<!-- Footer Section End -->
-
-<!-- Search Begin -->
-<div class="search-model">
-    <div class="h-100 d-flex align-items-center justify-content-center">
-        <div class="search-close-switch">+</div>
-        <form class="search-model-form">
-            <input type="text" id="search-input" placeholder="Search here.....">
-        </form>
-    </div>
-</div>
-<!-- Search End -->
-
-<!-- Js Plugins -->
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
-<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
+               	  </div>
+            	</div>
+        	</div>
+    	</div>
+	</footer>
+	<!-- Footer Section End -->
+	
+	<!-- Search Begin -->
+	<div class="search-model">
+	    <div class="h-100 d-flex align-items-center justify-content-center">
+	        <div class="search-close-switch">+</div>
+	        <form class="search-model-form">
+	            <input type="text" id="search-input" placeholder="Search here.....">
+	        </form>
+	    </div>
+	</div>
+	<!-- Search End -->
+	
+	<!-- Js Plugins -->
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
 
 <h1>상품 안내</h1>
 	<c:choose>

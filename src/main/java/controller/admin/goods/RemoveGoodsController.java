@@ -21,6 +21,7 @@ import vo.GoodsImg;
 @WebServlet("/admin/goods/removeGoods")
 public class RemoveGoodsController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
@@ -29,7 +30,7 @@ public class RemoveGoodsController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
-		
+		*/
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;

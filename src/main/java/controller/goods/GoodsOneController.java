@@ -29,11 +29,15 @@ public class GoodsOneController extends HttpServlet {
 		// 상품 상세보기
 		int goodsCode = 0;
 		
-		if(request.getParameter("goodsCode") != null){
+		// 방어 코드
+		if(request.getParameter("goodsCode") == null){
+			response.sendRedirect(request.getContextPath()+"/goods/goodsList");
+			return;
+		} else {
 			goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
+			// 디버깅 코드
+			// System.out.println("goodsCode : " + goodsCode);
 		}
-		// 디버깅 코드
-		// System.out.println("goodsCode : " + goodsCode);
 		
 	    HashMap<String, Object> map = new HashMap<String, Object>();
 		GoodsService goodsService = new GoodsService();
