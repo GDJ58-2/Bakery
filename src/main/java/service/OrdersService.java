@@ -259,13 +259,17 @@ public class OrdersService {
 	}
 	
 	// 관리자 기능 - 모든 주문내역 보기 
-	public ArrayList<HashMap<String, Object>> getOrdersListByAdmin() {
+	public ArrayList<HashMap<String, Object>> getOrdersListByAdmin(String date, String orderState, int currentPage, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		this.ordersDao = new OrdersDao();
 		Connection conn = null;
+		if(orderState==null||orderState.equals("")) {
+			orderState="%%";
+		}
+		int beginRow = (currentPage-1)*rowPerPage;
 		try {
 			conn = DBUtil.getConnection();
-			list = ordersDao.selectOrdersListByAdmin(conn);
+			list = ordersDao.selectOrdersListByAdmin(conn, date, orderState, beginRow, rowPerPage);
 			conn.commit();
 		} catch (Exception e) {
 			try {

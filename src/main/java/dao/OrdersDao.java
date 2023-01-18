@@ -208,21 +208,30 @@ public class OrdersDao {
 	}
 	
 	// 관리자 주문내역 보기 
-	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn, String date, String orderState, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename"
-				+ "		FROM orders o "
+		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, ca.address address, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename"
+				+ "	FROM orders o"
 				+ "	INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename"
 				+ "				FROM goods g "
 				+ "				INNER JOIN goods_img img"
 				+ "				ON g.goods_code = img.goods_code) g"
 				+ "	ON o.goods_code = g.goods_code"
+				+ "	INNER JOIN customer_address ca "
+				+ "	ON o.address_code = ca.address_code"
+				+ "	WHERE DATE_FORMAT(o.createdate, '%Y-%c-%d') LIKE ?" // %c : 10보다 작을경우 한자리수 월
+				+ "	AND o.order_state LIKE ? "
 				+ "	ORDER BY (case when o.order_state LIKE '결제' then 5"
 				+ "					when o.order_state LIKE '배송중' then 4"
 				+ "					when o.order_state LIKE '배송완료' then 3"
 				+ "					when o.order_state LIKE '구매확정' then 2"
-				+ "					ELSE 1 END) desc, createdate DESC;";
+				+ "					ELSE 1 END) DESC, o.createdate DESC"
+				+ "	LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, date);
+		stmt.setString(2, orderState);
+		stmt.setInt(3, beginRow);
+		stmt.setInt(4, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -230,6 +239,7 @@ public class OrdersDao {
 			map.put("goodsCode", rs.getInt("goodsCode"));
 			map.put("customerId", rs.getString("customerId"));
 			map.put("addressCode", rs.getInt("addressCode"));
+			map.put("address", rs.getString("address"));
 			map.put("orderQuantity", rs.getInt("orderQuantity"));
 			map.put("orderPrice", rs.getInt("orderPrice"));
 			map.put("orderState", rs.getString("orderState"));

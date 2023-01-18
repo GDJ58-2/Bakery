@@ -8,10 +8,10 @@
 <script>
 	$(document).ready(function(){
 		$('#rowPerPage').change(function(){
-			$('#form').submit();
+			$('#searchForm').submit();
 		});
 		$('#submitBtn').click(function(){
-			$('#form').submit();
+			$('#searchForm').submit();
 		});
 		$('#removeNotice').click(function(){
 			let result = confirm('삭제하시겠습니까?');
@@ -31,7 +31,7 @@
 	<h1>noticeList</h1>
 	<a href="${pageContext.request.contextPath}/admin/notice/addNotice">추가</a>
 	<!-- 검색창 -->
-	<form action="${pageContext.request.contextPath}/notice/noticeList" id="form">
+	<form action="${pageContext.request.contextPath}/notice/noticeList" id="searchForm">
 		<input type="text" name="search" value="${search}" id="search">
 		<button type="button" id="submitBtn">검색</button>
 		

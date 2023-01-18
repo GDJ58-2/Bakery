@@ -11,7 +11,22 @@
 		$('.submitBtn').click(function(){
 			//console.log($(this).attr('value'));
 			$('#orderState').val($(this).attr('value'));
+			if($('.checkOrderCode:checked').length==0) {
+				let orderState = $('#orderState').val();
+				let date = $('#date option:selected').val();
+				location.href='/bakery/admin/orders/modifyOrders?orderState='+orderState+'&year='+$('#year').val()+'&month='+$('#month').val()+'&date='+date;
+				return;
+			}
 			$('#modifyForm').submit();
+		});
+		$('#date').change(function(){
+			console.log($('#date option:selected').val());
+			let orderState = $('#orderState').val();
+			let date = $('#date option:selected').val();
+			console.log(orderState);
+			console.log(date);
+			location.href='/bakery/admin/orders/modifyOrders?orderState='+orderState+'&year='+$('#year').val()+'&month='+$('#month').val()+'&date='+date;
+			return;
 		});
 	});
 </script>
@@ -22,10 +37,11 @@
 	<jsp:include page="../../inc/customer.jsp"></jsp:include>
 	<jsp:include page="../../inc/menu.jsp"></jsp:include>
 	<h1>관리자-주문관리</h1>
+	<h2>${year}-${month}</h2>
+	<!-- 달력 페이징 -->
+	<a href="${pageContext.request.contextPath}/admin/orders/modifyOrders?orderState=${orderState}&year=${year}&month=${month-1}&date=${maxDate}">이전 달</a>
+	<a href="${pageContext.request.contextPath}/admin/orders/modifyOrders?year=${year}&month=${month+1}&date=${maxDate}">다음 달</a>
 	<br>
-	<div style="color:red;">
-	${msg}
-	</div>
 	<form action="${pageContext.request.contextPath}/admin/orders/modifyOrders" method="post" id="modifyForm">
 		<!-- javascript ; button click시 button의 value를 hidden value에 추가 -> 폼넘기기 -->
 		<div>
@@ -35,6 +51,20 @@
 			<button type="button" class="submitBtn" value="배송중">배송중</button>
 			<button type="button" class="submitBtn" value="배송완료">배송완료</button>
 			<button type="button" class="submitBtn" value="구매확정">구매확정</button>
+		</div>
+		<div>
+			<input type="hidden" name="year" value="${year}" id="year">
+			<input type="hidden" name="month" value="${month}" id="month">
+			<select name="date" id="date">
+				<c:forEach var="d" begin="${minDate}" end="${maxDate}" step="1">
+					<c:if test="${date eq maxDate-d+1}">
+						<option value="${maxDate-d+1}" selected="selected">${year}-${month}-${maxDate-d+1}</option>
+					</c:if>
+					<c:if test="${date ne maxDate-d+1}">
+						<option value="${maxDate-d+1}">${year}-${month}-${maxDate-d+1}</option>
+					</c:if>
+				</c:forEach>
+			</select>
 		</div>
 		<table border="1">
 			<thead>
@@ -61,7 +91,7 @@
 								&nbsp;
 							</c:if>
 							<c:if test="${map.orderState ne '구매확정'}">
-								<input type="checkbox" name="orderCode" value="${map.orderCode}">
+								<input type="checkbox" name="orderCode" value="${map.orderCode}" class="checkOrderCode">
 							</c:if>
 						</td>
 						<td>${map.orderCode}</td>
