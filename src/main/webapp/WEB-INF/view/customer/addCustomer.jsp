@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="zxx">
-<meta charset="UTF-8">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Cake Template">
@@ -144,6 +143,7 @@
 				$('.msg').each(function() {
 					if($(this).text() != '') {
 						alert($(this).text());
+						return false;
 					} else {
 						++ msgCk 
 						console.log('msgCk'+msgCk);
@@ -169,11 +169,11 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__cart">
             <div class="offcanvas__cart__links">
-                <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
+                <a href="#" class="search-switch"><img src="${pageContext.request.contextPath}/resources/static/img/icon/search.png" alt=""></a>
                 <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/heart.png" alt=""></a>
             </div>
             <div class="offcanvas__cart__item">
-                <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
                 <div class="cart__price">Cart: <span>$0.00</span></div>
             </div>
         </div>
@@ -195,7 +195,12 @@
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                   <ul>
+                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
+                       <li></li>
+                   </ul>
+               </li>
             </ul>
         </div>
     </div>
@@ -224,7 +229,7 @@
                                     </li>
                                     <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a> <span class="arrow_carrot-down"></span>
                                     	<ul>
-                                    		<li><a href = "${pageContext.request.contextPath}/customer/addCustomer">Create Account</a></li>
+                                    		<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;up</font></a></li>
                                     	</ul>
                                     </li>
                                 </ul>

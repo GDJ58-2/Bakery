@@ -27,15 +27,44 @@ public class ModifyCartController extends HttpServlet {
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
 		ArrayList<HashMap<String, Object>> userList = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 		ArrayList<HashMap<String,Object>> customerList = new ArrayList<HashMap<String,Object>>();
+		int goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
+		String filename = null;
+		String goodsName = null;
+		int cartQuantity = 0;
 		this.cartService = new CartService();
 		if(loginCustomer == null) {
+			
+			for(HashMap<String, Object> m : userList) {
+				if(goodsCode == (int)m.get("goodsCode")) {
+					filename = (String)m.get("filename");
+					goodsName = (String)m.get("goodsName");
+					cartQuantity = (int)m.get("carQuantity");
+				}
+			}
+			HashMap<String, Object> userListOne = new HashMap<String, Object>();
+			userListOne.put("goodsCode", goodsCode);
+			userListOne.put("filename", filename);
+			userListOne.put("goodsName", goodsName);
+			userListOne.put("cartQuantity", cartQuantity);
 			request.setAttribute("loginCustomer", loginCustomer);
-			request.setAttribute("userList", userList);
+			request.setAttribute("userListOne", userListOne);
 		} else {
 			String custmerId = loginCustomer.getCustomerId();
 			customerList = cartService.getCartList(custmerId);
+			for(HashMap<String, Object> m : customerList) {
+				if(goodsCode == (int)m.get("goodsCode")) {
+					filename = (String)m.get("filename");
+					goodsName = (String)m.get("goodsName");
+					cartQuantity = (int)m.get("cartQuantity");
+				}
+			}
+			HashMap<String, Object> customerListOne = new HashMap<String, Object>();
+			customerListOne.put("goodsCode", goodsCode);
+			customerListOne.put("filename", filename);
+			customerListOne.put("goodsName", goodsName);
+			customerListOne.put("cartQuantity", cartQuantity);
 			request.setAttribute("loginCustomer", loginCustomer);
-			request.setAttribute("customerList", customerList);
+			request.setAttribute("customerListOne", customerListOne);
 		}
 
 		// View
