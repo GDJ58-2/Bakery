@@ -37,4 +37,31 @@ public class GoodsCategoryService {
 		}
 		return list;
 	}
+	
+	// 상품 카테고리 종류 출력
+	public String getCategoryKind(int categoryNo) {
+		String categoryKind = null;
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			
+			this.goodsCategoryDao = new GoodsCategoryDao();
+			categoryKind = goodsCategoryDao.selectCategoryKind(conn, categoryNo);
+			conn.commit();
+		} catch(Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return categoryKind;
+	}
 }

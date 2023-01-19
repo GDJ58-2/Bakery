@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import service.OrdersService;
 import service.QuestionService;
 import vo.Customer;
 import vo.Question;
@@ -33,25 +34,21 @@ public class AddQuestionController extends HttpServlet {
 			return;
 		}
 		
+		int orderCode = 0;
+		if(request.getParameter("orderCode") != null) {
+			orderCode = Integer.parseInt(request.getParameter("orderCode"));
+		} 		
+		OrdersService ordersService = new OrdersService();
+		HashMap<String, Object> map = ordersService.getOrdersOne(orderCode);
+		request.setAttribute("map", map);
+		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
 		if(request.getParameter("msg") != null) {
 			msg = request.getParameter("msg");
 		}
-		request.setAttribute("msg", msg);
-		
-		/*
-		int orderCode = 4;
-		// 방어코드
-		
-		if(request.getParameter("orderCode") == null || (request.getParameter("orderCode")).equals("")) {
-			response.sendRedirect(request.getContextPath()+"/question/questionList");
-			return;
-		} else {
-			orderCode = Integer.parseInt(request.getParameter("orderCode"));
-		}
-		*/
+		request.setAttribute("msg", msg);			
 		
 		this.questionService = new QuestionService();
 		ArrayList<HashMap<String, Object>> orderCodeList = questionService.getOrderCodeList(loginCustomer.getCustomerId());
@@ -82,19 +79,22 @@ public class AddQuestionController extends HttpServlet {
 		
 		// 방어코드
 		if(request.getParameter("orderCode") == null || (request.getParameter("orderCode")).equals("")) {
-			response.sendRedirect(request.getContextPath()+"/question/questionList");
+			String msg = URLEncoder.encode("주문 번호를 선택해주세요.", "utf-8");	    	
+	    	response.sendRedirect(request.getContextPath()+"/question/addQuestion?msg="+msg);
 			return;
 		} else {
 			orderCode = Integer.parseInt(request.getParameter("orderCode"));
 		}
 		if(request.getParameter("category") == null || (request.getParameter("category")).equals("")) {
-			response.sendRedirect(request.getContextPath()+"/question/questionList");
+			String msg = URLEncoder.encode("문의 종류를 선택해주세요.", "utf-8");	    	
+	    	response.sendRedirect(request.getContextPath()+"/question/addQuestion?msg="+msg);
 			return;
 		} else {
 			category = request.getParameter("category");
 		}
 		if(request.getParameter("questionMemo") == null || (request.getParameter("questionMemo")).equals("")) {
-			response.sendRedirect(request.getContextPath()+"/question/questionList");
+			String msg = URLEncoder.encode("메모를 입력해주세요.", "utf-8");	    	
+	    	response.sendRedirect(request.getContextPath()+"/question/addQuestion?msg="+msg);
 			return;
 		} else {
 			questionMemo = request.getParameter("questionMemo");
