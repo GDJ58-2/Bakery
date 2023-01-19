@@ -49,13 +49,17 @@ public class AddOrdersListController extends HttpServlet {
 		ArrayList<CustomerAddress> addressList = customerAddressService.getAddressList(loginCustomer.getCustomerId());
 		ArrayList<HashMap<String, Object>> orderList = cartService.getCartList(loginCustomer.getCustomerId(), checkedGoodsCodeInt);
 		int orderPrice = 0;
+		int saveupPoint = 0;
 		for(HashMap<String, Object> map : orderList) {
+			System.out.println(map.get("filename"));
 			map.put("saveupPoint", (int)((int)map.get("goodsPrice")*(int)map.get("cartQuantity")*0.05));
 			orderPrice += (int)map.get("goodsPrice")*(int)map.get("cartQuantity");
+			saveupPoint += orderPrice*0.05;
 		}
 		request.setAttribute("addressList", addressList);
 		request.setAttribute("orderList", orderList);		
 		request.setAttribute("orderPrice", orderPrice);
+		request.setAttribute("saveupPoint", saveupPoint);
 		request.getRequestDispatcher("/WEB-INF/view/orders/addOrders.jsp").forward(request, response);
 	}
 

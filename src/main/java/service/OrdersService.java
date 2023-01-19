@@ -141,6 +141,9 @@ public class OrdersService {
 		this.cartDao = new CartDao();
 		this.goodsDao = new GoodsDao();
 		Connection conn = null;
+		if(address.getAddressKind().equals("직접입력")) {
+			address.setAddressKind("기타");
+		}
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
