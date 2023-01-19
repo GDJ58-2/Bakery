@@ -26,66 +26,131 @@ public class GoodsDao {
 	}
 	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> selectGoodsListByPage(Connection conn, String categoryKind, int categoryNo, int beginRow, int rowPerPage) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectGoodsListByPage(Connection conn, String categoryKind, int categoryNo, String search, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String,Object>>();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		if(categoryKind == null || categoryKind.equals("")) {
-			if(categoryNo == 0) {
-				String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
-						+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
-						+ "				FROM goods g INNER JOIN goods_img img"
-						+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-						+ "			ON g.category_no = gc.category_no"
-						+ "		LIMIT ?, ?";
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, beginRow);
-				stmt.setInt(2, rowPerPage);
-				rs = stmt.executeQuery();
+		if(search == null || search.equals("")) {
+			if(categoryKind == null || categoryKind.equals("")) {
+				if(categoryNo == 0) {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, beginRow);
+					stmt.setInt(2, rowPerPage);
+					rs = stmt.executeQuery();
+				} else {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE g.category_no = ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, categoryNo);
+					stmt.setInt(2, beginRow);
+					stmt.setInt(3, rowPerPage);
+					rs = stmt.executeQuery();
+				}
 			} else {
-				String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
-						+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
-						+ "				FROM goods g INNER JOIN goods_img img"
-						+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-						+ "			ON g.category_no = gc.category_no"
-						+ "		WHERE g.category_no = ?"
-						+ "		LIMIT ?, ?";
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, categoryNo);
-				stmt.setInt(2, beginRow);
-				stmt.setInt(3, rowPerPage);
-				rs = stmt.executeQuery();
+				if(categoryNo == 0) {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE gc.category_kind = ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setString(1, categoryKind);
+					stmt.setInt(2, beginRow);
+					stmt.setInt(3, rowPerPage);
+					rs = stmt.executeQuery();
+				} else {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE g.category_no = ? AND gc.category_kind = ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, categoryNo);
+					stmt.setString(2, categoryKind);
+					stmt.setInt(3, beginRow);
+					stmt.setInt(4, rowPerPage);
+					rs = stmt.executeQuery();
+				}
 			}
 		} else {
-			if(categoryNo == 0) {
-				String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
-						+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
-						+ "				FROM goods g INNER JOIN goods_img img"
-						+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-						+ "			ON g.category_no = gc.category_no"
-						+ "		WHERE gc.category_kind = ?"
-						+ "		LIMIT ?, ?";
-				stmt = conn.prepareStatement(sql);
-				stmt.setString(1, categoryKind);
-				stmt.setInt(2, beginRow);
-				stmt.setInt(3, rowPerPage);
-				rs = stmt.executeQuery();
+			if(categoryKind == null || categoryKind.equals("")) {
+				if(categoryNo == 0) {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE g.goods_name LIKE ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setString(1, "%"+search+"%");
+					stmt.setInt(2, beginRow);
+					stmt.setInt(3, rowPerPage);
+					rs = stmt.executeQuery();
+				} else {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE g.category_no = ? AND g.goods_name LIKE ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, categoryNo);
+					stmt.setString(2, "%"+search+"%");
+					stmt.setInt(3, beginRow);
+					stmt.setInt(4, rowPerPage);
+					rs = stmt.executeQuery();
+				}
 			} else {
-				String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
-						+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
-						+ "				FROM goods g INNER JOIN goods_img img"
-						+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-						+ "			ON g.category_no = gc.category_no"
-						+ "		WHERE g.category_no = ? OR gc.category_kind = ?"
-						+ "		LIMIT ?, ?";
-				stmt = conn.prepareStatement(sql);
-				stmt.setInt(1, categoryNo);
-				stmt.setString(2, categoryKind);
-				stmt.setInt(3, beginRow);
-				stmt.setInt(4, rowPerPage);
-				rs = stmt.executeQuery();
+				if(categoryNo == 0) {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE gc.category_kind = ? AND g.goods_name LIKE ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setString(1, categoryKind);
+					stmt.setString(2, "%"+search+"%");
+					stmt.setInt(3, beginRow);
+					stmt.setInt(4, rowPerPage);
+					rs = stmt.executeQuery();
+				} else {
+					String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.filename filename, gc.category_kind categoryKind, gc.category_name categoryName"
+							+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, img.filename"
+							+ "				FROM goods g INNER JOIN goods_img img"
+							+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
+							+ "			ON g.category_no = gc.category_no"
+							+ "		WHERE g.category_no = ? AND gc.category_kind = ? AND g.goods_name LIKE ?"
+							+ "		LIMIT ?, ?";
+					stmt = conn.prepareStatement(sql);
+					stmt.setInt(1, categoryNo);
+					stmt.setString(2, categoryKind);
+					stmt.setString(3, "%"+search+"%");
+					stmt.setInt(4, beginRow);
+					stmt.setInt(5, rowPerPage);
+					rs = stmt.executeQuery();
+				}
 			}
 		}
+		
 		while(rs.next()) {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("goodsCode", rs.getInt("goodsCode"));
