@@ -27,6 +27,15 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#cartBtn').click(function() {
+				alert('장바구니에 상품을 담았습니다.');
+			});
+		});
+	</script>
 </head>
 <body>
     <!-- Page Preloder -->
@@ -206,7 +215,7 @@
 										</c:otherwise>
 									</c:choose>
                                 </select>
-                                <input type="text" placeholder="상품 이름 검색">
+                                <input type="text" name="search" placeholder="상품 이름 검색">
                                 <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
@@ -242,7 +251,7 @@
 								</h6>
 	                            <div class="product__item__price">${m.goodsPrice}원</div>
 	                            <div class="cart_add">
-	                                <a href="#">장바구니 추가</a>
+	                                <a type="button" id="cartBtn" href="${pageContext.request.contextPath}/cart/addCart?goodsCode=${m.goodsCode}">장바구니 추가</a>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -362,69 +371,5 @@
 	<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
-
-<h1>상품 안내</h1>
-	<c:choose>
-		<c:when test="${categoryKind == null || categoryKind eq ''}">
-			<a href="${pageContext.request.contextPath}/goods/goodsList?categoryKind=">전체</a>
-			<c:forEach var="gc" items="${gcList}">
-				<a href="${pageContext.request.contextPath}/goods/goodsList?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
-			</c:forEach>
-		</c:when>
-		<c:otherwise>
-			<a href="${pageContext.request.contextPath}/goods/goodsList?categoryKind=">전체</a>
-			<c:forEach var="gc" items="${gcList}">
-				<c:if  test="${categoryKind eq gc.categoryKind}">
-					<a href="${pageContext.request.contextPath}/goods/goodsList?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
-				</c:if>
-			</c:forEach>
-		</c:otherwise>
-	</c:choose>
-	<table border="1">
-		<tr>
-			<!-- 
-				varStatus 변수속성
-				${s.current} 현재 for문의 해당하는 번호
-				${s.index} 0부터의 순서
-				${s.count} 1부터의 순서
-				${s.first} 첫 번째인지 여부
-				${s.last} 마지막인지 여부
-				${s.begin} for문의 시작 번호
-				${s.end} for문의 끝 번호
-				${s.step} for문의 증가값				
-			-->
-			<c:forEach var="m" items="${list}" varStatus="s">
-				<c:if test="${s.index != 0 && s.index % 5 == 0}">
-					</tr><tr>
-				</c:if>
-				
-				<td>
-					<div>
-						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
-							<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
-						</a>
-					</div>
-					<div>
-						<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}">
-							${m.goodsName}
-						</a>
-					</div>
-				</td>
-			</c:forEach>
-		</tr>
-	</table>
-	<br>
-	<!-- 페이징 -->
-	<div>
-		<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=1">처음</a>
-			<c:if test="${currentPage > 1}">
-				<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${currentPage-1}">이전</a>
-			</c:if>
-			<span>${currentPage}</span>
-			<c:if test="${currentPage < lastPage}">
-				<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${currentPage+1}">다음</a>
-			</c:if>
-		<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${lastPage}">마지막</a>
-	</div>
 </body>
 </html>

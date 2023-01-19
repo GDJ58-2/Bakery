@@ -31,23 +31,19 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		function checkNumber(event) {
-			if(!((e.keyCode > 95 && e.keyCode < 106)
-			      || (e.keyCode > 47 && e.keyCode < 58) 
-			      || e.keyCode == 8)) {
-			        return false;
-			}
-		}
-		
 		$(document).ready(function() {
 			$('#cartBtn').click(function() {
 				if($('#cartQuantity').val() == 0 || $('#cartQuantity').val() == '') {
-					alert('상품의 개수를 선택하세요');
+					alert('상품의 개수를 선택하세요.');
+					$('#cartQuantity').val(1);
+					$('#cartQuantity').focus();
+				} else if($('#cartQuantity').val() > 50){
+					alert('상품 구매는 최대 50개까지만 가능합니다.');
 					$('#cartQuantity').val(1);
 					$('#cartQuantity').focus();
 				} else {
 					$('#addCartForm').submit();
-					alert('상품을 담았습니다');
+					alert('장바구니에 상품을 담았습니다.');
 				}
 			});
 		});
@@ -201,62 +197,45 @@
     <section class="product-details spad">
         <div class="container">
             <div class="row">
+            
                 <div class="col-lg-6">
                     <div class="product__details__img">
                         <div class="product__details__big__img">
                             <img class="big_img" src="${pageContext.request.contextPath}/upload/${map.filename}" alt="">
-                        </div>
-                        <!-- 
-                        <div class="product__details__thumb">
-                            <div class="pt__item active">
-                                <img data-imgbigurl="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-2.jpg"
-                                src="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-2.jpg" alt="">
-                            </div>
-                            <div class="pt__item">
-                                <img data-imgbigurl="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-1.jpg"
-                                src="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-1.jpg" alt="">
-                            </div>
-                            <div class="pt__item">
-                                <img data-imgbigurl="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-4.jpg"
-                                src="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-4.jpg" alt="">
-                            </div>
-                            <div class="pt__item">
-                                <img data-imgbigurl="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-3.jpg"
-                                src="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-3.jpg" alt="">
-                            </div>
-                            <div class="pt__item">
-                                <img data-imgbigurl="img/shop/details/product-big-5.jpg"
-                                src="${pageContext.request.contextPath}/resources/static/img/shop/details/product-big-5.jpg" alt="">
-                            </div>
-                        </div>
-                         -->
+                        </div>                        
                     </div>
                 </div>
+			
                 <div class="col-lg-6">
-                    <div class="product__details__text">
-                        <div class="product__label">${map.categoryKind}</div>
-                        <h4>${map.goodsName}</h4>                 
-						<div style="color:red;" id="msg">
-						${msg}
-						</div>
-                        <h5>${map.goodsPrice}원</h5>
-                        <p>${map.goodsContent}</p>
-                        <ul>
-                            <li>상품 재고 : <span>${map.goodsStock}개</span></li>
-                            <li>상품 종류 : <span>${map.categoryName}</span></li>
-                            <li>태그 : <span>${map.categoryKind}, ${map.categoryName}</span></li>
-                        </ul>
-                        <div class="product__details__option">
-                            <div class="quantity">
-                                <div class="pro-qty">
-                                    <input type="text" value="1">
-                                </div>
-                            </div>
-                            <a href="#" class="primary-btn">Add to cart</a>
-                            <a href="#" class="heart__btn"><span class="icon_heart_alt"></span></a>
-                        </div>
-                    </div>
-                </div>
+               		<form action="${pageContext.request.contextPath}/cart/addCart" method="get" id = "addCartForm">
+					<input type="hidden" name="goodsCode" value="${map.goodsCode}">  
+					<input type="hidden" name="categoryName" value="${map.categoryName}">     
+	                    <div class="product__details__text">
+	                        <div class="product__label">${map.categoryKind}</div>
+	                        <h4>${map.goodsName}</h4>   
+	                        <br>              
+							<div style="color:red;" id="msg">
+							${msg}
+							</div>
+	                        <h5>${map.goodsPrice}원</h5>
+	                        <p>${map.goodsContent}</p>
+	                        <ul>
+	                            <li>상품 재고 : <span>${map.goodsStock}개</span></li>
+	                            <li>상품 종류 : <span>${map.categoryName}</span></li>
+	                            <li>태그 : <span>${map.categoryKind}, ${map.categoryName}</span></li>
+	                        </ul>
+	                        <div class="product__details__option">
+	                            <div class="quantity">
+	                                <div class="pro-qty">
+	                                    <input type="text" name="cartQuantity" id="cartQuantity" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <!-- 숫자만 입력 가능하게 -->
+	                                </div>
+	                            </div>
+	                            <a href="#" type="button" id="cartBtn" class="primary-btn">장바구니 추가</a>
+	                            <a href="#" class="heart__btn"><span class="icon_heart_alt"></span></a>
+	                        </div>
+	                    </div>
+                    </form>
+                </div>			              		      
             </div>
             <div class="product__details__tab">
                 <div class="col-lg-12">
@@ -296,11 +275,39 @@
                         <div class="tab-pane" id="tabs-3" role="tabpanel">
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-8">
-                                    <p>This delectable Strawberry Pie is an extraordinary treat filled with sweet and
-                                        tasty chunks of delicious strawberries. Made with the freshest ingredients, one
-                                        bite will send you to summertime. Each gift arrives in an elegant gift box and
-                                        arrives with a greeting card of your choice that you can personalize online!3
-                                    </p>
+                                	<br>
+                                    <!-- 리뷰목록 -->
+									<div>리뷰</div>
+									<div>
+									<table class="table table-bordered">
+										<c:forEach var = "m" items = "${list}" varStatus = "i">
+											<tr>
+												<td>${m.reviewMemo}</td>
+												<td>${m.customerId}</td>
+												<td>
+													<c:set var = "date" value = "${m.createdate}" />${fn:substring(date,0,10)}
+												</td>
+											</tr>
+										</c:forEach>
+									</table>
+									</div>
+									<!-- 리뷰페이징 -->
+									<div>
+										<c:if test = "${currentPage > 1}">
+											<a type="button" href = "${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${map.goodsCode}&currentPage=${currentPage - 1}"><span class="arrow_carrot-left"></span></a>
+										</c:if>
+										<c:choose>
+											<c:when test = "${!empty list}">
+												<a type="button" href = "${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${map.goodsCode}&currentPage=${currentPage}">${currentPage}</a>
+											</c:when>
+											<c:otherwise>
+												<span>아직 작성된 리뷰가 없습니다.</span>
+											</c:otherwise>
+										</c:choose>
+										<c:if test = "${currentPage < endPage}">
+											<a type="button" href = "${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${map.goodsCode}&currentPage=${currentPage + 1}"><span class="arrow_carrot-right"></span></a>
+										</c:if>
+									</div>
                                 </div>
                             </div>
                         </div>
@@ -433,86 +440,5 @@
 	<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
-
-	<h1>${map.goodsName}</h1>
-	<br>
-	<div style="color:red;">
-	${msg}
-	</div>
-	<form action="${pageContext.request.contextPath}/cart/addCart" method="get" id = "addCartForm">
-	<input type="hidden" name="goodsCode" value="${map.goodsCode}">
-	<table border="1">
-		<tr>
-			<td rowspan="5">
-				<img src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
-			</td>
-			<th>상품 이름 : </th>
-			<td>${map.goodsName}</td>
-		</tr>
-		<tr>
-			<th>상품 종류 : </th>
-			<td>${map.categoryName}</td>
-		</tr>
-		<tr>
-			<th>상품 가격 : </th>
-			<td>${map.goodsPrice}원</td>
-		</tr>
-		<tr>
-			<th>상품 개수 : </th>
-			<td>
-				<input type="number" name="cartQuantity" id = "cartQuantity" value = "1" min = "1" max = "50" onkeypress = 'return checkNumber(event)'>개
-			</td>
-		</tr>
-		<tr>
-			<th>상품 재고 : </th>
-			<td>${map.goodsStock}개</td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<div>상품 설명 : </div>
-				<div>${map.goodsContent}</div>
-			</td>
-		</tr>
-	</table>
-	<button type="button" id = "cartBtn">장바구니 추가</button>
-	</form>
-	<div>
-		<a href = "${pageContext.request.contextPath}/cart/cartList">
-			장바구니
-		</a>
-	</div>
-	
-	<!-- 리뷰목록 -->
-	<div>리뷰</div>
-	<div>
-	<table>
-		<c:forEach var = "m" items = "${list}" varStatus = "i">
-			<tr>
-				<td>${m.reviewMemo}</td>
-				<td>${m.customerId}</td>
-				<td>
-					<c:set var = "date" value = "${m.createdate}" />${fn:substring(date,0,10)}
-				</td>
-			</tr>
-		</c:forEach>
-	</table>
-	</div>
-	<!-- 리뷰페이징 -->
-	<div>
-		<c:if test = "${currentPage > 1}">
-			<a href = "${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${map.goodsCode}&currentPage=${currentPage - 1}"><</a>
-		</c:if>
-		<c:choose>
-			<c:when test = "${!empty list}">
-				${currentPage}
-			</c:when>
-			<c:otherwise>
-				아직 작성된 리뷰가 없습니다
-			</c:otherwise>
-		</c:choose>
-		<c:if test = "${currentPage < endPage}">
-			<a href = "${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${map.goodsCode}&currentPage=${currentPage + 1}">></a>
-		</c:if>
-	</div>
 </body>
 </html>
