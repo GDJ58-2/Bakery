@@ -234,11 +234,13 @@
            		<c:forEach var="m" items="${list}" varStatus="s">
 	                <div class="col-lg-3 col-md-6 col-sm-6">
 	                    <div class="product__item">
-	                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
-	                            <div class="product__label">
-	                                <span>${m.categoryName}</span>
-	                            </div>
-	                        </div>
+	                    	<a href="${pageContext.request.contextPath}/admin/goods/goodsOneByAdmin?goodsCode=${m.goodsCode}&categoryName=${m.categoryName}">
+		                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
+		                            <div class="product__label">
+		                                <span>${m.categoryName}</span>
+		                            </div>
+		                        </div>
+	                        </a>
 	                        <div class="product__item__text">
 	                            <h6>
 	                            	<a href="${pageContext.request.contextPath}/admin/goods/goodsOneByAdmin?goodsCode=${m.goodsCode}&categoryName=${m.categoryName}">

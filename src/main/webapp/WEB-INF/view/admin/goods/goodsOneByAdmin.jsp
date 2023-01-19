@@ -221,9 +221,6 @@
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">추가 정보</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">리뷰</a>
-                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
@@ -239,25 +236,28 @@
                         <div class="tab-pane" id="tabs-2" role="tabpanel">
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-8">
-                                    <p>This delectable Strawberry Pie is an extraordinary treat filled with sweet and
-                                        tasty chunks of delicious strawberries. Made with the freshest ingredients, one
-                                        bite will send you to summertime. Each gift arrives in an elegant gift box and
-                                        arrives with a greeting card of your choice that you can personalize online!2
+                                    <p>
+                                    <img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법1.jpg"><br><br>
+                                    빵을 어떻게<br>보관해야 할지<br>잘 모르실때가 있으시죠?<br>
+                                   	이번 시간에는<br>빵 보관하는 방법에<br>대해서 알아보겠습니다.<br><br>
+                                   	<img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법2.jpg"><br><br>
+                                   	먼저 빵을 보관하는데에 있어서<br>가장 핵심을 공기의 접촉을<br>막는 것입니다!<br>
+                                   	빵이 공기와 닿으면<br>빨리 딱딱하게 변하고<br>상하기도 쉽다고 합니다.<br><br>
+                                   	<img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법3.jpg"><br><br>
+                                   	따라서 공기와 닿지 않게<br>비닐봉투 등 적당한<br>봉투 안에 빵을 넣고<br>약간의 틈을 남겨두고<br>손으로 봉투 입구를 막은 다음<br>
+                                   	빨대를 이용하여<br>봉투 안의 공기를<br>흡입해주세요.<br>그렇게 공기를 빼주시고<br>봉투 입구를 잘 막아주세요.<br><br>
+                                   	<img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법4.jpg"><br><br>
+                                   	그리고 만약 <br>빨리 먹을 빵이라면 <br>실온 보관을 하고 <br><br>그게 아니라면 <br>냉장실이 아닌 <br>냉동실에 넣어주는 것이 <br>좋다고 합니다.<br><br>
+                                   	냉장실에 보관을 할 경우 <br>수분이 빠르게 날아가서 <br>원래의 맛있는 맛을 <br>잃게 된다고 합니다.<br><br>
+                                   	<img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법5.jpg"><br><br>
+                                   	여기서 또 주의할 점은 <br>빨리 먹을 빵일지라 하더라도 <br>빵 나에 크림이나 팥, <br>혹은 햄, 마요네즈와 같이 <br>오래 두면 상할 수 있는 <br>
+                                   	음식이 들어있는 경우 <br>실온이 아닌 <br>냉장고(냉동실)에 넣어 <br>보관해주셔야 합니다.<br><br>
+                                   	<img class="big_img" src="${pageContext.request.contextPath}/upload/빵 보관법6.jpg"><br><br>
+                                   	이렇게 빵 보관하는 <br>방법에 대하여 <br>알아보았는데요 <br>흔히 먹는 빵이지라도 <br>우리가 모르는 <br>현명한 보관 방법이 <br>있다는 사실! <br>꼭 기억해 두세요.<br>
                                     </p>
                                 </div>
                             </div>
-                        </div>
-                        <div class="tab-pane" id="tabs-3" role="tabpanel">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-lg-8">
-                                    <p>This delectable Strawberry Pie is an extraordinary treat filled with sweet and
-                                        tasty chunks of delicious strawberries. Made with the freshest ingredients, one
-                                        bite will send you to summertime. Each gift arrives in an elegant gift box and
-                                        arrives with a greeting card of your choice that you can personalize online!3
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        </div>                     
                     </div>
                 </div>
             </div>
