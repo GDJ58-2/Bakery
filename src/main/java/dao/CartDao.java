@@ -145,19 +145,22 @@ public class CartDao {
 		String sql = "SELECT c.goods_code goodsCode"
 				+ "			, g.goods_name goodsName"
 				+ "			, g.goods_price goodsPrice"
+				+ "			, gi.filename filename"
 				+ "			, c.customer_id customerId"
 				+ "			, c.cart_quantity cartQuantity"
 				+ "			, c.createdate"
 				+ "		FROM cart c"
 				+ "		INNER JOIN goods g"
 				+ "		ON c.goods_code = g.goods_code"
+				+ "		INNER JOIN goods_img gi"
+				+ "		ON gi.goods_code = g.goods_code"
 				+ "		WHERE c.customer_id = ?"
 				+ "		AND c.goods_code = ?";
 		String sqlWhere = " OR c.goods_code=?";
 		for(int i=0; i<goodsCode.length-1; i++) {
 			sql+=sqlWhere;
 		}
-		System.out.println(sql);
+		//System.out.println(sql);
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
 		for(int i=0; i<goodsCode.length; i++) {
@@ -169,6 +172,7 @@ public class CartDao {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("goodsCode", rs.getInt("goodsCode"));
 			map.put("goodsName", rs.getString("goodsName"));
+			map.put("filename", rs.getString("filename"));
 			map.put("goodsPrice", rs.getInt("goodsPrice"));
 			map.put("customerId", rs.getString("customerId"));
 			map.put("cartQuantity", rs.getInt("cartQuantity"));

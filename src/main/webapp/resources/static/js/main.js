@@ -161,7 +161,10 @@
     /*--------------------------
         Select
     ----------------------------*/
-    $("select").niceSelect();
+    if(!$('#searchForm').length){
+		$("select").niceSelect();
+	}
+    
 
     /*------------------
 		Magnific
