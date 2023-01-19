@@ -238,11 +238,13 @@
            		<c:forEach var="m" items="${list}" varStatus="s">
 	                <div class="col-lg-3 col-md-6 col-sm-6">
 	                    <div class="product__item">
-	                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
-	                            <div class="product__label">
-	                                <span>${m.categoryName}</span>
-	                            </div>
-	                        </div>
+	                    	<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}&categoryName=${m.categoryName}">
+		                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
+		                            <div class="product__label">
+		                                <span>${m.categoryName}</span>
+		                            </div>
+		                        </div>
+	                        </a>
 	                        <div class="product__item__text">
 	                            <h6>
 	                            	<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}&categoryName=${m.categoryName}">
@@ -251,7 +253,15 @@
 								</h6>
 	                            <div class="product__item__price">${m.goodsPrice}원</div>
 	                            <div class="cart_add">
-	                                <a type="button" id="cartBtn" href="${pageContext.request.contextPath}/cart/addCart?goodsCode=${m.goodsCode}">장바구니 추가</a>
+	                            	<c:choose>
+	                            	<c:when test="${m.goodsStock eq 0}">
+	                            		<a href="#">품절</a>
+	                            	</c:when>
+	                            	<c:otherwise>
+	                            		<a type="button" id="cartBtn" href="${pageContext.request.contextPath}/cart/addCart?goodsCode=${m.goodsCode}">장바구니 추가</a>
+	                            	</c:otherwise>
+	                            	</c:choose>
+	                                
 	                            </div>
 	                        </div>
 	                    </div>
