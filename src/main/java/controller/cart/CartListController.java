@@ -27,6 +27,7 @@ public class CartListController extends HttpServlet {
 		this.cartService = new CartService();
 		int listStock = 0;
 		int listGoodsCode = 0;
+		int goodsPrice = 0;
 		String stockMsg = null;
 		String modifyCart = request.getParameter("msg");
 		if(modifyCart == null) {

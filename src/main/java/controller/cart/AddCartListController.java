@@ -33,8 +33,7 @@ public class AddCartListController extends HttpServlet {
 		//System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
-			if(list == null) { // 장바구니가 비어있을 때
-				
+			if(list == null || list.isEmpty()) { // 장바구니가 비어있을 때
 				list = new ArrayList<HashMap<String, Object>>();
 				session.setAttribute("userList", list);
 				HashMap<String, Object> map = new HashMap<String, Object>();

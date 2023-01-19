@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="zxx">
-<meta charset="UTF-8">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="Cake Template">
@@ -33,7 +32,6 @@
 		body {
 			margin: 0;
 		}
-		
 	</style>
 	    
    
@@ -46,7 +44,15 @@
 			}
 			
 			$('#loginBtn').click(function() {
-				$('#loginForm').submit();
+				if(!$('#id').val()) {
+					alert('ID와 비밀번호를 입력하세요');
+					$('#id').focus();
+				} else {
+					$('#pw').focus();
+				}
+				if($('#id').val() && $('#pw').val()){
+					$('#loginForm').submit();
+				}
 			});
 		});
 	</script>
@@ -63,16 +69,16 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__cart">
             <div class="offcanvas__cart__links">
-                <a href="#" class="search-switch"><img src="img/icon/search.png" alt=""></a>
+                <a href="#" class="search-switch"><img src="${pageContext.request.contextPath}/resources/static/img/icon/search.png" alt=""></a>
                 <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/heart.png" alt=""></a>
             </div>
             <div class="offcanvas__cart__item">
-                <a href="#"><img src="img/icon/cart.png" alt=""> <span>0</span></a>
+                <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
                 <div class="cart__price">Cart: <span>$0.00</span></div>
             </div>
         </div>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="img/logo.png" alt=""></a>
+            <a href="./index.html"><img src="${pageContext.request.contextPath}/resources/static/img/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__option">
@@ -89,7 +95,12 @@
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+               <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                   <ul>
+                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
+                       <li></li>
+                   </ul>
+               </li>
             </ul>
         </div>
     </div>
@@ -116,10 +127,11 @@
                                             <li>ENG</li>
                                         </ul>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a> <span class="arrow_carrot-down"></span>
-                                    	<ul>
-                                    		<li><a href = "${pageContext.request.contextPath}/customer/addCustomer">Create Account</a></li>
-                                    	</ul>
+                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                                        <ul>
+                                            <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
+                                            <li></li>
+                                        </ul>
                                     </li>
                                 </ul>
                             </div>
@@ -181,7 +193,7 @@
                         <div class="contact__address__item">
                             <h6>Login</h6>
                             <div>
-                            
+                            	<div>
                             	<input type = "hidden" id = "addMsg" value = "${addMsg}">
 								<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
 									<table>
@@ -199,8 +211,16 @@
 										</tr>
 									</table>
 								</form>
+								</div>
 								<div class = "m-1">
-								<button type = "button" id = "loginBtn" class="site-btn" >login</button>
+									<span>
+										<button type = "button" id = "loginBtn" class="site-btn" >login</button>
+									</span>
+									<span class = "float-right">
+                            			<a href = "${pageContext.request.contextPath}/admin/emp/loginEmp">
+                            				<font size = "2" color = "black">직원로그인</font>
+                            			</a>
+									</span>
 								</div>
 								<div class = "m-1">
 								<a href = "${pageContext.request.contextPath}/customer/addCustomer">
