@@ -45,14 +45,14 @@ public class GoodsService {
 	}
 	
 	// 상품 리스트
-	public ArrayList<HashMap<String, Object>> getGoodsListByPage(int categoryNo, int beginRow, int rowPerPage) {
+	public ArrayList<HashMap<String, Object>> getGoodsListByPage(String categoryKind, int categoryNo, int beginRow, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			
 			goodsDao = new GoodsDao();
-			list = goodsDao.selectGoodsListByPage(conn, categoryNo, beginRow, rowPerPage);
+			list = goodsDao.selectGoodsListByPage(conn, categoryKind, categoryNo, beginRow, rowPerPage);
 			conn.commit();
 		} catch(Exception e) {
 			try {

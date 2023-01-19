@@ -41,7 +41,7 @@ public class QuestionOneController extends HttpServlet {
 		int questionCode = 0;
 		
 		// 방어 코드
-		if(request.getParameter("questionCode") != null){
+		if(request.getParameter("questionCode") == null){
 			response.sendRedirect(request.getContextPath()+"/question/questionList");
 			return;
 		} else {

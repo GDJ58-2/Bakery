@@ -213,7 +213,7 @@
 								<c:if test="${currentPage > 1}">
 									<a type="button" href="${pageContext.request.contextPath}/pointHistory/pointHistoryList?currentPage=${currentPage-1}">이전</a>
 								</c:if>
-								<span>${currentPage}</span>
+								<a type="button" href="${pageContext.request.contextPath}/pointHistory/pointHistoryList?currentPage=${currentPage}">${currentPage}</a>
 								<c:if test="${currentPage < lastPage}">
 									<a type="button" href="${pageContext.request.contextPath}/pointHistory/pointHistoryList?currentPage=${currentPage+1}">다음</a>
 								</c:if>

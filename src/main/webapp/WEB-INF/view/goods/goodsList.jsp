@@ -158,6 +158,15 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__text">
                         <h2>상품 안내</h2>
+                        <br>
+                        <c:choose>
+	                        <c:when test="${categoryKind == null || categoryKind eq ''}">
+	                        	<h3>전체</h3>
+	                        </c:when>
+	                        <c:otherwise>
+	                        	<h3>${categoryKind}</h3>
+	                        </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -197,7 +206,7 @@
 										</c:otherwise>
 									</c:choose>
                                 </select>
-                                <input type="text" placeholder="Search">
+                                <input type="text" placeholder="상품 이름 검색">
                                 <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
@@ -249,7 +258,7 @@
 								<c:if test="${currentPage > 1}">
 									<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${currentPage-1}">이전</a>
 								</c:if>
-								<span>${currentPage}</span>
+								<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${currentPage}">${currentPage}</a>
 								<c:if test="${currentPage < lastPage}">
 									<a type="button" href="${pageContext.request.contextPath}/goods/goodsList?currentPage=${currentPage+1}">다음</a>
 								</c:if>

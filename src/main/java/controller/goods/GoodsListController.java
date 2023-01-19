@@ -46,23 +46,25 @@ public class GoodsListController extends HttpServlet {
 		}
 		request.setAttribute("msg", msg);
 		
+		String categoryKind = null;
+		
 		int categoryNo = 0;
 		if(request.getParameter("categoryNo") != null) {
 			categoryNo = Integer.parseInt(request.getParameter("categoryNo"));
 		}
+		GoodsCategoryService goodsCategoryService = new GoodsCategoryService();
+		categoryKind = goodsCategoryService.getCategoryKind(categoryNo);
 		
-		String categoryKind = null;
 		if(request.getParameter("categoryKind") != null) {
 			categoryKind = request.getParameter("categoryKind");
 		}
 		request.setAttribute("categoryKind", categoryKind);
 		
 		goodsService = new GoodsService();
-		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryNo, beginRow, ROW_PER_PAGE);
+		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryKind, categoryNo, beginRow, ROW_PER_PAGE);
 		request.setAttribute("list", list);
 		
 		// 상품 카테고리
-		GoodsCategoryService goodsCategoryService = new GoodsCategoryService();
 		ArrayList<GoodsCategory> gcList = goodsCategoryService.getGoodsCategoryList();
 		request.setAttribute("gcList", gcList);
 		
