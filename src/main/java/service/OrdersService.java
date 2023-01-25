@@ -141,18 +141,16 @@ public class OrdersService {
 		this.cartDao = new CartDao();
 		this.goodsDao = new GoodsDao();
 		Connection conn = null;
-		if(address.getAddressKind().equals("직접입력")) {
-			address.setAddressKind("기타");
-		}
 		try {
 			conn = DBUtil.getConnection();
 			// 주소추가
 			int addressCode = 0;
-			if(address.getAddress()==null||address.getAddress().equals("")) { // 직접입력하지 않음(->이미 사용했던 주소 중 선택)
-				addressCode = customerAddressDao.selectAddressCode(conn, address);
-			} else {
+			if(address.getAddressKind().equals("직접입력")) {
+				address.setAddressKind("기타");
 				HashMap<String, Object> addressMap = customerAddressDao.insertAddress(conn, address);
 				addressCode = (int)addressMap.get("addressCode");
+			} else {
+				addressCode = customerAddressDao.selectAddressCode(conn, address);
 			}
 			System.out.println(addressCode+"<--OrdersService addressCode");
 			// 주문추가 

@@ -8,7 +8,21 @@ a {
   text-decoration: none;
   background-color: transparent;
 }
+.wrap {
+	overflow: auto;
+	white-space: nowrap;
+	width: 100%;
+	min-width: 1200px;
+	position: relative;
+}
 
+.content {
+	position: relative;
+  	width: 100%;
+  	padding-right: 15px;
+  	padding-left: 15px;
+  	margin: 0 auto;
+}
 .title > a:hover {
   color: #111111;
   text-decoration: underline;
@@ -50,11 +64,14 @@ a {
 }
 
 /* card */
+.card {
+	overflow: hidden;
+}
 .card-header {
 	background: rgba(226, 108, 12, 0.4);
 }
 
-/* btn */
+/* button */
 .a-btn a {
   font-size: 14px;
   color: #444444;
@@ -77,6 +94,7 @@ a {
 /* table */
 .table{
 	position: relative;
+	overflow: hidden;
 }
 .table-primary,
 .table-primary th {
@@ -106,16 +124,16 @@ form .primary-btn {
 
 /* search form */
 .searchForm {
-	width: 100%;
+	width: 870px;
 	text-align:center;
-	vertical-align: baseline;
+	overflow: hidden;
 }
 .searchForm form input{
 	float:left;
 	width:250px;
 	height:32px;
 	padding:0 0 0 10px;
-	margin: 0 0 0 300px;
+	margin: 0 0 0 380px;
 	outline:0 none;
 	border: none;
 }
@@ -156,35 +174,37 @@ form .primary-btn {
   color: #888888;
   font-size: 15px;
 }
-/* searchForm 반응형 - 수정 */
-/* Medium Device = 1200px */
-@media only screen and (min-width: 992px) and (max-width: 1199px) {
-	.searchForm form select {
-	   	width: 10%;
-	}
-	.searchForm form input {
-		width: 30%;
- 	}
-}
-/* Tablet Device = 768px */
-@media only screen and (min-width: 768px) and (max-width: 991px) {
-	.shop__option__search form .nice-select {
-		width: 40%;
- 	}
 
-	.shop__option__search form input {
- 		width: 60%;
-	}
+/* checkout input */
+.checkout__input input[type=radio] {
+	width: 8%;
+	height: 15px;
 }
-/* Wide Mobile = 480px */
-@media only screen and (max-width: 767px) {
-	.shop__option__search form {
-    	margin-bottom: 30px;
+.checkout__input label {
+	width: 92%;
+	height: 15px;
+	line-height: 15px;
+	text-align: justify;
+}
+.checkout__input span {
+	text-justify: inter-word;
+	height: 15px;
+	margin-right: 10%;
+}
+.checkout__input input[type=number] {
+	height: 50px;
+	text-align: right;
+	width: 50%;
+}
+
+/* 반응형 */
+@media only screen and (min-width: 1200px) {
+  .content {
+    max-width: 1170px;
+  }
+}
+@media (max-width: 1200px) {
+	.checkout__input input[type=number] {
+		width: 90%;
 	}
-	.shop__option__search form .nice-select {
-    	width: 36%;
-	}
-  	.shop__option__search form input {
-    	width: 64%;
-  	}
 }
