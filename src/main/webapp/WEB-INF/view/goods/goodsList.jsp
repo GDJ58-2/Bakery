@@ -34,6 +34,11 @@
 			$('#cartBtn').click(function() {
 				alert('장바구니에 상품을 담았습니다.');
 			});
+		
+			$('#sort').change(function(){
+				$('#pageForm').submit();
+				alert('정렬되었습니다.');
+			});
 		});
 	</script>
 </head>
@@ -222,14 +227,32 @@
                     </div>
                     <div class="col-lg-5 col-md-5">
                         <div class="shop__option__right">
-                            <select>
-                                <option value="">Default sorting</option>
-                                <option value="">A to Z</option>
-                                <option value="">1 - 8</option>
-                                <option value="">Name</option>
+                        	<form id="pageForm" method="get" action="${pageContext.request.contextPath}/goods/goodsList">
+                            <select name="sort" id="sort">
+                            	<c:if test="${sort eq '신제품순'}">
+									<option value="신제품순" selected="selected">신제품 순</option>
+                                	<option value="인기상품순">인기 상품 순</option>
+                                	<option value="리뷰순">리뷰 순</option>
+								</c:if>
+								<c:if test="${sort eq '인기상품순'}">
+									<option value="신제품순">신제품 순</option>
+                                	<option value="인기상품순" selected="selected">인기 상품 순</option>
+                                	<option value="리뷰순">리뷰 순</option>
+								</c:if>
+								<c:if test="${sort eq '리뷰순'}">
+									<option value="신제품순">신제품 순</option>
+                                	<option value="인기상품순">인기 상품 순</option>
+                                	<option value="리뷰순" selected="selected">리뷰 순</option>
+                            	</c:if>   
+                            	<c:if test="${empty sort}">
+									<option value="신제품순">신제품 순</option>
+                                	<option value="인기상품순">인기 상품 순</option>
+                                	<option value="리뷰순">리뷰 순</option>
+                            	</c:if>                             
                             </select>
                             <a href="#"><i class="fa fa-list"></i></a>
                             <a href="#"><i class="fa fa-reorder"></i></a>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -239,7 +262,7 @@
 	                <div class="col-lg-3 col-md-6 col-sm-6">
 	                    <div class="product__item">
 	                    	<a href="${pageContext.request.contextPath}/goods/goodsOne?goodsCode=${m.goodsCode}&categoryName=${m.categoryName}">
-		                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
+		                        <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.originName}">
 		                            <div class="product__label">
 		                                <span>${m.categoryName}</span>
 		                            </div>

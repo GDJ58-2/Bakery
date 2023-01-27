@@ -76,8 +76,14 @@ public class GoodsListByAdminController extends HttpServlet {
 			search = request.getParameter("search");
 		}
 		
+		String sort = null;
+		if(request.getParameter("sort") != null) {
+			sort = request.getParameter("sort");
+		}
+		request.setAttribute("sort", sort);
+		
 		goodsService = new GoodsService();
-		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryKind, categoryNo, search, beginRow, ROW_PER_PAGE);
+		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryKind, categoryNo, search, sort, beginRow, ROW_PER_PAGE);
 		request.setAttribute("list", list);
 		
 		// 상품 카테고리
