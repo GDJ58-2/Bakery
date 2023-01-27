@@ -28,30 +28,13 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
-
+	
+	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
 	
 		$(document).ready(function() {
-			if($('#stockMsg').val()) {
-				alert($('#stockMsg').val());
-				history.replaceState({}, null, location.pathname);
-			}
-			
-			$('#quantity').text(($('.checkGoodsCode')).length);
-			
-			$('#chkAll').on('click', function() {
-				var total = $('.checkGoodsCode').length;
-				var checked = ($('.checkGoodsCode:checked')).length;	
-				//console.log('total: '+total);
-				//console.log('checked: '+checked);
-				if(total == checked) {
-					$('.checkGoodsCode').prop('checked', false);
-				} else {
-					$('.checkGoodsCode').prop('checked', true);
-				}
-			});
-			
+			// 총 금액
 			$('.checkGoodsCode').each(function() {
 				$('.checkGoodsCode').change(function() {
 					var total = 0;
@@ -65,16 +48,13 @@
 				});
 			});
 			
-			
-			
-			$('#orderBtn').click(function() {
-				var checked = ($('.checkGoodsCode:checked')).length;
-				if(!checked) {
-					console.log(checked);
-					alert('주문할 상품을 선택하세요');
-				} else {
-					$('#orderForm').submit();
-				}
+			// 수량변경버튼
+			$('.quantity__item').on('click', '.modify', function() {
+				var code = a.dataset.goodsCode;
+				var quantity = $(this).find('input.cQuantity').val();
+				console.log('gCode: '+code+'/cQuantity: '+quantity);
+				var url = '${pageContext.request.contextPath}/cart/modifyCart?goodsCode='+code+'&cartQuantity='+quantity;
+				location.replace(url);
 			});
 		});
 	</script>
@@ -183,7 +163,7 @@
                         <ul>
                             <li><a href="./index.html">Home</a></li>
                             <li><a href="./about.html">About</a></li>
-                            <li class="active"><a href="./shop.html">Shop</a></li>
+                            <li class="active"><a href="${pageContext.request.contextPath}/goods/goodsList">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="./shop-details.html">Shop Details</a></li>
@@ -238,7 +218,11 @@
                         				<table>
                             			<thead>
                                 			<tr>
-                                				<th><button type = "button" id = "chkAll">전체선택</button></th>
+                                				<th>
+                                					<div class = "justify-content-start">
+				                                		<button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
+				                                    </div>
+                                				</th>
                                     			<th>Product</th>
                                     			<th>Quantity</th>
                                     			<th>Total</th>
@@ -275,7 +259,7 @@
                          								<tr>
                                								<td>
                                									<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}">
-                               		 							<input type="hidden" name="goodsCode" value="${user.goodsCode}">
+                               		 							<input type="hidden" name="goodsCode" class = "gCode" value="${user.goodsCode}">
                                								</td>
                                    							<td class="product__cart__item">
                                        							<div class="product__cart__item__pic">
@@ -289,8 +273,11 @@
                                     						<td class="quantity__item">
                                         						<div class="quantity">
                                             						<div class="pro-qty">
-                                                						<input type="text" name="cartQuantity" value = "${user.cartQuantity}">${user.cartQuantity}개
+                                                						<input type="text" class = "cQuantity" name="cartQuantity" value = "${user.cartQuantity}">개
                                             						</div>
+                                        						</div>
+                                        						<div class = "cart__modify__btn">
+                                        							<a href = "#" class = "modifyBtn" data-goodsCode = "${user.goodsCode}">수정</a>
                                         						</div>
                                     						</td>
                                    							<td class="cart__price">&#8361;${user.goodsPrice * user.cartQuantity}</td>
@@ -311,7 +298,11 @@
                         					<table>
                          					<thead>
                                 				<tr>
-				                                	<th><button type = "button" id = "chkAll">전체선택</button></th>
+				                                	<th>
+				                                	<div class = "justify-content-start">
+				                                		<button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
+				                                    </div>
+				                                    </th>
 				                                    <th>Product</th>
 				                                    <th>Quantity</th>
 				                                    <th>Total</th>
@@ -355,7 +346,7 @@
                         								<tr>
 						                                	<td>
 						                                		<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}">
-						                                		<input type="hidden" name="goodsCode" value="${customer.goodsCode}">
+						                                		<input type="hidden" name="goodsCode" id = "gCode" value="${customer.goodsCode}">
 						                                	</td>
                                     						<td class="product__cart__item">
 						                                        <div class="product__cart__item__pic">
@@ -369,8 +360,11 @@
 															 <td class="quantity__item">
 						                                        <div class="quantity">
 						                                            <div class="pro-qty">
-						                                                <input type="hidden" name="cartQuantity" value="${customer.cartQuantity}">${customer.cartQuantity}개
+						                                                <input type="text" class = "cQuantity" name="cartQuantity" value="${customer.cartQuantity}">개
 						                                            </div>
+						                                        </div>
+						                                        <div class = "cart__modify__btn">
+						                                        	<a href = "#" class = "modifyBtn" data-goodsCode = "${customer.goodsCode}">수정</a>
 						                                        </div>
 						                                    </td>
 						                                    <td class="cart__price" id = "cartPrice"><span>&#8361;${customer.goodsPrice * customer.cartQuantity}</span></td>

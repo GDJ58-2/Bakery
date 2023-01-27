@@ -37,8 +37,8 @@
 					alert('상품의 개수를 선택하세요.');
 					$('#cartQuantity').val(1);
 					$('#cartQuantity').focus();
-				} else if($('#cartQuantity').val() > 50){
-					alert('상품 구매는 최대 50개까지만 가능합니다.');
+				} else if($('#cartQuantity').val() > 100){
+					alert('상품 구매는 최대 100개까지만 가능합니다.');
 					$('#cartQuantity').val(1);
 					$('#cartQuantity').focus();
 				} else {
@@ -230,7 +230,7 @@
 	                                    <input type="text" name="cartQuantity" id="cartQuantity" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <!-- 숫자만 입력 가능하게 -->
 	                                </div>
 	                            </div>
-	                            <a href="#" type="button" id="cartBtn" class="primary-btn">장바구니 추가</a>
+	                            <a href="" type="button" id="cartBtn" class="primary-btn">장바구니 추가</a>
 	                            <a href="#" class="heart__btn"><span class="icon_heart_alt"></span></a>
 	                        </div>
 	                    </div>
