@@ -42,7 +42,7 @@ public class RemoveNoticeController extends HttpServlet {
 		this.noticeService = new NoticeService();
 		int row = noticeService.removeNotice(noticeCode);
 		System.out.println(row+"<--RemoveNoticeController row");
-		String msg = "<script>alert('공지 삭제를 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"; </script>";
+		String msg = "<script>alert('공지 삭제를 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
 		if(row==1) {
 			msg = "<script>alert('공지가 삭제되었습니다.'); location.href='/bakery/notice/noticeList'; </script>";
 		}

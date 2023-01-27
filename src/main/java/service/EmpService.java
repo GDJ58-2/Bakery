@@ -19,9 +19,6 @@ public class EmpService {
 		try {
 			conn = DBUtil.getConnection();
 			returnEmp = empDao.selectIdPwByEmp(conn, paramEmp);
-			if(returnEmp.getAuthCode()==0) { // 비활성화 상태 시 emp 로그인불가
-				return null;
-			}
 			conn.commit();
 		} catch (Exception e) {
 			try {

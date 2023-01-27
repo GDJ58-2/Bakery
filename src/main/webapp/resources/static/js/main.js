@@ -161,7 +161,7 @@
     /*--------------------------
         Select
     ----------------------------*/
-    if(!$('#searchForm').length){
+    if($('#searchForm').length==0){
 		$("select").niceSelect();
 	}
     
