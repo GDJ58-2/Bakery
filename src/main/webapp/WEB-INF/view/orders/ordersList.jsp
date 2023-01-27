@@ -193,7 +193,7 @@
 									</td>
 									<td>
 										<a class="btn dark-btn" href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
-											<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
+											<img src="${pageContext.request.contextPath}/upload/${m.originName}" width="200" height="200">
 										</a>
 									</td>
 									<td>
@@ -237,7 +237,7 @@
 										</td>
 										<td>
 											<a class="btn dark-btn" href="${pageContext.request.contextPath}/orders/ordersOne?orderCode=${m.orderCode}&createdate=${m.createdate}">
-												<img src="${pageContext.request.contextPath}/upload/${m.filename}" width="200" height="200">
+												<img src="${pageContext.request.contextPath}/upload/${m.originName}" width="200" height="200">
 											</a>
 										</td>
 										<td>

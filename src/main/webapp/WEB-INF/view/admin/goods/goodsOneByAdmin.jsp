@@ -183,7 +183,7 @@
                 <div class="col-lg-6">
                     <div class="product__details__img">
                         <div class="product__details__big__img">
-                            <img class="big_img" src="${pageContext.request.contextPath}/upload/${map.filename}" alt="">
+                            <img class="big_img" src="${pageContext.request.contextPath}/upload/${map.originName}" alt="">
                         </div>
                     </div>
                 </div>                             	              
@@ -280,7 +280,7 @@
                 	<c:forEach var="m" items="${gList}">
 	                    <div class="col-lg-3">
 	                        <div class="product__item">
-	                            <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.filename}">
+	                            <div class="product__item__pic set-bg" data-setbg="${pageContext.request.contextPath}/upload/${m.originName}">
 	                                <div class="product__label">
 	                                    <span>${m.categoryName}</span>
 	                                </div>

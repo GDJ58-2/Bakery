@@ -46,6 +46,7 @@ public class GoodsListController extends HttpServlet {
 		}
 		request.setAttribute("msg", msg);
 		
+		// 검색 기능
 		String categoryKind = null;
 		
 		int categoryNo = 0;
@@ -65,8 +66,15 @@ public class GoodsListController extends HttpServlet {
 			search = request.getParameter("search");
 		}
 		
+		String sort = null;
+		if(request.getParameter("sort") != null) {
+			sort = request.getParameter("sort");
+		}
+		request.setAttribute("sort", sort);
+		
+		// 리스트 출력
 		goodsService = new GoodsService();
-		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryKind, categoryNo, search, beginRow, ROW_PER_PAGE);
+		ArrayList<HashMap<String, Object>> list = goodsService.getGoodsListByPage(categoryKind, categoryNo, search, sort, beginRow, ROW_PER_PAGE);
 		request.setAttribute("list", list);
 		
 		// 상품 카테고리
