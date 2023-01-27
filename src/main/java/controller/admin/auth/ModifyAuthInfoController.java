@@ -8,9 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import service.AuthInfoService;
 import vo.AuthInfo;
+import vo.Emp;
 
 @WebServlet("/admin/auth/modifyAuthInfo")
 public class ModifyAuthInfoController extends HttpServlet {
@@ -18,7 +20,18 @@ public class ModifyAuthInfoController extends HttpServlet {
 	// modifyAuthInfo form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 로그인, 관리자권한 유효성검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<3) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		// 파라메타값 받기, 유효성검사, 디버깅
 		if(request.getParameter("authCode")==null||request.getParameter("authCode").equals("")) {
@@ -37,7 +50,18 @@ public class ModifyAuthInfoController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.setCharacterEncoding("UTF-8"); 인코딩 필터처리
 		
-		// 로그인, 관리자권한 유효성검사
+		// 로그인 세션 검사 
+		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+		if(loginEmp==null) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
+			return;
+		}
+		// 관리자 권한 검사 
+		if(loginEmp.getAuthCode()<3) { 
+			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			return;
+		}
 		
 		// 파라메타값 받기, 유효성검사
 		String authMemo = request.getParameter("authMemo");

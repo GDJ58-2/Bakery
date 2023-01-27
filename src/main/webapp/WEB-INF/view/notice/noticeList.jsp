@@ -105,10 +105,12 @@
 								</div>
 							</div>
 							<div class="card-body">
-								<div class="a-btn">
-									<!-- emp 기능 -->
-									<a href="${pageContext.request.contextPath}/admin/notice/addNotice">추가</a>
-								</div>
+								<c:if test="${loginEmp ne null}">
+									<div class="a-btn">
+										<!-- emp 기능 -->
+										<a href="${pageContext.request.contextPath}/admin/notice/addNotice">추가</a>
+									</div>
+								</c:if>
 								<!-- noticeList -->
 								<table class="table text-center">
 									<thead class="table-primary">

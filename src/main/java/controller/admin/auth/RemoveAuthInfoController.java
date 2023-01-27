@@ -43,7 +43,7 @@ public class RemoveAuthInfoController extends HttpServlet {
 		int row = authInfoService.removeAuthInfo(authCode);
 		System.out.println(row+"<--RemoveAuthInfoController row");
 		
-		String msg = "<script>alert('삭제를 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/auth/removeAuthInfo?authCode="+authCode+"';</script>";
+		String msg = "<script>alert('삭제를 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/auth/authInfoList';</script>";
 		if(row==1) {
 			msg = "<script>alert('수정되었습니다.'); location.href='/bakery/admin/auth/authInfoList';</script>";
 		}

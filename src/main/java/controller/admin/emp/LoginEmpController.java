@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import service.EmpService;
+import vo.Customer;
 import vo.Emp;
 
 @WebServlet("/admin/emp/loginEmp")
@@ -20,6 +21,11 @@ public class LoginEmpController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사 
 		HttpSession session = request.getSession();
+		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
+		if(loginCustomer!=null) {
+			response.sendRedirect(request.getContextPath()+"/customer/home");
+			return;
+		}
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp!=null) {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -30,8 +36,8 @@ public class LoginEmpController extends HttpServlet {
 		//System.out.println(msg+"<--LoginEmpController msg");
 		if(msg!=null&&msg.equals("로그인 실패")) {
 			msg = "아이디 또는 비밀번호를 잘못 입력했습니다. 다시 시도해주세요.";
-			request.setAttribute("msg", msg);
 		}
+		request.setAttribute("msg", msg);
 		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/loginEmp.jsp").forward(request, response);
 	}
@@ -65,7 +71,7 @@ public class LoginEmpController extends HttpServlet {
 		String redirectUrl = "/admin/emp/loginEmp?msg="+msg;
 		if(emp!=null) { // 로그인 성공시
 			session.setAttribute("loginEmp", emp); // 수정) 세션에 저장될 이름 정하기
-			redirectUrl = "/admin/emp/empList";
+			redirectUrl = "/admin/emp/home";
 		}
 		response.sendRedirect(request.getContextPath()+redirectUrl); // 수정 필요) 로그인 후 관리자 홈으로 이동
 	}

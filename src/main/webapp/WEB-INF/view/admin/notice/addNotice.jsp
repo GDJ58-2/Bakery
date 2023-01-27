@@ -86,7 +86,7 @@
 								<div>
 									<textarea rows="5" cols="50" name="noticeContent" id="noticeContent" class="form-control" placeholder="내용을 입력하세요."></textarea>
 								</div>
-								<div class="text-align: center">
+								<div class="text-center">
 									<button type="button" id="submitBtn" class="primary-btn">등록</button>
 								</div>
 							</form>

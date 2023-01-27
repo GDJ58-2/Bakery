@@ -2,18 +2,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="description" content="Cake Template">
+    <meta name="keywords" content="Cake, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	
+	<!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/flaticon.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/barfiller.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/magnific-popup.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/elegant-icons.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/nice-select.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+    <!-- custom css -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
 		$('#submitBtn').click(function(){
-			$('#authCodeMsg').text('');
-			$('#authMemoMsg').text('');
 			if($('#authCode').val().length==0) {
-				$('#authCodeMsg').text('필수정보입니다.');
+				alert('등급번호를 입력해주세요.');
+				$('#authCode').focus();
+				return;
 			}
 			if($('#authMemo').val().length==0) {
-				$('#authMemoMsg').text('필수정보입니다.');
+				alert('내용을 입력해주세요.');
+				$('#authMemo').focus();
 				return;
 			}
 			$('#addAuthInfoForm').submit();
@@ -25,17 +50,64 @@
 <body>
 	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
 	<jsp:include page="../../inc/menu.jsp"></jsp:include>
-	<h1>관리자 등급 추가</h1>
-	<form action="${pageContext.request.contextPath}/admin/auth/addAuthInfo" method="post" id="addAuthInfoForm">
-		<div>
-			등급번호 : <input type="number" name="authCode" id="authCode">
-			<span id="authCodeMsg"></span>
+	
+	<!-- breadcrumb -->
+	<div class="breadcrumb-option">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<div class="breadcrumb__text">
+						<h2>관리자권한</h2>
+					</div>
+				</div>	
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<div class="breadcrumb__links">
+						<a href="">Home</a>
+						<a href="">목록</a>
+						<span>추가</span>
+					</div>
+				</div> 	
+			</div>
 		</div>
-		<div>
-			등급 : <input type="text" name="authMemo" id="authMemo">
-			<span id="authMemoMsg"></span>
+	</div>
+	<!-- /breadcrumb -->
+	
+	<!-- add authInfo form -->
+	<section class="blog-details spad">
+		<div class="container">
+			<div class="row d-flex justify-content-center">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<form action="${pageContext.request.contextPath}/admin/auth/addAuthInfo" method="post" id="addAuthInfoForm">
+								<div>
+									<input type="number" name="authCode" id="authCode" class="form-control" placeholder="등급번호를 입력하세요.">
+									<span id="authCodeMsg"></span>
+								</div>
+								<div>
+									<input type="text" name="authMemo" id="authMemo" class="form-control" placeholder="내용을 입력하세요.">
+									<span id="authMemoMsg"></span>
+								</div>
+								<div class="text-center">
+									<button type="button" id="submitBtn" class="primary-btn">등록</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div><button type="button" id="submitBtn">추가</button></div>
-	</form>
+	</section>
+	
+<!-- Js Plugins -->
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
 </body>
 </html>

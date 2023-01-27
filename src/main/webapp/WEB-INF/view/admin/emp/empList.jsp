@@ -84,15 +84,11 @@
 							</div>
 							
 							<div class="card-body">
-								<div class="a-btn">
-									<a href="${pageContext.request.contextPath}/admin/emp/addEmp">추가</a>
-								</div>
-								
 								<!-- empList -->
 								<table class="table text-center">
 									<thead class="table-primary">
 										<tr>
-											<th>#</th>
+											<th>번호</th>
 											<th>ID</th>
 											<th>이름</th>
 											<th>활성화</th>

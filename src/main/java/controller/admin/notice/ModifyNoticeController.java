@@ -78,9 +78,9 @@ public class ModifyNoticeController extends HttpServlet {
 		this.noticeService = new NoticeService();
 		int row = noticeService.modifyNotice(notice);
 		System.out.println(row+"<--ModifyNoticeController row");
-		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"; </script>";
+		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
 		if(row==1) {
-			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"; </script>";
+			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
