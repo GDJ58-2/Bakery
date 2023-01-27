@@ -77,11 +77,16 @@
                 }
 
                 .qtybtn {
-                  font-size: 16px;
+                  font-size: 25px;
                   color: #888888;
-                  width: 10px;
+                  width: 200px;
                   cursor: pointer;
                   font-weight: 500;
+                  -webkit-touch-callout: none;
+        		  -webkit-user-select: none;
+                  -moz-user-select: none;
+                  -ms-user-select: none;
+                  user-select: none
                 }
               }
             }
