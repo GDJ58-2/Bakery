@@ -288,4 +288,30 @@ public class OrdersService {
 		}
 		return list;
 	}
+	
+	// 관리자 기능 - 배송상태 별 건수 확인
+	public ArrayList<HashMap<String, Object>> getCountByOrderState(String date) {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.ordersDao = new OrdersDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = ordersDao.selectCountByOrderState(conn, date);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 }

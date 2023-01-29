@@ -38,7 +38,7 @@ public class ModifyOrdersByAdminController extends HttpServlet {
 		}
 		
 		// 페이징
-		request.setCharacterEncoding("UTF-8");
+		//request.setCharacterEncoding("UTF-8"); 인코딩 필터 처리
 		String orderState = request.getParameter("orderState");
 		int currentPage = 1;
 		if(request.getParameter("currentPage")!=null) {

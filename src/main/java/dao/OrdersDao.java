@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -246,6 +247,26 @@ public class OrdersDao {
 			map.put("createdate", rs.getString("createdate"));
 			map.put("goodsName", rs.getString("goodsName"));
 			map.put("filename", rs.getString("filename"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
+	// 관리자 기능 - 배송상태 별 건수 확인
+	public ArrayList<HashMap<String, Object>> selectCountByOrderState(Connection conn, String date) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT order_state orderState, COUNT(order_state) cnt "
+				+ "		FROM orders "
+				+ "		WHERE DATE_FORMAT(createdate, '%Y-%c-%d') LIKE ?"
+				+ "		GROUP BY order_state";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, date);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("orderState", rs.getString("orderState"));
+			map.put("count", rs.getInt("cnt"));
 			list.add(map);
 		}
 		DBUtil.close(rs, stmt, null);

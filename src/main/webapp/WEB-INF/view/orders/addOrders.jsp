@@ -138,7 +138,7 @@
 								<p>
 									보유포인트
 								</p>
-								<input type="number" name="usePoint" readonly="readonly"> 원
+								<input type="number" name="point" readonly="readonly"> 원
 							</div>
 							<div class="checkout__input">
 								<p>
@@ -158,6 +158,7 @@
 								<ul class="checkout__total__products">
 									<c:forEach var="o" items="${orderList}">
 										<input type="hidden" name="goodsCode" value="${o.goodsCode}">
+										<input type="hidden" name="cartQuantity" value="${o.cartQuantity}">
 										<li>
 											${o.goodsName}
 											<span>&#8361;${o.goodsPrice*o.cartQuantity}</span>

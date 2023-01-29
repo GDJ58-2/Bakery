@@ -1,8 +1,11 @@
 @charset "UTF-8";
-
+.table thead th, .table tbody td {
+	vertical-align: middle;
+}
 pre {
 	font-family: "Montserrat", sans-serif;
 }
+
 a {
   color: #111111;
   text-decoration: none;

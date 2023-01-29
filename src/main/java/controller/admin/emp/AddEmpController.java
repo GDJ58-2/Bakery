@@ -29,7 +29,7 @@ public class AddEmpController extends HttpServlet {
 		}
 		
 		String msg = request.getParameter("msg");
-		if(msg!=null&&msg.equals("중복된 아이디")) {
+		if(msg!=null&&msg.equals("중복된 아이디")) { // 중복아이디 확인메시지 : 중복된 아이디 
 			msg = "이미 사용중인 아이디이거나 탈퇴한 아이디입니다.";
 			request.setAttribute("msg", msg);
 		}
@@ -61,15 +61,16 @@ public class AddEmpController extends HttpServlet {
 		emp.setEmpName(empName);
 		
 		this.empService = new EmpService();
+		// 아이디 중복확인
 		boolean checkId = empService.checkId(empId);
 		System.out.println(checkId+"<--AddEmpController checkId");
 		String idMsg = URLEncoder.encode("중복된 아이디", "UTF-8");
 		if(checkId) { // true -> 아이디 중복
-			request.setAttribute("emp", emp);
 			response.sendRedirect(request.getContextPath()+"/admin/emp/addEmp?msg="+idMsg);
 			return;
 		}
 		
+		// 회원가입
 		int row = empService.addEmp(emp);
 		System.out.println(row+"<--AddEmpController row");
 		
