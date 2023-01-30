@@ -200,6 +200,11 @@ form .primary-btn {
 	width: 50%;
 }
 
+/* nav */
+.nav-link .active{
+	font-weight: 800;
+}
+
 /* 반응형 */
 @media only screen and (min-width: 1200px) {
   .content {

@@ -32,25 +32,50 @@
 	<title>orders</title>
 <script>
 	$(document).ready(function(){
-		$('.submitBtn').click(function(){
-			//console.log($(this).attr('value'));
-			$('#orderState').val($(this).attr('value'));
-			if($('.checkOrderCode:checked').length==0) {
-				let orderState = $('#orderState').val();
-				let date = $('#date option:selected').val();
-				location.href='/bakery/admin/orders/modifyOrders?orderState='+orderState+'&year='+$('#year').val()+'&month='+$('#month').val()+'&date='+date;
+		
+		// nav 
+		
+		// 전체선택
+		$('#allcheck').click(function(){
+			if($('#allcheck').is(':checked')) { // .is(':checked') : 체크 여부 확인. checked -> true
+				$('input[type="checkbox"]').prop('checked', true);	
+			} else {
+				$('input[type="checkbox"]').prop('checked', false);
+			}
+		});
+		
+		// 검색기능
+		if($('#searchKind').val()!=''){
+			$('select[name="searchKind"]').val($('#searchKind').val()).prop('selected', true);	
+		}
+		$('select[name="searchKind"]').change(function(){
+			if($('select[name="searchKind"]').val()=='c.customer_phone'){
+				$('input[name="search"]').attr('placeholder', '012-3456-7890');
+			} else {
+				$('input[name="search"]').attr('placeholder', '');
+			}
+		});
+		if($('select[name="searchKind"]').val()=='c.customer_phone'){
+			$('input[name="search"]').attr('placeholder', '012-3456-7890');
+		}
+		$('input[type="date"]').change(function(){
+			$('#searchForm').submit();
+		});
+		$('#searchBtn').click(function(){
+			$('#searchForm').submit();
+		});
+		
+		// 배송상태 변경기능 
+		$('#submitBtn').click(function(){
+			if($('input[name="orderState"]:checked').length==0) {
+				alert('배송상태를 선택해주세요.');
 				return;
 			}
-			$('#modifyForm').submit();
-		});
-		$('#date').change(function(){
-			console.log($('#date option:selected').val());
-			let orderState = $('#orderState').val();
-			let date = $('#date option:selected').val();
-			console.log(orderState);
-			console.log(date);
-			location.href='/bakery/admin/orders/modifyOrders?orderState='+orderState+'&year='+$('#year').val()+'&month='+$('#month').val()+'&date='+date;
-			return;
+			if($('input[name="orderCode"]:checked').length==0) {
+				alert('변경할 주문을 선택해주세요.');
+				return;
+			}
+			$('#modifyOrderStateForm').submit();
 		});
 	});
 </script>
@@ -88,42 +113,68 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="p-4">
-									<div class="row">
-										<!-- 달력 페이징 -->
-										<h2>${year}-${month}</h2>
-										<a href="${pageContext.request.contextPath}/admin/orders/modifyOrders?orderState=${orderState}&year=${year}&month=${month-1}&date=${maxDate}">이전 달</a>
-										<a href="${pageContext.request.contextPath}/admin/orders/modifyOrders?year=${year}&month=${month+1}&date=${maxDate}">다음 달</a>
+									<div class="row justify-content-center">
+										<!-- 상태별 목록보기 -->
+										<ul class="nav">
+										  	<li class="nav-item">
+										    	<a class="nav-link" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
+										 	 </li>
+										  	<li class="nav-item">
+										    	<a class="nav-link" id="결제" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=결제&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">결제</a>
+										  	</li>
+										  	<li class="nav-item">
+										    	<a class="nav-link" id="배송중" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=배송중&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">배송중</a>
+										  	</li>
+										  	<li class="nav-item">
+										    	<a class="nav-link" id="구매확정" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=구매확정&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">구매확정</a>										  	
+										    </li>
+										</ul>										
 									</div>
+									<!-- 검색기능 form -->
+									<form action="${pageContext.request.contextPath}/admin/orders/ordersList" id="searchForm">
+										<input type="hidden" name="orderState" value="${orderState}">
+										<table>
+											<tr>
+												<th>기간</th>
+												<td><input type="date" name="startDate" value="${startDate}"> ~ <input type="date" name="endDate" value="${endDate}"></td>
+											</tr>
+											<tr>
+												<th>검색</th>
+												<td>
+													<input type="hidden" id="searchKind" value="${searchKind}">
+													<select name="searchKind">
+														<option value="o.order_code">주문 번호</option>
+														<option value="c.customer_name">주문자 명</option>
+														<option value="c.customer_phone">연락처</option>
+													</select>
+													<input type="text" name="search" value="${search}">
+													<button type="button" id="searchBtn">검색</button>
+												</td>
+											</tr>
+										</table>
+									</form>
 								</div>
 							</div>
 							
 							<div class="card-body">
-								<!-- 날짜변경 form -->
-								<form action="${pageContext.request.contextPath}/admin/orders/modifyOrders" method="post" id="modifyForm">
-									<!-- javascript ; button click시 button의 value를 hidden value에 추가 -> 폼넘기기 -->
-									<div>
-										<input type="hidden" name="orderState" id="orderState">
-										<button type="button" class="submitBtn" value="">전체주문</button>
-										<button type="button" class="submitBtn" value="결제">결제</button>
-										<button type="button" class="submitBtn" value="취소">취소</button>
-										<button type="button" class="submitBtn" value="배송중">배송중</button>
-										<button type="button" class="submitBtn" value="배송완료">배송완료</button>
-										<button type="button" class="submitBtn" value="구매확정">구매확정</button>
-									</div>
-									<div>
-										<input type="hidden" name="year" value="${year}" id="year">
-										<input type="hidden" name="month" value="${month}" id="month">
-										<select name="date" id="date">
-											<c:forEach var="d" begin="${minDate}" end="${maxDate}" step="1">
-												<c:if test="${date eq maxDate-d+1}">
-													<option value="${maxDate-d+1}" selected="selected">${year}-${month}-${maxDate-d+1}</option>
-												</c:if>
-												<c:if test="${date ne maxDate-d+1}">
-													<option value="${maxDate-d+1}">${year}-${month}-${maxDate-d+1}</option>
-												</c:if>
-											</c:forEach>
-										</select>
-									</div>
+								<!-- 배송상태 변경 기능 form -->
+								<form action="${pageContext.request.contextPath}/admin/orders/ordersList" method="post" id="modifyOrderStateForm">
+									<input type="hidden" name="startDate" value="${startDate}">
+									<input type="hidden" name="endDate" value="${endDate}">
+									<input type="hidden" name="search" value="${search}">
+									<table>
+										<tr>
+											<th>배송상태 변경</th>
+											<td>
+												<input type="radio" name="orderState" value="결제">결제
+												<input type="radio" name="orderState" value="취소">취소
+												<input type="radio" name="orderState" value="배송중">배송중
+												<input type="radio" name="orderState" value="배송완료">배송완료
+												<input type="radio" name="orderState" value="구매확정">구매확정
+												<button type="button" id="submitBtn">변경</button>
+											</td>
+										</tr>
+									</table>
 									<!-- ordersList -->
 									<table class="table table-bordered text-center">
 										<thead class="table-primary">
@@ -131,9 +182,9 @@
 												<th>
 													주문 번호
 													<br> 주문자
-													<br> 연락처	
+													<br> 연락처
 												</th>
-												<th>&nbsp;</th>
+												<th><input type="checkbox" id="allcheck"></th> <!-- 전체선택 -->
 												<th>상품 번호</th>
 												<th>주문일</th>
 												<th>상품 이름 </th>
@@ -149,8 +200,8 @@
 												<tr>
 													<td>
 														${map.orderCode}
-														<br> ${map.customerId}
-														<br> 
+														<br> ${map.customerName}
+														<br> ${map.customerPhone}
 													</td>
 													<td>
 														<c:if test="${map.orderState eq '구매확정'}">

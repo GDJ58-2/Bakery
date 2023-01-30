@@ -260,17 +260,26 @@ public class OrdersService {
 	}
 	
 	// 관리자 기능 - 모든 주문내역 보기 
-	public ArrayList<HashMap<String, Object>> getOrdersListByAdmin(String date, String orderState, int currentPage, int rowPerPage) {
+	public ArrayList<HashMap<String, Object>> getOrdersListByAdmin(String searchKind, String search, String startDate, String endDate, String orderState, int currentPage, int rowPerPage) {
 		ArrayList<HashMap<String, Object>> list = null;
 		this.ordersDao = new OrdersDao();
 		Connection conn = null;
+		if(startDate==null||startDate.equals("")) {
+			startDate="%%";
+		}
+		if(endDate==null||endDate.equals("")) {
+			endDate="%%";
+		}
 		if(orderState==null||orderState.equals("")) {
 			orderState="%%";
+		}
+		if(search==null||search.equals("")) {
+			search="%%";
 		}
 		int beginRow = (currentPage-1)*rowPerPage;
 		try {
 			conn = DBUtil.getConnection();
-			list = ordersDao.selectOrdersListByAdmin(conn, date, orderState, beginRow, rowPerPage);
+			list = ordersDao.selectOrdersListByAdmin(conn, searchKind, search, startDate, endDate, orderState, beginRow, rowPerPage);
 			conn.commit();
 		} catch (Exception e) {
 			try {

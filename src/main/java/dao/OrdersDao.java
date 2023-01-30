@@ -209,44 +209,44 @@ public class OrdersDao {
 	}
 	
 	// 관리자 주문내역 보기 
-	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn, String date, String orderState, int beginRow, int rowPerPage) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn, String searchKind, String search, String startDate, String endDate, String orderState, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		String sql ="SELECT o.order_code orderCode, o.goods_code goodsCode, o.customer_Id customerId, o.address_code addressCode, ca.address address, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName, g.filename filename"
-				+ "	FROM orders o"
-				+ "	INNER JOIN (SELECT g.goods_code, g.goods_name, img.filename"
-				+ "				FROM goods g "
-				+ "				INNER JOIN goods_img img"
-				+ "				ON g.goods_code = img.goods_code) g"
-				+ "	ON o.goods_code = g.goods_code"
-				+ "	INNER JOIN customer_address ca "
-				+ "	ON o.address_code = ca.address_code"
-				+ "	WHERE DATE_FORMAT(o.createdate, '%Y-%c-%d') LIKE ?" // %c : 10보다 작을경우 한자리수 월
-				+ "	AND o.order_state LIKE ? "
-				+ "	ORDER BY (case when o.order_state LIKE '결제' then 5"
-				+ "					when o.order_state LIKE '배송중' then 4"
-				+ "					when o.order_state LIKE '배송완료' then 3"
-				+ "					when o.order_state LIKE '구매확정' then 2"
-				+ "					ELSE 1 END) DESC, o.createdate DESC"
-				+ "	LIMIT ?,?";
+		String sql ="	SELECT o.order_code orderCode, o.goods_code goodsCode, c.customer_name customerName, c.customer_phone customerPhone, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName"
+				+ "		  FROM orders o"
+				+ " INNER JOIN (SELECT g.goods_code, g.goods_name"
+				+ "				  FROM goods g) g"
+				+ "			ON o.goods_code = g.goods_code"
+				+ " INNER JOIN (SELECT c.customer_id, c.customer_name, c.customer_phone"
+				+ "				FROM customer c) c"
+				+ "			ON o.customer_id = c.customer_id"
+				+ "		 WHERE DATE_FORMAT(o.createdate, '%Y-%m-%d') BETWEEN ? AND ?"
+				+ "		   AND o.order_state LIKE ?"
+				+ "		   AND " + searchKind + " LIKE ?" // 검색
+				+ "	  ORDER BY (case when o.order_state LIKE '결제' then 5"
+				+ "					 when o.order_state LIKE '배송중' then 4"
+				+ "					 when o.order_state LIKE '배송완료' then 3"
+				+ "					 when o.order_state LIKE '구매확정' then 2"
+				+ "					 ELSE 1 END) DESC, o.createdate DESC"
+				+ "		 LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, date);
-		stmt.setString(2, orderState);
-		stmt.setInt(3, beginRow);
-		stmt.setInt(4, rowPerPage);
+		stmt.setString(1, startDate);
+		stmt.setString(2, endDate);
+		stmt.setString(3, orderState);
+		stmt.setString(4, search);
+		stmt.setInt(5, beginRow);
+		stmt.setInt(6, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("orderCode", rs.getInt("orderCode"));
 			map.put("goodsCode", rs.getInt("goodsCode"));
-			map.put("customerId", rs.getString("customerId"));
-			map.put("addressCode", rs.getInt("addressCode"));
-			map.put("address", rs.getString("address"));
+			map.put("customerName", rs.getString("customerName"));
+			map.put("customerPhone", rs.getString("customerPhone"));
 			map.put("orderQuantity", rs.getInt("orderQuantity"));
 			map.put("orderPrice", rs.getInt("orderPrice"));
 			map.put("orderState", rs.getString("orderState"));
 			map.put("createdate", rs.getString("createdate"));
 			map.put("goodsName", rs.getString("goodsName"));
-			map.put("filename", rs.getString("filename"));
 			list.add(map);
 		}
 		DBUtil.close(rs, stmt, null);
@@ -258,7 +258,7 @@ public class OrdersDao {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT order_state orderState, COUNT(order_state) cnt "
 				+ "		FROM orders "
-				+ "		WHERE DATE_FORMAT(createdate, '%Y-%c-%d') LIKE ?"
+				+ "		WHERE DATE_FORMAT(createdate, '%Y-%m-%d') LIKE ?"
 				+ "		GROUP BY order_state";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, date);
