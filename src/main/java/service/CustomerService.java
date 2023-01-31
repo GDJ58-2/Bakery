@@ -7,6 +7,7 @@ import java.util.HashMap;
 import util.DBUtil;
 import vo.Customer;
 import dao.CustomerDao;
+import dao.EmpDao;
 import dao.CartDao;
 import dao.PointHistoryDao;
 
@@ -277,5 +278,30 @@ public class CustomerService {
 			}	
 		}
 		return list;
+	}
+	// 고객목록 페이징 카운트 -관리자기능
+	public int getCustomerCount() {
+		int count = 0;
+		this.customerDao = new CustomerDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			count = customerDao.selectCustomerCount(conn);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
 	}
 }

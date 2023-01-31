@@ -40,7 +40,7 @@ public class EmpListController extends HttpServlet {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
 		int rowPerPage = 30;
-		System.out.println(search);
+		System.out.println(search+"<--empList search, EmpListController");
 		this.empService = new EmpService();
 		int count = empService.getEmpCount(); 
 		int lastPage = count/rowPerPage;

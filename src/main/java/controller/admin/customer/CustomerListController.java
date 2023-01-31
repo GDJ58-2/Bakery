@@ -38,18 +38,27 @@ public class CustomerListController extends HttpServlet {
 		if(request.getParameter("currentPage")!=null) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
-		int rowPerPage = 10;
-		if(request.getParameter("rowPerPage")!=null) {
-			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
-		}
+		int rowPerPage = 30;
 		String search = request.getParameter("search");
+		System.out.println(search+"<--customerList search, CustomerListController");
 		
 		this.customerService = new CustomerService();
+		int count = customerService.getCustomerCount(); 
+		int lastPage = count/rowPerPage;
+		if(count%rowPerPage!=0) {
+			lastPage+=1;
+		}
+		// 페이징 방어 코드
+		if(currentPage<1) {
+			currentPage = 1;
+		} else if(currentPage>lastPage) {
+			currentPage = lastPage;
+		}
 		ArrayList<Customer> list = customerService.getCustomerListByAdmin(search, currentPage, rowPerPage);		
 		request.setAttribute("customerList", list);
 		request.setAttribute("search", search);
-		request.setAttribute("currentPage", currentPage);
-		request.setAttribute("rowPerPage", rowPerPage);
+		request.setAttribute("currentPage", currentPage);		
+		request.setAttribute("lastPage", lastPage);
 		request.getRequestDispatcher("/WEB-INF/view/admin/customer/customerList.jsp").forward(request, response);
 	}
 }

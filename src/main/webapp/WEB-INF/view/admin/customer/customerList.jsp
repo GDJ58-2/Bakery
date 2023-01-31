@@ -31,9 +31,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
-		$('#rowPerPage').change(function(){
-			$('#searchForm').submit();
-		});
 		$('#submitBtn').click(function(){
 			$('#searchForm').submit();
 		});
@@ -86,19 +83,8 @@
 										<div class="searchForm">
 											<!-- 검색창 -->
 											<form action="${pageContext.request.contextPath}/admin/customer/customerList" id="searchForm">
-												<input type="text" name="search" value="${search}" id="search" placeholder="아이디 검색">
+												<input type="text" name="search" value="${search}" id="search" placeholder="이름 검색">
 												<button type="button" id="submitBtn" class="searchBtn">검색</button>
-												<!-- 페이지당 보여질 공지 개수 -->
-												<select name="rowPerPage" id="rowPerPage">
-													<c:forEach var="i" begin="10" end="30" step="10">
-														<c:if test="${rowPerPage eq i}">
-															<option value="${i}" selected="selected">${i}</option>
-														</c:if>
-														<c:if test="${rowPerPage ne i}">
-															<option value="${i}">${i}</option>
-														</c:if>
-													</c:forEach>
-												</select>
 											</form>
 										</div>
 									</div>
