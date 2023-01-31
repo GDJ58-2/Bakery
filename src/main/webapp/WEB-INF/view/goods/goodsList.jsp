@@ -32,8 +32,8 @@
 	<script>
 		function logoutAction() {
 			let url = '${pageContext.request.contextPath}/customer/logout';
-				let out = confirm('로그아웃하시겠습니까?'); 
-			 	if(out) {
+			let out = confirm('로그아웃하시겠습니까?'); 
+			 if(out) {
 	  			location.replace(url); 
 	      		alert('로그아웃되었습니다');
 	       	} else {
@@ -147,7 +147,9 @@
                                     	<c:otherwise>
                                     	   <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
 							                   <ul>
-							                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+							                       <li style = "display:inline-block">
+                       									<a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                       								</li>
 							                   </ul>
 							               </li>
                                     	</c:otherwise>
