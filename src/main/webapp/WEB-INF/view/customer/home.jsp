@@ -32,7 +32,22 @@
 	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-	
+		function logoutAction() {
+			let url = '${pageContext.request.contextPath}/customer/logout';
+ 			let out = confirm('로그아웃하시겠습니까?'); 
+ 		 	if(out) {
+      			location.replace(url); 
+          		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
+	   $(document).ready(function() {
+	   		$('#logoutBtn').on('click', function() {
+	   			logoutAction(url);
+	   		});
+	   });
 	</script>
 </head>
 
@@ -73,10 +88,11 @@
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
                    <ul>
-                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-                       <li></li>
+                       <li style = "display:inline-block">
+                       		<a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                       </li>
                    </ul>
                </li>
             </ul>
@@ -105,10 +121,11 @@
                                             <li>ENG</li>
                                         </ul>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                                    <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
 					                   <ul>
-					                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-					                       <li></li>
+					                       <li style = "display:inline-block">
+					                       		<a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+					                       </li>
 					                   </ul>
 					               </li>
                                 </ul>
@@ -218,18 +235,8 @@
 							</div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="contact__address__item">
-                            <h6>san bernardino</h6>
-                            <!-- 로그아웃 -->
-							<div>
-								<a href = "${pageContext.request.contextPath}/customer/logout">
-									<button type = "button" id = "logoutBtn">logout</button>
-								</a>
-							</div>
-                        </div>
-                    </div>
                 </div>
+             </div>
         </div>
     </section>
     <!-- Shopping Cart Section End -->

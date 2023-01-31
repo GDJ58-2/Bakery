@@ -1,6 +1,9 @@
 package controller.customer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +16,7 @@ import service.CustomerService;
 
 @WebServlet("/customer/login")
 public class LoginController extends HttpServlet {
-	
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    HttpSession session = request.getSession();// 로그인 전에만 진입가능
 	    Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
@@ -21,6 +24,8 @@ public class LoginController extends HttpServlet {
 	    	response.sendRedirect(request.getContextPath()+"/customer/home");
 	        return;
 	    }
+	    
+	    ArrayList<HashMap<String, Object>> userList = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 	    
 	    String addMsg = request.getParameter("addMsg");
 	    if(addMsg != null) {

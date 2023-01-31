@@ -261,7 +261,6 @@
 			$('#orderForm').submit();
 		}
 	});
-    
 
     $(".product__details__thumb").niceScroll({
         cursorborder: "",
