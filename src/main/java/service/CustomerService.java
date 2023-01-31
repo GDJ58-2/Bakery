@@ -254,7 +254,7 @@ public class CustomerService {
 		ArrayList<Customer> list = null;
 		Connection conn = null;
 		if(search==null) { // 검색어
-			search="%%";
+			search="";
 		}
 		int beginRow = (currentPage-1)*rowPerPage;
 		try {

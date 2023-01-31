@@ -290,12 +290,15 @@ public class CustomerDao {
 		return row;
 	}
 	
-	// 고객목록 출력
+	// 고객목록 출력 - 관리자
 	public ArrayList<Customer> selectCustomerListByAdmin(Connection conn, String search, int beginRow, int rowPerPage) throws Exception {
 		ArrayList<Customer> list = new ArrayList<Customer>();
-		String sql = "SELECT customer_code customerCode, customer_id customerId, customer_name customerName, customer_phone customerPhone, point, createdate FROM customer WHERE customer_id LIKE ? LIMIT ?,?";
+		String sql = "SELECT customer_code customerCode, customer_id customerId, customer_name customerName, customer_phone customerPhone, point, createdate "
+				+ "		FROM customer "
+				+ "	   WHERE customer_id LIKE ? "
+				+ "	   LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, search);
+		stmt.setString(1, "%"+search+"%");
 		stmt.setInt(2, beginRow);
 		stmt.setInt(3, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
