@@ -31,23 +31,39 @@
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			$('#cartBtn').click(function() {
-				if($('#cartQuantity').val() == 0 || $('#cartQuantity').val() == '') {
-					alert('상품의 개수를 선택하세요.');
-					$('#cartQuantity').val(1);
-					$('#cartQuantity').focus();
-				} else if($('#cartQuantity').val() > 100){
-					alert('상품 구매는 최대 100개까지만 가능합니다.');
-					$('#cartQuantity').val(1);
-					$('#cartQuantity').focus();
-				} else {
-					$('#addCartForm').submit();
-					alert('장바구니에 상품을 담았습니다.');
-				}
-			});
-		});
-	</script>
+      function logoutAction() {
+         let url = '${pageContext.request.contextPath}/customer/logout';
+            let out = confirm('로그아웃하시겠습니까?'); 
+             if(out) {
+              location.replace(url); 
+               alert('로그아웃되었습니다');
+             } else {
+                alert('로그아웃 취소');
+                return false;
+             }
+       }  
+   
+      $(document).ready(function() {
+         $('#cartBtn').click(function() {
+            if($('#cartQuantity').val() == 0 || $('#cartQuantity').val() == '') {
+               alert('상품의 개수를 선택하세요.');
+               $('#cartQuantity').val(1);
+               $('#cartQuantity').focus();
+            } else if($('#cartQuantity').val() > 100){
+               alert('상품 구매는 최대 100개까지만 가능합니다.');
+               $('#cartQuantity').val(1);
+               $('#cartQuantity').focus();
+            } else {
+               $('#addCartForm').submit();
+               alert('장바구니에 상품을 담았습니다.');
+            }
+         });
+         
+         $('#logoutBtn').on('click', function() {
+               logoutAction(url);
+            });
+      });
+   </script>
 </head>
 <body>
     <!-- Page Preloder -->
@@ -80,13 +96,28 @@
                         <li>USD</li>
                     </ul>
                 </li>
-                <li>ENG <span class="arrow_carrot-down"></span>
+                 <li>ENG <span class="arrow_carrot-down"></span>
                     <ul>
                         <li>Spanish</li>
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                <c:choose>
+                     <c:when test="${loginCustomer eq null}">
+                        <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+                       <ul>
+                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+                       </ul>
+                   </li>
+                     </c:when>
+                     <c:otherwise>
+                           <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                       <ul>
+                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+                       </ul>
+                   </li>
+                     </c:otherwise>
+            	</c:choose>
             </ul>
         </div>
     </div>
@@ -107,13 +138,28 @@
                                             <li>USD</li>
                                         </ul>
                                     </li>
-                                    <li>ENG <span class="arrow_carrot-down"></span>
-                                        <ul>
-                                            <li>Spanish</li>
-                                            <li>ENG</li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Sign in</a> <span class="arrow_carrot-down"></span></li>
+                                     <li>ENG <span class="arrow_carrot-down"></span>
+                    <ul>
+                        <li>Spanish</li>
+                        <li>ENG</li>
+                    </ul>
+                </li>
+                 <c:choose>
+                     <c:when test="${loginCustomer eq null}">
+                        <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+                       <ul>
+                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+                       </ul>
+                   </li>
+                     </c:when>
+                     <c:otherwise>
+                           <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                       <ul>
+                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+                       </ul>
+                   </li>
+                     </c:otherwise>
+            </c:choose>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -205,37 +251,40 @@
                         </div>                        
                     </div>
                 </div>
-			
-                <div class="col-lg-6">
-               		<form action="${pageContext.request.contextPath}/cart/addCart" method="get" id = "addCartForm">
-					<input type="hidden" name="goodsCode" value="${map.goodsCode}">  
-					<input type="hidden" name="categoryName" value="${map.categoryName}">     
-	                    <div class="product__details__text">
-	                        <div class="product__label">${map.categoryKind}</div>
-	                        <h4>${map.goodsName}</h4>   
-	                        <br>              
-							<div style="color:red;" id="msg">
-							${msg}
-							</div>
-	                        <h5>${map.goodsPrice}원</h5>
-	                        <p>${map.goodsContent}</p>
-	                        <ul>
-	                            <li>상품 재고 : <span>${map.goodsStock}개</span></li>
-	                            <li>상품 종류 : <span>${map.categoryName}</span></li>
-	                            <li>태그 : <span>${map.categoryKind}, ${map.categoryName}</span></li>
-	                        </ul>
-	                        <div class="product__details__option">
-	                            <div class="quantity">
-	                                <div class="pro-qty">
-	                                    <input type="text" name="cartQuantity" id="cartQuantity" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <!-- 숫자만 입력 가능하게 -->
-	                                </div>
-	                            </div>
-	                            <a href="" type="button" id="cartBtn" class="primary-btn">장바구니 추가</a>
-	                            <a href="#" class="heart__btn"><span class="icon_heart_alt"></span></a>
-	                        </div>
-	                    </div>
-                    </form>
-                </div>			              		      
+				
+ 				<div class="col-lg-6">
+	            	<form action="${pageContext.request.contextPath}/cart/addCart" method="get" id = "addCartForm">
+			       		<input type="hidden" name="goodsCode" value="${map.goodsCode}">  
+			            <input type="hidden" name="goodsName" value="${map.goodsName}">    
+			            <input type="hidden" name="categoryName" value="${map.categoryName}">    
+			            <div class="product__details__text">
+			            	<div class="product__label">${map.categoryKind}</div>
+		                	<h4>${map.goodsName}</h4>   
+		                    <br>              
+		                    <div style="color:red;" id="msg">
+		                    	${msg}
+		                    </div>
+		                    <h5>${map.goodsPrice}원</h5>
+		                    <p>${map.goodsContent}</p>
+                            <ul>
+                                <li>상품 재고 : <span>${map.goodsStock}개</span></li>
+                                <li>상품 종류 : <span>${map.categoryName}</span></li>
+                                <li>태그 : <span>${map.categoryKind}, ${map.categoryName}</span></li>
+                            </ul>
+                            <div class="product__details__option">
+                            	<div class="quantity">
+                                	<div class="pro-qty">
+                                    	<input type="text" name="cartQuantity" id="cartQuantity" value="1" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> <!-- 숫자만 입력 가능하게 -->
+                                    </div>
+                            	</div>
+                            	<a href="" type="button" id="cartBtn">
+                                	<button class = "add__btn btn primary-btn" id="cartBtn">장바구니 추가</button>
+                                </a>
+                                <a href="#" class="heart__btn"><span class="icon_heart_alt"></span></a>
+                           	</div>
+			        	</div>
+	            	</form>
+	        	</div>   
             </div>
             <div class="product__details__tab">
                 <div class="col-lg-12">
@@ -254,10 +303,14 @@
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-8">
-                                    <p>This delectable Strawberry Pie is an extraordinary treat filled with sweet and
-                                        tasty chunks of delicious strawberries. Made with the freshest ingredients, one
-                                        bite will send you to summertime. Each gift arrives in an elegant gift box and
-                                    arrives with a greeting card of your choice that you can personalize online!</p>
+                                	<br>
+                                	<div style="font-size: 20px; font-weight: bold;">빵의 효능</div>
+                                    <p>
+                                    글루텐 성분이 없어서 소화가 잘됩니다.<br>먹고 난 다음에 속이 편합니다.<br>각종 식이섬유가 많고 무기질과 미네랄이 풍부합니다.<br>
+                                    GI(당지수)가 낮아서 당뇨와 다이어트에 매우 좋습니다.<br>섬유소가 풍부해서 대장 활동을 활발히 해 대장암 예방 효과가 탁월합니다.<br>
+                                    항암 효과가 탁월하고 암세포의 증식을 방해한다고 합니다.<br>황산화 성분이 풍부한 빵은 심장기능을 향상시킬 수 있습니다.<br>
+                                    식이섬유가 많아서 변비에 좋고, 탄수화물 ,단백질, 칼슘, 비타민B가 풍부합니다.
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -369,68 +422,7 @@
     <!-- Related Products Section End -->
 
     <!-- Footer Section Begin -->
-    <footer class="footer set-bg" data-setbg="${pageContext.request.contextPath}/resources/static/img/footer-bg.jpg">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__widget">
-                        <h6>WORKING HOURS</h6>
-                        <ul>
-                            <li>Monday - Friday: 08:00 am – 08:30 pm</li>
-                            <li>Saturday: 10:00 am – 16:30 pm</li>
-                            <li>Sunday: 10:00 am – 16:30 pm</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/footer-logo.png" alt=""></a>
-                        </div>
-                        <p>Lorem ipsum dolor amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore dolore magna aliqua.</p>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-6">
-                    <div class="footer__newslatter">
-                        <h6>Subscribe</h6>
-                        <p>Get latest updates and offers.</p>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit"><i class="fa fa-send-o"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-7">
-                        <p class="copyright__text text-white"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                          Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                          <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      </p>
-                  </div>
-                  <div class="col-lg-5">
-                    <div class="copyright__widget">
-                        <ul>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms & Conditions</a></li>
-                            <li><a href="#">Site Map</a></li>
-                        </ul>
-                    </div>
-               	  </div>
-            	</div>
-        	</div>
-    	</div>
-	</footer>
+    <c:import url="../inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 	
 	<!-- Search Begin -->

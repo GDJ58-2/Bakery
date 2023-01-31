@@ -413,23 +413,41 @@ public class GoodsDao {
 			if(search == null || search.equals("")) {
 				if(categoryKind == null || categoryKind.equals("")) {
 					if(categoryNo == 0) {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
-								+ "		LIMIT ?, ?";
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no\r\n"
+								+ "ORDER BY count DESC\r\n"
+								+ "LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
 						stmt.setInt(1, beginRow);
 						stmt.setInt(2, rowPerPage);
 						rs = stmt.executeQuery();
 					} else {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no\r\n"
 								+ "		WHERE g.category_no = ?"
+								+ "		ORDER BY count DESC"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
 						stmt.setInt(1, categoryNo);
@@ -439,12 +457,21 @@ public class GoodsDao {
 					}
 				} else {
 					if(categoryNo == 0) {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no\r\n"
 								+ "		WHERE gc.category_kind = ?"
+								+ "		ORDER BY count DESC"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
 						stmt.setString(1, categoryKind);
@@ -452,12 +479,20 @@ public class GoodsDao {
 						stmt.setInt(3, rowPerPage);
 						rs = stmt.executeQuery();
 					} else {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
-								+ "		WHERE g.category_no = ? AND gc.category_kind = ?"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no"
+								+ "		ORDER BY count DESC"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
 						stmt.setInt(1, categoryNo);
@@ -470,11 +505,19 @@ public class GoodsDao {
 			} else {
 				if(categoryKind == null || categoryKind.equals("")) {
 					if(categoryNo == 0) {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no"
 								+ "		WHERE g.goods_name LIKE ?"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
@@ -483,11 +526,19 @@ public class GoodsDao {
 						stmt.setInt(3, rowPerPage);
 						rs = stmt.executeQuery();
 					} else {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no"
 								+ "		WHERE g.category_no = ? AND g.goods_name LIKE ?"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
@@ -499,11 +550,19 @@ public class GoodsDao {
 					}
 				} else {
 					if(categoryNo == 0) {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no"
 								+ "		WHERE gc.category_kind = ? AND g.goods_name LIKE ?"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
@@ -513,11 +572,19 @@ public class GoodsDao {
 						stmt.setInt(4, rowPerPage);
 						rs = stmt.executeQuery();
 					} else {
-						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, gc.category_kind categoryKind, gc.category_name categoryName"
-								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, img.filename, img.origin_name"
-								+ "				FROM goods g INNER JOIN goods_img img"
-								+ "					ON g.goods_code = img.goods_code) g INNER JOIN goods_category gc"
-								+ "			ON g.category_no = gc.category_no"
+						String sql = "SELECT g.goods_code goodsCode, g.category_no categoryNo, g.goods_name goodsName, g.goods_price goodsPrice, g.goods_stock goodsStock, g.hit hit, g.createdate createdate, g.filename filename, g.origin_name originName, g.count count, gc.category_kind categoryKind, gc.category_name categoryName\r\n"
+								+ "FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, g.count, img.filename, img.origin_name\r\n"
+								+ "		FROM (SELECT g.goods_code, g.category_no, g.goods_name, g.goods_price, g.goods_stock, g.hit, g.createdate, COUNT(r.goods_code) COUNT\r\n"
+								+ "				FROM (SELECT r.order_code, r.goods_code, COUNT(r.review_memo) count\r\n"
+								+ "						FROM (SELECT r.order_code, o.goods_code, r.review_memo\r\n"
+								+ "								FROM orders o INNER JOIN review r\r\n"
+								+ "								ON o.order_code = r.order_code) r\r\n"
+								+ "						GROUP BY r.order_code) r RIGHT OUTER JOIN goods g\r\n"
+								+ "				ON r.goods_code = g.goods_code 	\r\n"
+								+ "				GROUP BY g.goods_code) g INNER JOIN goods_img img\r\n"
+								+ "		ON g.goods_code = img.goods_code\r\n"
+								+ "		GROUP BY g.goods_code) g INNER JOIN goods_category gc\r\n"
+								+ "ON g.category_no = gc.category_no"
 								+ "		WHERE g.category_no = ? AND gc.category_kind = ? AND g.goods_name LIKE ?"
 								+ "		LIMIT ?, ?";
 						stmt = conn.prepareStatement(sql);
