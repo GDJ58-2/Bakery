@@ -97,7 +97,7 @@
                 </li>
                <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
                    <ul>
-                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
+                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
                        <li></li>
                    </ul>
                </li>
@@ -127,10 +127,9 @@
                                             <li>ENG</li>
                                         </ul>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                                    <li><a href="${pageContext.request.contextPath}/customer/login">Login</a><span class="arrow_carrot-down"></span>
                                         <ul>
-                                            <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-                                            <li></li>
+                                            <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -189,43 +188,45 @@
             <div class = "d-flex justify-content-center">
                 <div class="row">
                    
-                    <div class="col-lg-11 col-md-7 col-sm-6">
+                    <div class="col-lg-12 col-md-7 col-sm-6">
                         <div class="contact__address__item">
                             <h6>Login</h6>
                             <div>
                             	<div>
-                            	<input type = "hidden" id = "addMsg" value = "${addMsg}">
-								<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
-									<table>
-										<tr>
-											<td>ID</td>
-											<td>
-												<input type = "text" id = "id" name = "id">
-											</td>
-										</tr>
-										<tr>
-											<td>PW</td>
-											<td>
-												<input type = "password" id = "pw" name = "pw">
-											</td>
-										</tr>
-									</table>
-								</form>
+	                            	<input type = "hidden" id = "addMsg" value = "${addMsg}">
+									<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
+										<table>
+											<tr>
+												<td>ID</td>
+												<td>
+													<input type = "text" id = "id" name = "id">
+												</td>
+											</tr>
+											<tr>
+												<td>PW</td>
+												<td>
+													<input type = "password" id = "pw" name = "pw">
+												</td>
+											</tr>
+										</table>
+									</form>
 								</div>
-								<div class = "m-1">
-									<span>
-										<button type = "button" id = "loginBtn" class="site-btn" >login</button>
-									</span>
+								<div class = "mt-1 mb-4">
 									<span class = "float-right">
                             			<a href = "${pageContext.request.contextPath}/admin/emp/loginEmp">
                             				<font size = "2" color = "black">직원로그인</font>
                             			</a>
 									</span>
 								</div>
-								<div class = "m-1">
-								<a href = "${pageContext.request.contextPath}/customer/addCustomer">
-									<button type = "button" id = "createBtn" class="site-btn">create account</button>
-								</a>
+								<div class = "mt-2">
+									<div>
+										<button type = "button" id = "loginBtn" class="login-btn btn-block">login</button>
+									</div>
+									<div class = "mt-1">
+										<a href = "${pageContext.request.contextPath}/customer/addCustomer">
+											<button type = "button" id = "createBtn" class="signup-btn btn-block">sign up</button>
+										</a>
+									</div>
 								</div>
                             </div>
                         </div>

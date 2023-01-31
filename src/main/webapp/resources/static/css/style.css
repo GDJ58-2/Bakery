@@ -172,7 +172,31 @@ ol {
   text-transform: uppercase;
   display: inline-block;
   letter-spacing: 2px;
-  padding: 14px 30px;
+  padding: 10px 25px;
+}
+
+.login-btn {
+  font-size: 14px;
+  color: #ffffff;
+  background: #111111;
+  font-weight: 600;
+  border: none;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 2px;
+  padding: 8px;
+}
+
+.signup-btn {
+  font-size: 14px;
+  color: #ffffff;
+  background: #111111;
+  font-weight: 600;
+  border: none;
+  text-transform: uppercase;
+  display: inline-block;
+  letter-spacing: 2px;
+  padding: 8px;
 }
 
 /* Preloder */
@@ -1669,6 +1693,11 @@ ol {
 .product__details__option a {
   float: left;
 }
+
+.product__details__option button.add__btn {
+  float: left;
+}
+
 .product__details__option a.heart__btn {
   font-size: 20px;
   border: 1px solid #e1e1e1;
@@ -1679,6 +1708,18 @@ ol {
 }
 .product__details__option .primary-btn {
   margin-right: 20px;
+}
+
+.product__details__option .add__btn {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 14px 30px;
+  color: #ffffff;
+  background: #f08632;
+  letter-spacing: 2px;
+  border: none;
 }
 
 .product__details__tab {
@@ -3095,7 +3136,7 @@ ol {
 .contact__address__item ul li:last-child {
   margin-bottom: 0;
 }
-.contact__address__item ul li span {
+.contact__address__item ul li {
   font-size: 24px;
   color: #111111;
   margin-right: 25px;

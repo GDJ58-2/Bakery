@@ -28,9 +28,10 @@ public class AddCartListController extends HttpServlet {
 		GoodsService goodsService = new GoodsService(); 
 		HashMap<String, Object> goodsOne = goodsService.getGoodsOne(goodsCode); // goodsCode로 goods정보 얻기
 		String goodsName = (String)goodsOne.get("goodsName");
+		String categoryName = request.getParameter("categoryName");
 		int goodsPrice = (int)goodsOne.get("goodsPrice");
 		int cartQuantity = Integer.parseInt(request.getParameter("cartQuantity"));
-		//System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
+		System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 			if(list == null || list.isEmpty()) { // 장바구니가 비어있을 때
@@ -64,7 +65,7 @@ public class AddCartListController extends HttpServlet {
 				}
 			}
 			System.out.println("AddCartListController: 비회원장바구니담기 완료");
-			response.sendRedirect(request.getContextPath() + "/goods/goodsOne?goodsCode=" + goodsCode);
+			response.sendRedirect(request.getContextPath() + "/goods/goodsOne?goodsCode=" + goodsCode +"&categoryName=" + categoryName);
 		} else { // 회원
 			cart = new Cart();
 			cart.setGoodsCode(goodsCode);
@@ -74,7 +75,7 @@ public class AddCartListController extends HttpServlet {
 			int result = cartService.addCart(cart);
 			if(result == 1) {
 				System.out.println("AddCartListController: 회원장바구니담기 완료");
-				response.sendRedirect(request.getContextPath() + "/goods/goodsOne?goodsCode=" + goodsCode);
+				response.sendRedirect(request.getContextPath() + "/goods/goodsOne?goodsCode=" + goodsCode + "&categoryName=" + categoryName);
 			}
 		}
 	}

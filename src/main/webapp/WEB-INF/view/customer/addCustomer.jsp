@@ -195,10 +195,9 @@
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
+                <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
                    <ul>
-                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-                       <li></li>
+                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">sign&nbsp;up</font></a></li>
                    </ul>
                </li>
             </ul>
@@ -227,7 +226,7 @@
                                             <li>ENG</li>
                                         </ul>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a> <span class="arrow_carrot-down"></span>
+                                    <li><a href="${pageContext.request.contextPath}/customer/login">login</a> <span class="arrow_carrot-down"></span>
                                     	<ul>
                                     		<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;up</font></a></li>
                                     	</ul>
@@ -341,11 +340,11 @@
 								</form>
 							</div>
 							<div class = "m-1">
-								<button type = "button" id = "createBtn" class = "site-btn">create</button>
+								<button type = "button" id = "createBtn" class = "signup-btn btn-block">sign up</button>
 							</div>
 							<div class = "m-1">
 								<a href = "${pageContext.request.contextPath}/customer/login">
-									<button type = "button" id = "loginBtn" class = "site-btn">login</button>
+									<button type = "button" id = "loginBtn" class = "login-btn btn-block">login</button>
 								</a>
 							</div>				
 						</div>

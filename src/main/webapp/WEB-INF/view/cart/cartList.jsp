@@ -32,7 +32,18 @@
 	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-	
+		function logoutAction() {
+			let url = '${pageContext.request.contextPath}/customer/logout';
+				let out = confirm('로그아웃하시겠습니까?'); 
+			 	if(out) {
+	  			location.replace(url); 
+	      		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
+		
 		$(document).ready(function() {
 			// 총 금액
 			$('.checkGoodsCode').each(function() {
@@ -56,6 +67,11 @@
 				var url = '${pageContext.request.contextPath}/cart/modifyCart?goodsCode='+code+'&cartQuantity='+quantity;
 				location.replace(url);
 			});
+			
+			// 로그아웃
+			$('#logoutBtn').on('click', function() {
+	   			logoutAction(url);
+	   		});
 		});
 	</script>
 </head>
@@ -97,12 +113,22 @@
                         <li>ENG</li>
                     </ul>
                 </li>
-                <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
-                   <ul>
-                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-                       <li></li>
-                   </ul>
-               </li>
+                  <c:choose>
+              			<c:when test="${loginCustomer eq null}">
+               				<li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+     							<ul>
+         							<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+     							</ul>
+ 							</li>
+               			</c:when>
+               			<c:otherwise>
+               	   			<li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+     							<ul>
+         							<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+     							</ul>
+ 							</li>
+               			</c:otherwise>
+				</c:choose>
             </ul>
         </div>
     </div>
@@ -129,12 +155,22 @@
                                             <li>ENG</li>
                                         </ul>
                                     </li>
-                                    <li><a href="${pageContext.request.contextPath}/customer/login">Sign in</a><span class="arrow_carrot-down"></span>
-					                   <ul>
-					                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Create&nbsp;Account</font></a></li>
-					                       <li></li>
-					                   </ul>
-					               </li>
+                                    <c:choose>
+                                    	<c:when test="${loginCustomer eq null}">
+                                    		<li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+							                   <ul>
+							                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+							                   </ul>
+							               </li>
+                                    	</c:when>
+                                    	<c:otherwise>
+                                    	   <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+							                   <ul>
+							                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+							                   </ul>
+							               </li>
+                                    	</c:otherwise>
+					               </c:choose>
                                 </ul>
                             </div>
                             <div class="header__logo">
