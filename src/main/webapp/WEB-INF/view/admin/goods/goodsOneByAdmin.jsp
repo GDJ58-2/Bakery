@@ -226,10 +226,14 @@
                         <div class="tab-pane active" id="tabs-1" role="tabpanel">
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-8">
-                                    <p>This delectable Strawberry Pie is an extraordinary treat filled with sweet and
-                                        tasty chunks of delicious strawberries. Made with the freshest ingredients, one
-                                        bite will send you to summertime. Each gift arrives in an elegant gift box and
-                                    arrives with a greeting card of your choice that you can personalize online!</p>
+                                   <br>
+                                	<div style="font-size: 20px; font-weight: bold;">빵의 효능</div>
+                                    <p>
+                                    글루텐 성분이 없어서 소화가 잘됩니다.<br>먹고 난 다음에 속이 편합니다.<br>각종 식이섬유가 많고 무기질과 미네랄이 풍부합니다.<br>
+                                    GI(당지수)가 낮아서 당뇨와 다이어트에 매우 좋습니다.<br>섬유소가 풍부해서 대장 활동을 활발히 해 대장암 예방 효과가 탁월합니다.<br>
+                                    항암 효과가 탁월하고 암세포의 증식을 방해한다고 합니다.<br>황산화 성분이 풍부한 빵은 심장기능을 향상시킬 수 있습니다.<br>
+                                    식이섬유가 많아서 변비에 좋고, 탄수화물 ,단백질, 칼슘, 비타민B가 풍부합니다.
+                                    </p>
                                 </div>
                             </div>
                         </div>
