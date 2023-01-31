@@ -295,7 +295,7 @@ public class CustomerDao {
 		ArrayList<Customer> list = new ArrayList<Customer>();
 		String sql = "SELECT customer_code customerCode, customer_id customerId, customer_name customerName, customer_phone customerPhone, point, createdate "
 				+ "		FROM customer "
-				+ "	   WHERE customer_id LIKE ? "
+				+ "	   WHERE customer_name LIKE ? "
 				+ "	   LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+search+"%");
@@ -308,5 +308,17 @@ public class CustomerDao {
 		}
 		DBUtil.close(rs, stmt, null);
 		return list;
+	}
+	// 고객목록 페이징 - 관리자
+	public int selectCustomerCount(Connection conn) throws Exception {
+		int count = 0;
+		String sql = "SELECT COUNT(*) count FROM customer";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		return count;
 	}
 }
