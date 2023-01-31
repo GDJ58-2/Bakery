@@ -80,7 +80,7 @@
                 <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/heart.png" alt=""></a>
             </div>
             <div class="offcanvas__cart__item">
-                <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                <a href="${pageContext.request.contextPath}/cart/cartList"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
                 <div class="cart__price">Cart: <span>$0.00</span></div>
             </div>
         </div>
@@ -113,7 +113,9 @@
                      <c:otherwise>
                            <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
                        <ul>
-                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
+                           <li style = "display:inline-block">
+                 	           <a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                 	       </li>
                        </ul>
                    </li>
                      </c:otherwise>
@@ -138,28 +140,30 @@
                                             <li>USD</li>
                                         </ul>
                                     </li>
-                                     <li>ENG <span class="arrow_carrot-down"></span>
-                    <ul>
-                        <li>Spanish</li>
-                        <li>ENG</li>
-                    </ul>
-                </li>
-                 <c:choose>
-                     <c:when test="${loginCustomer eq null}">
-                        <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
-                       <ul>
-                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
-                       </ul>
-                   </li>
-                     </c:when>
-                     <c:otherwise>
-                           <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
-                       <ul>
-                           <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
-                       </ul>
-                   </li>
-                     </c:otherwise>
-            </c:choose>
+                                    <li>ENG <span class="arrow_carrot-down"></span>
+                    					<ul>
+                        					<li>Spanish</li>
+                        					<li>ENG</li>
+                    					</ul>
+                					</li>
+                 					<c:choose>
+                     					<c:when test="${loginCustomer eq null}">
+                        					<li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+                       							<ul>
+                           							<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+                       							</ul>
+                   							</li>
+                     					</c:when>
+                     					<c:otherwise>
+                            				<li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                       							<ul>
+                       								<li style = "display:inline-block">
+                       									<a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                       								</li>
+                       							</ul>
+                   							</li>
+                     					</c:otherwise>
+            						</c:choose>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -171,7 +175,7 @@
                                     <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/heart.png" alt=""></a>
                                 </div>
                                 <div class="header__top__right__cart">
-                                    <a href="#"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
+                                    <a href="${pageContext.request.contextPath}/cart/cartList"><img src="${pageContext.request.contextPath}/resources/static/img/icon/cart.png" alt=""> <span>0</span></a>
                                     <div class="cart__price">Cart: <span>$0.00</span></div>
                                 </div>
                             </div>
