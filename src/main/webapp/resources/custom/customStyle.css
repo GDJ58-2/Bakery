@@ -1,8 +1,11 @@
 @charset "UTF-8";
-
+.table thead th, .table tbody td {
+	vertical-align: middle;
+}
 pre {
 	font-family: "Montserrat", sans-serif;
 }
+
 a {
   color: #111111;
   text-decoration: none;
@@ -195,6 +198,11 @@ form .primary-btn {
 	height: 50px;
 	text-align: right;
 	width: 50%;
+}
+
+/* nav */
+.nav-link .active{
+	font-weight: 800;
 }
 
 /* 반응형 */

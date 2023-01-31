@@ -38,13 +38,17 @@ public class AddOrdersController extends HttpServlet {
 		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
 		String addressKind = request.getParameter("addressKind");
 		String address = request.getParameter("address");
+		System.out.println(goodsCodeStr);
+		System.out.println(cartQuantityStr);
+		System.out.println(addressKind);
+		System.out.println(address);
 		if(goodsCodeStr==null||cartQuantityStr==null||addressKind==null||addressKind.equals("")) {
 			response.sendRedirect(request.getContextPath()+"/cart/cartList");
 			return;
 		}
 		
 		int usePoint = 0;
-		if(request.getParameter("usePoint")!=null||!request.getParameter("usePoint").equals("")) {
+		if(request.getParameter("usePoint")!=null&&!request.getParameter("usePoint").equals("")) {
 			usePoint = Integer.parseInt(request.getParameter("usePoint"));
 		}
 		
