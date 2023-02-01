@@ -71,7 +71,6 @@ public class EmpService {
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			checkId = empDao.selectId(conn, emp.getEmpId());
 			if(checkId) { 
 				return row;
 			}

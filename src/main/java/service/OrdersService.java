@@ -210,9 +210,9 @@ public class OrdersService {
 				goods.setGoodsStock((int)stock.get("goodsStock")+orders.getOrderQuantity());
 			} else if(orders.getOrderState().equals("구매확정")) {
 				// 포인트 내역 추가 (적립)
-				System.out.print((int)(orders.getOrderPrice()*0.05));
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
 				pointHistoryDao.insertPoint(conn, p);
+				
 			}
 			conn.commit();
 		} catch (Exception e) {
@@ -276,6 +276,9 @@ public class OrdersService {
 		if(search==null||search.equals("")) {
 			search="%%";
 		}
+		if(searchKind==null||searchKind.equals("")) {
+			searchKind="o.order_code";
+		}
 		int beginRow = (currentPage-1)*rowPerPage;
 		try {
 			conn = DBUtil.getConnection();
@@ -299,13 +302,13 @@ public class OrdersService {
 	}
 	
 	// 관리자 기능 - 배송상태 별 건수 확인
-	public ArrayList<HashMap<String, Object>> getCountByOrderState(String date) {
+	public ArrayList<HashMap<String, Object>> getCountByOrderState() {
 		ArrayList<HashMap<String, Object>> list = null;
 		this.ordersDao = new OrdersDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
-			list = ordersDao.selectCountByOrderState(conn, date);
+			list = ordersDao.selectCountByOrderState(conn);
 			conn.commit();
 		} catch (Exception e) {
 			try {

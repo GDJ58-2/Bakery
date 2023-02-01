@@ -61,24 +61,35 @@ public class OrdersListByAdminController extends HttpServlet {
 			month = todayCal.get(Calendar.MONTH);
 			date = todayCal.get(Calendar.DATE);
 			String monthmm = String.valueOf(month+1);
+			String dateFormat = String.valueOf(date);
 			if(month+1<10) {
 				monthmm = "0" + monthmm;
 			}
-			startDate = year+"-"+monthmm+"-"+date;
-			endDate = year+"-"+monthmm+"-"+date;			
-			System.out.println(monthmm+"<--mm 포맷 설정");
+			if(date<10) {
+				dateFormat = "0" + dateFormat;
+			}
+			startDate = year+"-"+monthmm+"-"+dateFormat;
+			endDate = year+"-"+monthmm+"-"+dateFormat;			
+			System.out.println(monthmm+"<-- 월 포맷 설정");
+			System.out.println(dateFormat+"<-- 일 포맷 설정");
 		} else {
 			startDate = request.getParameter("startDate");
 			endDate = request.getParameter("endDate");
 		}
+		
+		System.out.println("-----ordersListByAdmin doGet 파라메타값 디버깅------");
 		System.out.println(startDate+"<-- ordersListByAdmin startDate");
 		System.out.println(endDate+"<-- ordersListByAdmin endDate");
+		System.out.println(orderState+"<--ordersListByAdmin orderState");
+		System.out.println(searchKind+"<--ordersListByAdmin searchKind");
+		System.out.println(search+"<--ordersListByAdmin search");
+		System.out.println("----------------------------------------------");
 		
 		this.ordersService = new OrdersService();
 		ArrayList<HashMap<String, Object>> ordersList = ordersService.getOrdersListByAdmin(searchKind, search, startDate, endDate, orderState, currentPage, rowPerPage);
-		ArrayList<HashMap<String, Object>> ordersCount = ordersService.getCountByOrderState(endDate); 
-		//System.out.println(ordersList+"<--ordersListByAdmin ordersList");
-		System.out.println(ordersCount+"<--ordersListByAdmin ordersCount");
+		ArrayList<HashMap<String, Object>> ordersCount = ordersService.getCountByOrderState(); 
+		System.out.println(ordersList+"<--ordersListByAdmin ordersList");
+		//System.out.println(ordersCount+"<--ordersListByAdmin ordersCount");
 		
 		request.setAttribute("ordersCount", ordersCount);
 		request.setAttribute("ordersList", ordersList);
@@ -120,7 +131,7 @@ public class OrdersListByAdminController extends HttpServlet {
 		System.out.println(orderState+"<-- orderState");
 		System.out.println(startDate+"<-- startDate");
 		System.out.println(endDate+"<-- endDate");
-		System.out.println(orderCodeStr+"<-- orderCodeStr");
+		//System.out.println(orderCodeStr+"<-- orderCodeStr");
 		System.out.println("----------------------------------------------");
 		
 		if(orderState==null||orderState.equals("")) {
@@ -143,7 +154,6 @@ public class OrdersListByAdminController extends HttpServlet {
 			orders.setOrderPrice((int)map.get("orderPrice"));
 			ordersService.modifyOrders(orders);
 		}	
-		System.out.println(orderState);
 		response.sendRedirect(request.getContextPath()+"/admin/orders/ordersList?searchKind="+searchKind+"&search"+search+"&startDate="+startDate+"&endDate="+endDate);
 	}
 }

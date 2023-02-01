@@ -33,8 +33,6 @@
 <script>
 	$(document).ready(function(){
 		
-		// nav 
-		
 		// 전체선택
 		$('#allcheck').click(function(){
 			if($('#allcheck').is(':checked')) { // .is(':checked') : 체크 여부 확인. checked -> true
@@ -48,6 +46,8 @@
 		if($('#searchKind').val()!=''){
 			$('select[name="searchKind"]').val($('#searchKind').val()).prop('selected', true);	
 		}
+		console.log($('#searchKind').val());
+		console.log($('select[name="searchKind"]').val());
 		$('select[name="searchKind"]').change(function(){
 			if($('select[name="searchKind"]').val()=='c.customer_phone'){
 				$('input[name="search"]').attr('placeholder', '012-3456-7890');
@@ -162,6 +162,7 @@
 									<input type="hidden" name="startDate" value="${startDate}">
 									<input type="hidden" name="endDate" value="${endDate}">
 									<input type="hidden" name="search" value="${search}">
+									<input type="hidden" name="searchKind" value="${searchKind}">
 									<table>
 										<tr>
 											<th>배송상태 변경</th>

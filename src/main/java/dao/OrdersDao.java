@@ -254,14 +254,12 @@ public class OrdersDao {
 	}
 	
 	// 관리자 기능 - 배송상태 별 건수 확인
-	public ArrayList<HashMap<String, Object>> selectCountByOrderState(Connection conn, String date) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectCountByOrderState(Connection conn) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT order_state orderState, COUNT(order_state) cnt "
 				+ "		FROM orders "
-				+ "		WHERE DATE_FORMAT(createdate, '%Y-%m-%d') LIKE ?"
 				+ "		GROUP BY order_state";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, date);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
