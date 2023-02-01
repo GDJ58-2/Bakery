@@ -96,6 +96,7 @@
 												<td>${a.createdate}</td>
 												<td>
 													<a href="${pageContext.request.contextPath}/admin/auth/modifyAuthInfo?authCode=${a.authCode}">수정</a>
+													<!-- 삭제기능 : 데이터 삭제가 아닌, 수정 목적의 삭제 -->
 													<a href="${pageContext.request.contextPath}/admin/auth/removeAuthInfo?authCode=${a.authCode}" id="removeAuthInfo">삭제</a>
 												</td>
 											</tr>
