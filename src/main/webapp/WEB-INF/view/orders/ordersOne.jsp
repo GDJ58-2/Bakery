@@ -235,7 +235,9 @@
 								<tr>
 									<th>구매 확정 : </th> <!-- orderState이 배송완료일 때만 -->
 									<td>
-										<a class="primary-btn" href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
+										<c:if test="${map.orderState eq '배송완료'}">
+											<a class="primary-btn" href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}&orderState=구매확정">구매확정 하기</a>
+										</c:if>
 									</td>
 								</tr>
 							</table>
@@ -268,7 +270,6 @@
 						</table>
 						
 						<div>
-							<a class="primary-btn" href="${pageContext.request.contextPath}/orders/modifyOrders?orderCode=${map.orderCode}">주문 수정</a>
 							<a class="primary-btn" href="${pageContext.request.contextPath}/orders/removeOrders?orderCode=${map.orderCode}&createdate=${map.createdate}">주문 내역 삭제</a>
 						</div>
                     </div>             
