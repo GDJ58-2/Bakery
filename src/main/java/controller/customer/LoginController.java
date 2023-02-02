@@ -21,7 +21,7 @@ public class LoginController extends HttpServlet {
 	    HttpSession session = request.getSession();// 로그인 전에만 진입가능
 	    Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
 	    if(loginCustomer != null) { // 이미 로그인 상태
-	    	response.sendRedirect(request.getContextPath()+"/customer/home");
+	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
 	    }
 	    
@@ -42,7 +42,7 @@ public class LoginController extends HttpServlet {
 		HttpSession session = request.getSession();
 	    Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
 	    if(loginCustomer != null) { // 이미 로그인 상태
-	    	response.sendRedirect(request.getContextPath()+"/customer/home");
+	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
 	    }
 		
@@ -72,6 +72,6 @@ public class LoginController extends HttpServlet {
 		}
 		
 		session.setAttribute("loginCustomer", returnCustomer); // 세션에 로그인 정보 저장
-		response.sendRedirect(request.getContextPath() + "/customer/home");
+		response.sendRedirect(request.getContextPath() + "/customer/myHome");
 	}
 }

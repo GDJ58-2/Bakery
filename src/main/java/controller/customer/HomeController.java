@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import vo.Customer;
 
-@WebServlet("/customer/home")
+@WebServlet("/customer/myHome")
 public class HomeController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,7 +24,7 @@ public class HomeController extends HttpServlet {
 		}
 		
 		request.setAttribute("loginCustomer", loginCustomer);
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/customer/home.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/customer/myHome.jsp");
 	    rd.forward(request, response);
 	}
 }
