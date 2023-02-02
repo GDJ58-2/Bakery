@@ -41,11 +41,11 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>정보수정 | 관리자 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<h1>관리자-직원 권한/활성화 상태 수정</h1>
 	<form action="${pageContext.request.contextPath}/admin/emp/modifyEmp" method="post" id="modifyEmpForm">
 		<input type="hidden" name="empId" value="${e.empId}">
@@ -54,7 +54,7 @@
 		<table border="1">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>번호</th>
 					<th>ID</th>
 					<th>이름</th>
 					<th>권한</th>
@@ -77,6 +77,12 @@
 		</table>
 		<div><button type="button" id="submitBtn">변경</button></div>
 	</form>
+	
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>

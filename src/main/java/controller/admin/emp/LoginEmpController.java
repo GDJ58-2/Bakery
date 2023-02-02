@@ -69,7 +69,7 @@ public class LoginEmpController extends HttpServlet {
 		// 로그인 실패 시
 		String msg = URLEncoder.encode("로그인 실패","UTF-8"); 
 		String redirectUrl = "/admin/emp/loginEmp?msg="+msg;
-		if(emp!=null) { // 로그인 성공시
+		if(emp!=null) { 
 			session.setAttribute("loginEmp", emp); // 수정) 세션에 저장될 이름 정하기
 			redirectUrl = "/admin/emp/home";
 		}

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -110,11 +111,11 @@
 		});
 	});
 </script>
-<title>addEmp</title>
+<title>사원 등록 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
 	<!-- Create Account Section -->
 	<section class="contact spad">
@@ -169,7 +170,12 @@
 			</div>          
 		</div>
 	</section>
-    <!-- Contact Section End -->
+    <!-- Section End -->
+    
+    <!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 	
 <!-- Js Plugins -->
