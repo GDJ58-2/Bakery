@@ -47,12 +47,12 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>공지사항 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
-		<jsp:include page="../inc/empMenu.jsp"></jsp:include>
-		<jsp:include page="../inc/menu.jsp"></jsp:include>
+		<!-- header -->
+		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 		
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
@@ -77,8 +77,10 @@
 		<!-- notice section -->
 		<section class="blog-details spad">
 			<div class="content">
+			
 				<div class="row d-flex justify-content-center">
 					<div class="col-lg-12">
+					
 						<div class="card">
 							<div class="card-header">
 								<div class="p-4">
@@ -104,9 +106,10 @@
 									</div>
 								</div>
 							</div>
+							
 							<div class="card-body">
 								<c:if test="${loginEmp ne null}">
-									<div class="a-btn">
+									<div class="a-btn mb-1-4">
 										<!-- emp 기능 -->
 										<a href="${pageContext.request.contextPath}/admin/notice/addNotice">추가</a>
 									</div>
@@ -128,38 +131,62 @@
 									<tbody>
 										<c:forEach var="n" items="${noticeList}">
 											<tr>
-												<td>${n.noticeCode}</td>
-												<td class="text-left title"><a href="${pageContext.request.contextPath}/notice/noticeOne?noticeCode=${n.noticeCode}">${n.noticeTitle}</a></td>
+												<td>${n.rownum}</td>
+												<td class="text-left title"><a href="${pageContext.request.contextPath}/notice/noticeOne?no=${n.rownum}&search=${search}">${n.noticeTitle}</a></td>
 												<td>${n.createdate}</td>
 												<!-- emp 기능 -->
 												<c:if test="${loginEmp ne null}">
 													<td>${n.empId}</td>
 													<td>
-														<a href="${pageContext.request.contextPath}/admin/notice/modifyNotice?noticeCode=${n.noticeCode}">수정</a>
-														<a href="${pageContext.request.contextPath}/admin/notice/removeNotice?noticeCode=${n.noticeCode}" id="removeNotice">삭제</a>
+														<div class="row justify-content-center">
+															<div class="a-btn">
+																<!-- emp 기능 -->
+																<a href="${pageContext.request.contextPath}/admin/notice/modifyNotice?no=${n.rownum}&search=${search}">수정</a>
+															</div>
+															<div class="a-btn">
+																<!-- emp 기능 -->
+																<a href="${pageContext.request.contextPath}/admin/notice/removeNotice?noticeCode=${n.noticeCode}" id="removeNotice">삭제</a>
+															</div>
+														</div>
 													</td>
 												</c:if>
 											</tr>
 										</c:forEach>
 									</tbody>
 								</table>
-							</div>
-							<!-- 페이징 -->
-							<div class="shop__last__option">
-								<div class="row d-flex">
-									<div class="col-lg-6 col-md-6 col-sm-6">
+								
+								<!-- 페이징 -->
+								<div class="shop__last__option">
+									<div class="row justify-content-center">
 										<div class="shop__pagination">
-											<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${currentPage-1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-left"></span></a>
-											<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${currentPage+1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-right"></span></a>
+											<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${startPage-1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-left"></span></a>
+											<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+												<c:if test="${currentPage eq i}">
+													<a class="active" href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${i}&rowPerPage=${rowPerPage}&search=${search}">${i}</a>
+												</c:if>
+												<c:if test="${currentPage ne i}">
+													<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${i}&rowPerPage=${rowPerPage}&search=${search}">${i}</a>
+												</c:if>
+											</c:forEach>
+											<a href="${pageContext.request.contextPath}/notice/noticeList?currentPage=${endPage+1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-right"></span></a>
 										</div>
 									</div>
 								</div>
+								<!-- /페이징 -->
+								
 							</div>
 						</div>
+						<!-- /card -->
 					</div>
 				</div>
+				
 			</div>
 		</section>
+	</div>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	</div>
 	
 <!-- Js Plugins -->

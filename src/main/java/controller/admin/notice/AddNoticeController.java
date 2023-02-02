@@ -67,12 +67,11 @@ public class AddNoticeController extends HttpServlet {
 		
 		this.noticeService = new NoticeService();
 		HashMap<String, Object> map = noticeService.addNotice(notice);
-		int noticeCode = (int)map.get("noticeCode");
 		int row = (int)map.get("row");
 		System.out.println(row+"<--AddNoticeController row");
 		String msg = "<script>alert('공지 등록을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeList'; </script>";
 		if(row==1) { // 공지 등록 성공
-			msg = "<script>alert('공지가 등록되었습니다.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
+			msg = "<script>alert('공지가 등록되었습니다.'); location.href='/bakery/notice/noticeList'; </script>";
 			System.out.println(msg);
 		}
 		response.setContentType("text/html; charset=UTF-8");

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,11 +46,11 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>공지사항 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
 	<!-- breadcrumb -->
 	<div class="breadcrumb-option">
@@ -63,7 +64,7 @@
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div class="breadcrumb__links">
 						<a href="">Home</a>
-						<a href="">목록</a>
+						<a href="${pageContext.request.contextPath}/notice/noticeList">목록</a>
 						<span>공지 작성</span>
 					</div>
 				</div> 	
@@ -96,6 +97,11 @@
 			</div>
 		</div>
 	</section>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>

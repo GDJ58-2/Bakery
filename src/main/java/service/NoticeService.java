@@ -91,13 +91,16 @@ public class NoticeService {
 	}
 	
 	// 상세보기
-	public Notice getNoticeOne(int noticeCode) { // modifyNotice form
-		Notice notice = null;
+	public HashMap<String, Object> getNoticeOne(int rownum, String search) { // modifyNotice form
+		HashMap<String, Object> map = null;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
+		if(search==null) {
+			search="";
+		}
 		try {
 			conn = DBUtil.getConnection();
-			notice = noticeDao.selectNoticeOne(conn, noticeCode);
+			map = noticeDao.selectNoticeOne(conn, rownum, search);
 			conn.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,12 +117,12 @@ public class NoticeService {
 				e.printStackTrace();
 			}
 		}
-		return notice;
+		return map;
 	}
 	
 	// list 출력
-	public ArrayList<Notice> getNoticeList(String search, int currentPage, int rowPerPage) { 
-		ArrayList<Notice> list = null;
+	public ArrayList<HashMap<String, Object>> getNoticeList(String search, int currentPage, int rowPerPage) { 
+		ArrayList<HashMap<String, Object>> list = null;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
 		if(search==null) {
@@ -153,13 +156,16 @@ public class NoticeService {
 	}
 	
 	// 페이징 - 전체 행수
-	public int getNoticeCount() {
+	public int getNoticeCount(String search) {
 		int count = 0;
 		this.noticeDao = new NoticeDao();
 		Connection conn = null;
+		if(search==null) {
+			search = "";
+		}
 		try {
 			conn = DBUtil.getConnection();
-			count = noticeDao.selectNoticeCount(conn);
+			count = noticeDao.selectNoticeCount(conn, search);
 			conn.commit();
 		} catch (Exception e) {
 			try {

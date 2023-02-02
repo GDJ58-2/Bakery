@@ -58,41 +58,64 @@ public class NoticeDao {
 	}
 	
 	// 상세보기
-	public Notice selectNoticeOne(Connection conn, int noticeCode) throws Exception { 
-		Notice notice = null;
-		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate FROM notice WHERE notice_code=?";
+	public HashMap<String, Object> selectNoticeOne(Connection conn, int rownum, String search) throws Exception { 
+		HashMap<String, Object> map = null;
+		String sql = "SELECT rownum, notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, createdate"
+				+ "		FROM (SELECT ROW_NUMBER() over(ORDER BY notice_code asc) rownum , notice_code, notice_title, notice_content, emp_id, createdate"
+				+ "				FROM (SELECT notice_code, notice_title, notice_content, emp_id, createdate"
+				+ "						FROM notice"
+				+ "						WHERE notice_title LIKE ?) t) t2"
+				+ "	   WHERE t2.rownum = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, noticeCode);
+		stmt.setString(1, "%"+search+"%");
+		stmt.setInt(2, rownum);
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
-			notice = new Notice(rs.getInt("noticeCode"),rs.getString("noticeTitle"),rs.getString("noticeContent"),rs.getString("empId"),rs.getString("createdate"));
+			map = new HashMap<String, Object>();
+			map.put("rownum", rs.getInt("rownum"));
+			map.put("noticeCode", rs.getInt("noticeCode"));
+			map.put("noticeTitle", rs.getString("noticeTitle"));
+			map.put("noticeContent", rs.getString("noticeContent"));
+			map.put("empId", rs.getString("empId"));
+			map.put("createdate", rs.getString("createdate"));
 		}
 		DBUtil.close(rs, stmt, null);
-		return notice;
+		return map;
 	}
 	
 	// list 
-	public ArrayList<Notice> selectNoticeList(Connection conn, String search, int beginRow, int rowPerPage) throws Exception { 
-		ArrayList<Notice> list = new ArrayList<Notice>();
-		String sql = "SELECT notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, DATE_FORMAT(createdate, '%Y-%m-%d') createdate FROM notice WHERE notice_title LIKE ? ORDER BY createdate DESC LIMIT ?,?";
+	public ArrayList<HashMap<String, Object>> selectNoticeList(Connection conn, String search, int beginRow, int rowPerPage) throws Exception { 
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "SELECT ROW_NUMBER() over(ORDER BY notice_code asc) rownum, notice_code noticeCode, notice_title noticeTitle, notice_content noticeContent, emp_id empId, DATE_FORMAT(createdate, '%Y-%m-%d') createdate "
+				+ "		FROM notice "
+				+ 	  "WHERE notice_title LIKE ?"
+				+ " ORDER BY rownum desc"
+				+ "	   LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+search+"%");
 		stmt.setInt(2, beginRow);
 		stmt.setInt(3, rowPerPage);
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
-			Notice notice = new Notice(rs.getInt("noticeCode"),rs.getString("noticeTitle"),rs.getString("noticeContent"),rs.getString("empId"),rs.getString("createdate"));
-			list.add(notice);
+			HashMap<String, Object> map= new HashMap<String, Object>();
+			map.put("rownum", rs.getInt("rownum"));
+			map.put("noticeCode", rs.getInt("noticeCode"));
+			map.put("noticeTitle", rs.getString("noticeTitle"));
+			map.put("noticeContent", rs.getString("noticeContent"));
+			map.put("empId", rs.getString("empId"));
+			map.put("createdate", rs.getString("createdate"));			
+			list.add(map);
 		}
 		DBUtil.close(rs, stmt, null);
 		return list;
 	}
 	
 	// 페이징 - 전체 행 수 
-	public int selectNoticeCount(Connection conn) throws Exception {
+	public int selectNoticeCount(Connection conn, String search) throws Exception {
 		int count = 0;
-		String sql = "SELECT COUNT(*) count FROM notice";
+		String sql = "SELECT COUNT(*) count FROM notice WHERE notice_title LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+search+"%");
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			count = rs.getInt("count");

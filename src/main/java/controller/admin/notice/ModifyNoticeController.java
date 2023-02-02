@@ -2,6 +2,7 @@ package controller.admin.notice;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -33,16 +34,17 @@ public class ModifyNoticeController extends HttpServlet {
 		}
 		
 		// 파라메타값 유효성검사, 받기
-		if(request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
+		String search = request.getParameter("search");
+		if(request.getParameter("no")==null||request.getParameter("no").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
-		int noticeCode = Integer.parseInt(request.getParameter("noticeCode"));
-		System.out.println(noticeCode+"<--ModifyNoticeController noticeCode");
+		int no = Integer.parseInt(request.getParameter("no"));
+		System.out.println(no+"<--ModifyNoticeController no");
 		
 		this.noticeService = new NoticeService();
-		Notice notice = noticeService.getNoticeOne(noticeCode);
-		request.setAttribute("n", notice);
+		HashMap<String, Object> map = noticeService.getNoticeOne(no, search);
+		request.setAttribute("n", map);
 		request.getRequestDispatcher("/WEB-INF/view/admin/notice/modifyNotice.jsp").forward(request, response);
 	}
 	
@@ -67,10 +69,12 @@ public class ModifyNoticeController extends HttpServlet {
 		String empId = loginEmp.getEmpId();
 		String noticeTitle = request.getParameter("noticeTitle");
 		String noticeContent = request.getParameter("noticeContent");
-		if(noticeTitle==null||noticeTitle.equals("")||noticeContent==null||noticeContent.equals("")||request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
+		if(noticeTitle==null||noticeTitle.equals("")||noticeContent==null||noticeContent.equals("")||request.getParameter("no")==null||request.getParameter("no").equals("")
+			||request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
+		int no = Integer.parseInt(request.getParameter("no"));
 		int noticeCode = Integer.parseInt(request.getParameter("noticeCode"));
 		Notice notice = new Notice(noticeCode, noticeTitle, noticeContent, empId, null);
 		//System.out.println(notice+"<--ModifyNoticeController notice");
@@ -78,9 +82,9 @@ public class ModifyNoticeController extends HttpServlet {
 		this.noticeService = new NoticeService();
 		int row = noticeService.modifyNotice(notice);
 		System.out.println(row+"<--ModifyNoticeController row");
-		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
+		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?no="+no+"'; </script>";
 		if(row==1) {
-			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeOne?noticeCode="+noticeCode+"'; </script>";
+			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeOne?no="+no+"'; </script>";
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();

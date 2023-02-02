@@ -41,11 +41,12 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>공지사항 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+	
 	<!-- breadcrumb -->
 	<div class="breadcrumb-option">
 		<div class="container">
@@ -69,8 +70,10 @@
 	<!-- notice Content section -->
 	<section class="blog-details spad">
 		<div class="container">
+		
 			<div class="row d-flex justify-content-center">
 				<div class="col-lg-12">
+				
 					<div class="card">
 						<div class="card-body m-4">
 							<div class="blog__details__comment">
@@ -97,7 +100,7 @@
 								<div class="row">
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="blog__details__btns__item">
-											<a href="">
+											<a href="${pageContext.request.contextPath}/notice/noticeOne?no=${n.rownum-1}&search=${search}">
 												<span class="arrow_carrot-left"></span>
 												이전 글
 											</a>
@@ -105,7 +108,7 @@
 									</div>
 									<div class="col-lg-6 col-md-6 col-sm-6">
 										<div class="blog__details__btns__item blog__details__btns__item--next">
-											<a href="">
+											<a href="${pageContext.request.contextPath}/notice/noticeOne?no=${n.rownum+1}&search=${search}">
 												다음 글
 												<span class="arrow_carrot-right"></span>
 											</a>
@@ -117,14 +120,17 @@
 								<a href="${pageContext.request.contextPath}/notice/noticeList">목록</a>
 								<!-- emp 기능 -->
 								<c:if test="${loginEmp ne null}">
-									<a href="${pageContext.request.contextPath}/admin/notice/modifyNotice?noticeCode=${n.noticeCode}">수정</a>
+									<a href="${pageContext.request.contextPath}/admin/notice/modifyNotice?no=${n.rownum}&search=${search}">수정</a>
 									<a href="${pageContext.request.contextPath}/admin/notice/removeNotice?noticeCode=${n.noticeCode}" id="removeNotice">삭제</a>
 								</c:if>
 							</div>
 						</div>
 					</div>
+					<!-- /card -->
+					
 				</div>
 			</div>
+			
 		</div>
 	</section>
 	

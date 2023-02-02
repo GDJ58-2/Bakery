@@ -2,6 +2,7 @@ package controller.notice;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,22 +31,41 @@ public class NoticeListController extends HttpServlet {
 			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
 		}
 		this.noticeService = new NoticeService();
-		int count = noticeService.getNoticeCount();
+		int count = noticeService.getNoticeCount(search);
 		int lastPage = count/rowPerPage;
 		if(count%rowPerPage!=0) {
 			lastPage+=1;
 		}
-		// 페이징 방어 코드
 		if(currentPage<1) {
 			currentPage = 1;
-		} else if(currentPage>lastPage) {
+		} 
+		if(count!=0&&currentPage>lastPage) {
 			currentPage = lastPage;
 		}
-	
-		ArrayList<Notice> list = noticeService.getNoticeList(search, currentPage, rowPerPage);
+		int startPage = (currentPage-1)/10*10+1;
+		int endPage = startPage + 9;
+		if(startPage<1) {
+			startPage = 1;
+		}
+		if(endPage>lastPage) {
+			endPage = lastPage;
+		}
+		System.out.println("---------");
+		System.out.println(search+"<-- NoticeListController search");
+		System.out.println(currentPage+"<-- NoticeListController currentPage");
+		System.out.println(rowPerPage+"<-- NoticeListController rowPerPage");
+		System.out.println(count+"<-- NoticeListController count");
+		System.out.println(lastPage+"<-- NoticeListController lastPage");
+		System.out.println(startPage+"<-- NoticeListController startPage");
+		System.out.println(endPage+"<-- NoticeListController endPage");
+		System.out.println("---------");
+		
+		ArrayList<HashMap<String, Object>> list = noticeService.getNoticeList(search, currentPage, rowPerPage);
 		request.setAttribute("noticeList", list);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("rowPerPage", rowPerPage);
+		request.setAttribute("startPage", startPage);
+		request.setAttribute("endPage", endPage);
 		request.setAttribute("lastPage", lastPage);
 		request.setAttribute("search", search);
 		request.getRequestDispatcher("/WEB-INF/view/notice/noticeList.jsp").forward(request, response);

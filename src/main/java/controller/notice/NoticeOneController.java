@@ -1,6 +1,7 @@
 package controller.notice;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,16 +20,26 @@ public class NoticeOneController extends HttpServlet {
 		// 비회원 열람 가능
 		
 		// 파라메타값 유효성검사, 받기
-		if(request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
+		String search = request.getParameter("search");
+		if(request.getParameter("no")==null||request.getParameter("no").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
-		int noticeCode = Integer.parseInt(request.getParameter("noticeCode"));
-		//System.out.println(noticeCode+"<--NoticeOneController noticeCode");
-		
+		int no = Integer.parseInt(request.getParameter("no"));
+		System.out.println(no+"<--NoticeOneController no");
 		this.noticeService = new NoticeService();
-		Notice notice = noticeService.getNoticeOne(noticeCode);
-		request.setAttribute("n", notice);
+		int count = noticeService.getNoticeCount(search);
+		System.out.println(count+"<--NoticeOneController count");
+		System.out.println(search+"<--NoticeOneController search");
+		if(no<1) {
+			no = 1;
+		}
+		if(no>count) {
+			no = count;
+		}
+		HashMap<String, Object> map = noticeService.getNoticeOne(no, search);
+		request.setAttribute("n", map);
+		request.setAttribute("search", search);
 		request.getRequestDispatcher("/WEB-INF/view/notice/noticeOne.jsp").forward(request, response);
 	}
 }
