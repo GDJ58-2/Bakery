@@ -198,6 +198,24 @@
     </header>
     <!-- Header Section End -->
 
+	<div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="breadcrumb__text">
+                        <h2>회원정보</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="breadcrumb__links">
+                        <a href="${pageContext.request.contextPath}/customer/home">My Page</a>
+                        <span>회원정보</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
     <!-- Contact Section Begin -->
     <section class="contact spad">
         <div class="container">
@@ -206,7 +224,6 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-lg-4 col-md-7">
                             <div>
-                                <h6>회원정보</h6>
                                 <ul>
                                 	<li>
                                 		<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">

@@ -28,52 +28,57 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
-	
-	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<script>
-		function logoutAction() {
-			let url = '${pageContext.request.contextPath}/customer/logout';
-				let out = confirm('로그아웃하시겠습니까?'); 
-			 	if(out) {
-	  			location.replace(url); 
-	      		alert('로그아웃되었습니다');
-	       	} else {
-	          	alert('로그아웃 취소');
-	          	return false;
-	       	}
-		 }  
-		
-		$(document).ready(function() {
-			// 총 금액
-			$('.checkGoodsCode').each(function() {
-				$('.checkGoodsCode').change(function() {
-					var total = 0;
-					var cartPrice = 0;
-					if($('.checkGoodsCode').is(':checked')) {
-						var thisRow = $(this).closest('tr');
-						cartPrice = Number(thisRow.find('td:eq(3)').find('span').text().substring(1));
-						total = total + cartPrice;
-					}
-					console.log('cartPrice: '+cartPrice+' /total: '+total);
-				});
-			});
-			
-			// 수량변경버튼
-			$('.quantity__item').on('click', '.modify', function() {
-				var code = a.dataset.goodsCode;
-				var quantity = $(this).find('input.cQuantity').val();
-				console.log('gCode: '+code+'/cQuantity: '+quantity);
-				var url = '${pageContext.request.contextPath}/cart/modifyCart?goodsCode='+code+'&cartQuantity='+quantity;
-				location.replace(url);
-			});
-			
-			// 로그아웃
-			$('#logoutBtn').on('click', function() {
-	   			logoutAction(url);
-	   		});
-		});
-	</script>
+   
+   <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+   <script>
+      function logoutAction() {
+         let url = '${pageContext.request.contextPath}/customer/logout';
+            let out = confirm('로그아웃하시겠습니까?'); 
+             if(out) {
+              location.replace(url); 
+               alert('로그아웃되었습니다');
+             } else {
+                alert('로그아웃 취소');
+                return false;
+             }
+       }  
+      
+      function modifyAction() {
+         let code = a.dataset.goodsCode;
+         let quantity = $('td.quantity__item').find('input.cQuantity').val();
+         console.log(quantity);
+         let url = '${pageContext.request.contextPath}/cart/modifyCart?goodsCode='+code+'&cartQuantity='+quantity;
+         location.replace(url);
+      }
+      
+      $(document).ready(function() {
+         // 총 금액
+         $('.checkGoodsCode').each(function() {
+            $('.checkGoodsCode').change(function() {
+               var total = 0;
+               var cartPrice = 0;
+               if($('.checkGoodsCode').is(':checked')) {
+                  var thisRow = $(this).closest('tr');
+                  cartPrice = Number(thisRow.find('td:eq(3)').find('span').text().substring(1));
+                  total = total + cartPrice;
+               }
+               console.log('cartPrice: '+cartPrice+' /total: '+total);
+            });
+         });
+         
+         // 수량변경버튼
+         $('.modifyBtn').on('click', function() {
+            modifyAction(url);
+            
+         });
+         
+         // 로그아웃
+         $('#logoutBtn').on('click', function() {
+               logoutAction(url);
+            });
+      });
+   </script>
 </head>
 
 <body>
@@ -114,21 +119,23 @@
                     </ul>
                 </li>
                   <c:choose>
-              			<c:when test="${loginCustomer eq null}">
-               				<li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
-     							<ul>
-         							<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
-     							</ul>
- 							</li>
-               			</c:when>
-               			<c:otherwise>
-               	   			<li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
-     							<ul>
-         							<li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
-     							</ul>
- 							</li>
-               			</c:otherwise>
-				</c:choose>
+                       <c:when test="${loginCustomer eq null}">
+                           <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+                          <ul>
+                              <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+                          </ul>
+                      </li>
+                        </c:when>
+                        <c:otherwise>
+                              <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                          <ul>
+                              <li style = "display:inline-block">
+                                      <a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                                   </li>
+                          </ul>
+                      </li>
+                        </c:otherwise>
+            </c:choose>
             </ul>
         </div>
     </div>
@@ -156,21 +163,23 @@
                                         </ul>
                                     </li>
                                     <c:choose>
-                                    	<c:when test="${loginCustomer eq null}">
-                                    		<li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
-							                   <ul>
-							                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
-							                   </ul>
-							               </li>
-                                    	</c:when>
-                                    	<c:otherwise>
-                                    	   <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
-							                   <ul>
-							                       <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/logout"><font size = "2" color = "white">logout</font></a></li>
-							                   </ul>
-							               </li>
-                                    	</c:otherwise>
-					               </c:choose>
+                                       <c:when test="${loginCustomer eq null}">
+                                          <li><a href="${pageContext.request.contextPath}/customer/login">login</a><span class="arrow_carrot-down"></span>
+                                        <ul>
+                                            <li style = "display:inline-block"><a href = "${pageContext.request.contextPath}/customer/addCustomer"><font size = "2" color = "white">Sign&nbsp;Up</font></a></li>
+                                        </ul>
+                                    </li>
+                                       </c:when>
+                                       <c:otherwise>
+                                          <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                                        <ul>
+                                             <li style = "display:inline-block">
+                                                   <a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+                                               </li>
+                                        </ul>
+                                    </li>
+                                       </c:otherwise>
+                              </c:choose>
                                 </ul>
                             </div>
                             <div class="header__logo">
@@ -246,206 +255,194 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="shopping__cart__table">
-                    	<input type = "hidden" id = "stockMsg" value = "${stockMsg}">
-                    	<c:choose>
-                    		<c:when test = "${fn:length(userList) ne 0 || fn:length(customerList) ne 0}">
-                    			<c:choose>
-                    				<c:when test = "${userList ne null}"> <!-- 비회원장바구니 -->
-                        				<table>
-                            			<thead>
-                                			<tr>
-                                				<th>
-                                					<div class = "justify-content-start">
-				                                		<button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
-				                                    </div>
-                                				</th>
-                                    			<th>Product</th>
-                                    			<th>Quantity</th>
-                                    			<th>Total</th>
-                                    			<th></th>
-                                			</tr>
-                            			</thead>
-                            			<tbody>
-                            				<c:forEach var = "user" items = "${userList}">
-                            					<c:choose>
-                            						<c:when test = "${user.cartQuantity == 0}">  <!-- 재고부족일 때 -->
-                                						<tr>
-                                							<td>
-                                								<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}" onClick = "return false;">
-                                		 						<input type="hidden" name="goodsCode" value="${user.goodsCode}">	
-                                							</td>
-                                   	 						<td class="product__cart__item">
-                                        						<div class="product__cart__item__pic">
-                                            						<img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
-                                        						</div>
-                                        						<div class="product__cart__item__text">
-                                            						<h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
-                                            						<h5>&#8361;${user.goodsPrice}</h5>
-                                        						</div>
-                                    						</td>
-                                    						<td>품절</td>
-                                    						<td class="cart__close">
-                                    							<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-											 						<span class="icon_close"></span>
-																</a>
-															</td>
-                                						</tr>
-                         							</c:when>
-                         							<c:otherwise>
-                         								<tr>
-                               								<td>
-                               									<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}">
-                               		 							<input type="hidden" name="goodsCode" class = "gCode" value="${user.goodsCode}">
-                               								</td>
-                                   							<td class="product__cart__item">
-                                       							<div class="product__cart__item__pic">
-                                          							<img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
-                                      	 						</div>
-                                       							<div class="product__cart__item__text">
-                                           							<h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
-                                           							<h5>&#8361;${user.goodsPrice}</h5>
-                                       							</div>
-                                   							</td>
-                                    						<td class="quantity__item">
-                                        						<div class="quantity">
-                                            						<div class="pro-qty">
-                                                						<input type="text" class = "cQuantity" name="cartQuantity" value = "${user.cartQuantity}">개
-                                            						</div>
-                                        						</div>
-                                        						<div class = "cart__modify__btn">
-                                        							<a href = "#" class = "modifyBtn" data-goodsCode = "${user.goodsCode}">수정</a>
-                                        						</div>
-                                    						</td>
-                                   							<td class="cart__price">&#8361;${user.goodsPrice * user.cartQuantity}</td>
-                                   							<td class="cart__close">
-                                   								<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-										 							<span class="icon_close"></span>
-																</a>
-															</td>
-                               							</tr>
-                         							</c:otherwise>
-                         						</c:choose>
-                         					</c:forEach>
-                            			</tbody>
-                        				</table>
-                        			</c:when>
-                        			<c:when test = "${customerList ne null && loginCustomer ne null}"> 	<!-- 회원장바구니 -->
-                        				<form action="${pageContext.request.contextPath}/orders/addOrdersList" id = "orderForm" method="post">
-                        					<table>
-                         					<thead>
-                                				<tr>
-				                                	<th>
-				                                	<div class = "justify-content-start">
-				                                		<button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
-				                                    </div>
-				                                    </th>
-				                                    <th>Product</th>
-				                                    <th>Quantity</th>
-				                                    <th>Total</th>
-				                                    <th></th>
-				                                </tr>
-                            				</thead>
-                        					<tbody>
-                        					<c:forEach var = "customer" items = "${customerList}">
-                        						<c:choose>
-                       	 							<c:when test = "${customer.cartQuantity == 0}"> <!-- 재고부족일 때 -->
-                        		 						<tr>
-						                                	<td>
-						                                		<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}" onClick = "return false;">
-						                                		<input type="hidden" name="goodsCode" value="${customer.goodsCode}">
-						                                	</td>
-                                   		 					<td class="product__cart__item">
-						                                        <div class="product__cart__item__pic">
-						                                            <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
-						                                        </div>
-                                        						<div class="product__cart__item__text">
-						                                            <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
-						                                            <h5>&#8361;${customer.goodsPrice}</h5>
-                                        						</div>
-                                    						</td>
-                                   							<td class="quantity__item">
-						                                        <div class="quantity">
-						                                            <div class="pro-qty">
-						                                                <input type="hidden" name="cartQuantity" value="${customer.cartQuantity}">${customer.cartQuantity}개
-						                                            </div>
-						                                        </div>
-                                    						</td>
-                                    						<td>품절</td>
-                                    						<td class="cart__close">
-					                                    		<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-																 	<span class="icon_close"></span>
-																</a>
-															</td>
-                                						</tr>
-                                					</c:when>
-                                					<c:otherwise>
-                        								<tr>
-						                                	<td>
-						                                		<input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}">
-						                                		<input type="hidden" name="goodsCode" id = "gCode" value="${customer.goodsCode}">
-						                                	</td>
-                                    						<td class="product__cart__item">
-						                                        <div class="product__cart__item__pic">
-						                                            <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
-						                                        </div>
-						                                        <div class="product__cart__item__text">
-						                                            <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
-						                                            <h5>&#8361;${customer.goodsPrice}</h5>
-						                                        </div>
-                                    						 </td>
-															 <td class="quantity__item">
-						                                        <div class="quantity">
-						                                            <div class="pro-qty">
-						                                                <input type="text" class = "cQuantity" name="cartQuantity" value="${customer.cartQuantity}">개
-						                                            </div>
-						                                        </div>
-						                                        <div class = "cart__modify__btn">
-						                                        	<a href = "#" class = "modifyBtn" data-goodsCode = "${customer.goodsCode}">수정</a>
-						                                        </div>
-						                                    </td>
-						                                    <td class="cart__price" id = "cartPrice"><span>&#8361;${customer.goodsPrice * customer.cartQuantity}</span></td>
-						                                    <td class="cart__close">
-						                                   		<a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
-																 	<span class="icon_close"></span>
-																</a>
-															</td>
-						                                </tr>
-                                					</c:otherwise>
-                                				</c:choose>
-                                			</c:forEach>
-                                		</tbody>
-                                		</table>
-                                	</form>
-                        		</c:when>
-	                        </c:choose>
-						</c:when>
-	                    <c:when test = "${fn:length(userList) eq 0 || fn:length(customerList) eq 0}">
-							<table>
-							  	<tr>
-	                                <th>Product</th>
-	                                <th>Quantity</th>
-	                                <th>Total</th>
-	                                <th></th>
-	                            </tr>
-	                            <tr>
-	                               	<td colspan = "4"><div>장바구니가 비어있습니다.</div></td>
-	                             </tr>
-								</table>
-						</c:when>
-					</c:choose>
-            		</div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="continue__btn">
-                                <a href="#">Continue Shopping</a>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="continue__btn update__btn">
-                                <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
-                            </div>
-                        </div>
-                    </div>
+                       <input type = "hidden" id = "stockMsg" value = "${stockMsg}">
+                       <c:choose>
+                          <c:when test = "${fn:length(userList) ne 0 || fn:length(customerList) ne 0}">
+                             <c:choose>
+                                <c:when test = "${userList ne null}"> <!-- 비회원장바구니 -->
+                                    <table>
+                                     <thead>
+                                         <tr>
+                                            <th>
+                                               <div class = "justify-content-start">
+                                                  <button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
+                                                </div>
+                                            </th>
+                                             <th>Product</th>
+                                             <th>Quantity</th>
+                                             <th>Total</th>
+                                             <th></th>
+                                         </tr>
+                                     </thead>
+                                     <tbody>
+                                        <c:forEach var = "user" items = "${userList}">
+                                           <c:choose>
+                                              <c:when test = "${user.cartQuantity == 0}">  <!-- 재고부족일 때 -->
+                                                  <tr>
+                                                     <td>
+                                                        <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}" onClick = "return false;">
+                                                         <input type="hidden" name="goodsCode" value="${user.goodsCode}">   
+                                                     </td>
+                                                         <td class="product__cart__item">
+                                                          <div class="product__cart__item__pic">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
+                                                          </div>
+                                                          <div class="product__cart__item__text">
+                                                              <h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
+                                                              <h5>&#8361;${user.goodsPrice}</h5>
+                                                          </div>
+                                                      </td>
+                                                      <td>품절</td>
+                                                      <td class="cart__close">
+                                                         <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
+                                                    <span class="icon_close"></span>
+                                                </a>
+                                             </td>
+                                                  </tr>
+                                              </c:when>
+                                              <c:otherwise>
+                                                 <tr>
+                                                       <td>
+                                                          <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}">
+                                                           <input type="hidden" name="goodsCode" class = "gCode" value="${user.goodsCode}">
+                                                       </td>
+                                                        <td class="product__cart__item">
+                                                            <div class="product__cart__item__pic">
+                                                               <img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
+                                                            </div>
+                                                            <div class="product__cart__item__text">
+                                                                <h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
+                                                                <h5>&#8361;${user.goodsPrice}</h5>
+                                                            </div>
+                                                        </td>
+                                                      <td class="quantity__item">
+                                                          <div class="quantity">
+                                                              <div class="pro-qty">
+                                                                  <input type="text" class = "cQuantity" name="cartQuantity" value = "${user.cartQuantity}">개
+                                                              </div>
+                                                          </div>
+                                                          <div class = "cart__modify__btn">
+                                                             <a href = "#" class = "modifyBtn" data-goodsCode = "${user.goodsCode}">수정</a>
+                                                          </div>
+                                                      </td>
+                                                        <td class="cart__price">&#8361;${user.goodsPrice * user.cartQuantity}</td>
+                                                        <td class="cart__close">
+                                                           <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
+                                                    <span class="icon_close"></span>
+                                                </a>
+                                             </td>
+                                                    </tr>
+                                              </c:otherwise>
+                                           </c:choose>
+                                        </c:forEach>
+                                     </tbody>
+                                    </table>
+                                 </c:when>
+                                 <c:when test = "${customerList ne null && loginCustomer ne null}">    <!-- 회원장바구니 -->
+                                    <form action="${pageContext.request.contextPath}/orders/addOrdersList" id = "orderForm" method="post">
+                                       <table>
+                                        <thead>
+                                            <tr>
+                                               <th>
+                                               <div class = "justify-content-start">
+                                                  <button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
+                                                </div>
+                                                </th>
+                                                <th>Product</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                       <tbody>
+                                       <c:forEach var = "customer" items = "${customerList}">
+                                          <c:choose>
+                                                <c:when test = "${customer.cartQuantity == 0}"> <!-- 재고부족일 때 -->
+                                                 <tr>
+                                                     <td>
+                                                        <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}" onClick = "return false;">
+                                                        <input type="hidden" name="goodsCode" value="${customer.goodsCode}">
+                                                     </td>
+                                                         <td class="product__cart__item">
+                                                          <div class="product__cart__item__pic">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
+                                                          </div>
+                                                          <div class="product__cart__item__text">
+                                                              <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
+                                                              <h5>&#8361;${customer.goodsPrice}</h5>
+                                                          </div>
+                                                      </td>
+                                                        <td class="quantity__item">
+                                                          <div class="quantity">
+                                                              <div class="pro-qty">
+                                                                  <input type="hidden" name="cartQuantity" value="${customer.cartQuantity}">${customer.cartQuantity}개
+                                                              </div>
+                                                          </div>
+                                                      </td>
+                                                      <td>품절</td>
+                                                      <td class="cart__close">
+                                                         <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
+                                                    <span class="icon_close"></span>
+                                                </a>
+                                             </td>
+                                                  </tr>
+                                               </c:when>
+                                               <c:otherwise>
+                                                <tr>
+                                                     <td>
+                                                        <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}">
+                                                        <input type="hidden" name="goodsCode" id = "gCode" value="${customer.goodsCode}">
+                                                     </td>
+                                                      <td class="product__cart__item">
+                                                          <div class="product__cart__item__pic">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
+                                                          </div>
+                                                          <div class="product__cart__item__text">
+                                                              <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
+                                                              <h5>&#8361;${customer.goodsPrice}</h5>
+                                                          </div>
+                                                       </td>
+                                              <td class="quantity__item">
+                                                          <div class="quantity">
+                                                              <div class="pro-qty">
+                                                                  <input type="text" class = "cQuantity" name="cartQuantity" value="${customer.cartQuantity}">개
+                                                              </div>
+                                                          </div>
+                                                          <div class = "cart__modify__btn">
+                                                             <a href = "javascipt:modifyAction()" class = "modifyBtn" data-goodsCode = "${customer.goodsCode}">수정</a>
+                                                          </div>
+                                                      </td>
+                                                      <td class="cart__price" id = "cartPrice"><span>&#8361;${customer.goodsPrice * customer.cartQuantity}</span></td>
+                                                      <td class="cart__close">
+                                                           <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
+                                                    <span class="icon_close"></span>
+                                                </a>
+                                             </td>
+                                                  </tr>
+                                               </c:otherwise>
+                                            </c:choose>
+                                         </c:forEach>
+                                      </tbody>
+                                      </table>
+                                   </form>
+                              </c:when>
+                           </c:choose>
+                  </c:when>
+                       <c:when test = "${fn:length(userList) eq 0 || fn:length(customerList) eq 0}">
+                     <table>
+                          <tr>
+                                   <th>Product</th>
+                                   <th>Quantity</th>
+                                   <th>Total</th>
+                                   <th></th>
+                               </tr>
+                               <tr>
+                                     <td colspan = "4"><div>장바구니가 비어있습니다.</div></td>
+                                </tr>
+                        </table>
+                  </c:when>
+               </c:choose>
+                  </div>
                 </div>
                 <div class="col-lg-4">
                     <div class="cart__discount">
