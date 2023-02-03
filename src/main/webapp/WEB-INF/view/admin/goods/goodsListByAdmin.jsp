@@ -109,7 +109,7 @@
                     </div>
                      <div class="col-lg-5 col-md-5">
                         <div class="shop__option__right">
-                        	<form id="pageForm" method="get" action="${pageContext.request.contextPath}/goods/goodsList">
+                        	<form id="pageForm" method="get" action="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin">
                             <select name="sort" id="sort">
                             	<c:if test="${sort eq '신제품순'}">
 									<option value="신제품순" selected="selected">신제품 순</option>
