@@ -29,6 +29,14 @@
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<style>
+		.dropdown-menu {
+			z-index: 1000;
+		}
+		.dropdown-show {
+			display: block;
+		}
+	</style>
 <script>
 	$(document).ready(function(){
 		$('#submitBtn').click(function(){
@@ -101,19 +109,17 @@
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="e" items="${empList}">
+										<c:forEach var="e" items="${empList}" varStatus="status">
 											<tr>
 												<td>${e.empCode}</td>
 												<td>${e.empId}</td>
 												<td>${e.empName}</td>
 												<td>${e.active}</td>
-												<td>${e.authCode} ${e.authMemo}</td>
+												<td class="authCodeTd">${e.authCode} ${e.authMemo}</td>
 												<td>${e.createdate}</td>
 												<td>
-													<div class="row justify-content-center">
-														<div class="a-btn">
-															<a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a>
-														</div>
+													<div class="a-btn">
+														<a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a>
 													</div>
 												</td>
 											</tr>
@@ -131,6 +137,7 @@
 										</div>
 									</div>
 								</div>
+								
 							</div>
 						</div>
 						<!-- /card -->

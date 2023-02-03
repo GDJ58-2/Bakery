@@ -27,16 +27,24 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<title>관리자 홈 | 구디쥬르</title>
+<title>홈 | 직원 | 구디쥬르</title>
 </head>
 <body>
 	<!-- header -->
 	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
+	<!-- 메뉴 - 상품관리, 주문배송, 고객관리, 문의/후기 관리, 정산, 기타 -->
 	
-	<div>비밀번호 변경</div>
+	<!-- 판매 진행 결제건, 배송건 ... -->
+	<!-- Q&A, 클레임 관리 취소건, 환불건, 교환건, 응답해야할 Q&A건 -->
+	
+	
+	<!-- 공지사항 3~5개 -->
+	
+	
+	
 	<div>
-		<a href="${pageContext.request.contextPath}/emp/modifyEmpPw">비밀번호 변경</a>
+		<a href="${pageContext.request.contextPath}/admin/emp/modifyEmpPw">비밀번호 변경</a>
 	</div>
 	
 	

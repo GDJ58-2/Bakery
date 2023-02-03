@@ -31,7 +31,6 @@
 		body {
 			margin: 0;
 		}
-		
 		.create-account {
   			margin-bottom: 30px;
 		}
@@ -41,77 +40,49 @@
   			text-transform: uppercase;
   			margin-bottom: 25px;
 		}
-		
-		#empId, #empPw, #pwck, #empName {
+		.required, #pwck {
 			border-bottom : black 1px solid;
 			border-left: medium none;
 			border-right: medium none;
 			border-top: medium none;
-		}
-		
+		}	
+		.msg {
+			color:red;
+			font-size: small;
+		}	
 	</style>
 <script>
 	// 자바스크립트 유효성 검사
 	$(document).ready(function(){
 		
-		let msgCk = 0;
-		
-		$('#empId').blur(function(){
-			if($('#empId').val().length>20) {
-				$('#empId').val($('#empId').val().substr(0, 20));
-				$('#empIdMsg').text('20자 이하로 입력하세요.');
-				$('#empId').focus();
-			} else if($('#empId').val().length==0) {
-				$('#empIdMsg').text('필수정보입니다.');
-				$('#empId').focus();
-			} 
-		});
-		
 		$('#submitBtn').click(function(){
-			$('#empNameMsg').text('');
-			$('#empIdMsg').text('');
-			$('#empPwMsg').text('');
-			$('#ckMsg').text('');
 			
-			if($('#empId').val().length==0){ 
-				$('#empIdMsg').text('필수정보입니다.');
-				$('#empId').focus();
-			}
-			if($('#empPw').val().length==0){ 
-				$('#empPwMsg').text('필수정보입니다.');
-				$('#empPw').focus();
-			}
-			if($('#empName').val().length==0){ 
-				$('#empNameMsg').text('필수정보입니다.');
-				$('#empName').focus();
-				return;
-			}
-			if($('#empPw').val()!=$('#pwck').val()) {
+			let blank = 0;
+			
+			if($('input[name="empPw"]').val()!=$('#pwck').val()){ 
 				$('#ckMsg').text('비밀번호와 비밀번호확인이 일치하지 않습니다.');
-				$('#pwck').val('');
-				$('#pwck').focus();
-				return;
+			} else {
+				$('#ckMsg').text('');
 			}
 			
-			$('.msg').each(function() {
-				if($(this).text() != '') {
-					$(this).prev().focus();
-					return false;
+			$('.required').each(function() {
+				if($(this).val() == '') {
+					$(this).nextAll().eq(1).text('* 필수정보입니다.');
 				} else {
-					++ msgCk 
-					console.log('msgCk'+msgCk);
-					console.log('length'+$('.msg').length);
-				}
-				if(msgCk == $('.msg').length) {
-					$('#addForm').submit();
+					$(this).nextAll().eq(1).text('');
+					++ blank 
+					console.log('blank'+blank);
+					console.log('length'+$('.required').length);
+					
+					if(blank == $('.required').length) {
+						$('#addEmpForm').submit();
+					}
 				}
 			});
-			
-			$('#addEmpForm').submit();
 		});
 	});
 </script>
-<title>사원 등록 | 구디쥬르</title>
+<title>회원가입 | 직원 | 구디쥬르</title>
 </head>
 <body>
 	<!-- header -->
@@ -120,6 +91,7 @@
 	<!-- Create Account Section -->
 	<section class="contact spad">
     	<div class="container">
+    	
 			<div class="row">  
 				<div class="col-lg-11 col-md-7 col-sm-6">
 					<div class = "d-flex justify-content-center">
@@ -133,35 +105,40 @@
                         				<tr>
                         					<td>ID</td>
                         					<td>
-                        						<input type="text" id="empId" class="addInfo" name="empId" placeholder="ID">
-                        						<span id="empIdMsg" class="msg">${msg}</span>
+                        						<input type="text" class="addInfo required" name="empId" placeholder="ID">
+                        						<br>
+                        						<span class="msg">${msg}</span>
                         					</td>
                         				</tr>
                         				<tr>
                         					<td>PW</td>
                         					<td>
-                        						<input type="password" maxlength="20" id="empPw" class="addInfo" name="empPw" placeholder="Password">
-                        						<span id="empPwMsg"></span>
-                        						<span><input type="password" id="pwck" class="addInfo" placeholder="비밀번호 확인"></span>
+                        						<input type="password" maxlength="20" class="addInfo required" name="empPw" placeholder="Password">
+                        						<br>
+                        						<span class="msg"></span>
+                        						<br>
+                        						<span><input type="password" id="pwck" class="addInfo required" placeholder="비밀번호 확인"></span>
+                        						<br>
 												<span id="ckMsg" class="msg"></span>
                         					</td>
                         				</tr>
                         				<tr>
                         					<td>Name</td>
                         					<td>
-                        						<input type="text" maxlength="20" id="empName" class="addInfo" name="empName">
-                        						<span id="empNameMsg"></span>
+                        						<input type="text" maxlength="20" class="addInfo required" name="empName">
+                        						<br>
+                        						<span class="msg"></span>
                         					</td>
                         				</tr>
                         			</table>
 								</form>
                         	</div>
                         	<div class="m-1">
-								<button type="button" id="submitBtn" class="site-btn">create</button>
+								<button type="button" id="submitBtn" class="signup-btn btn-block">create</button>
 							</div>
 							<div class="m-1">
 								<a href="${pageContext.request.contextPath}/admin/emp/loginEmp">
-									<button type="button" id="loginBtn" class="site-btn">login</button>
+									<button type="button" id="loginBtn" class="login-btn btn-block">login</button>
 								</a>
 							</div>	
 						</div>

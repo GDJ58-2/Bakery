@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 import service.EmpService;
 import vo.Emp;
 
-@WebServlet("/emp/modifyEmpPw")
+@WebServlet("/admin/emp/modifyEmpPw")
 public class ModifyEmpPwController extends HttpServlet {
 	private EmpService empService;
 	// modifyEmpPw form
@@ -49,7 +49,7 @@ public class ModifyEmpPwController extends HttpServlet {
 		String empPw = request.getParameter("empPw");
 		String newEmpPw = request.getParameter("newEmpPw");
 		if(empCode==null||empCode.equals("")||empPw==null||empPw.equals("")||newEmpPw==null||newEmpPw.equals("")) {
-			response.sendRedirect(request.getContextPath()+"/emp/modifyEmpPw");
+			response.sendRedirect(request.getContextPath()+"/admin/emp/modifyEmpPw");
 			return;
 		}
 		HashMap<String, Object> map = new HashMap<String, Object>(); 

@@ -31,24 +31,30 @@
 		body {
 			margin: 0;
 		}
+		#loginMsg {
+			color:red;
+			font-size: small;
+		}
 	</style>
 	
 <script>
 	// 자바스크립트 유효성 검사
 	$(document).ready(function(){
-		console.log(!!$('#msg').val()); // false
+		console.log(!!$('#msg').val()); // !! : 다른 타입의 데이터를 boolean 타입으로 명시적으로 형 변환(Type Conversion)
 		console.log($('#msg').val());
 		if(!!$('#msg').val()){
-			alert($('#msg').val());
+			let msg = $('#msg').val();
+			msg = msg.replace(/\n/g, '<br/>'); // \n 을 <br>로 치환
+			$('#loginMsg').html(msg);
 		}
 		$('#loginBtn').click(function(){
 			if($('#empId').val().length==0){
-				$('#msg').text('아이디를 입력해주세요.');
+				$('#loginMsg').text('아이디를 입력해주세요.');
 				$('#empId').focus();
 				return;
 			}
 			if($('#empPw').val().length==0){
-				$('#msg').text('비밀번호를 입력해주세요.');
+				$('#loginMsg').text('비밀번호를 입력해주세요.');
 				$('#empPw').focus();
 				return;
 			}
@@ -57,7 +63,7 @@
 	});
 </script>
 
-<title>사원 로그인 | 구디쥬르</title>
+<title>로그인 | 직원 | 구디쥬르</title>
 </head>
 <body>
 	<input type="hidden" id="msg" value="${msg}">
@@ -86,6 +92,11 @@
 											<td>PW</td>
 											<td>
 												<input type="password" name="empPw" id="empPw">
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<span id="loginMsg"></span>
 											</td>
 										</tr>
 									</table>

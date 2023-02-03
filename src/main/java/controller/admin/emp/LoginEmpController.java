@@ -23,7 +23,7 @@ public class LoginEmpController extends HttpServlet {
 		HttpSession session = request.getSession();
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
 		if(loginCustomer!=null) {
-			response.sendRedirect(request.getContextPath()+"/customer/home");
+			response.sendRedirect(request.getContextPath()+"/index");
 			return;
 		}
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
@@ -35,7 +35,7 @@ public class LoginEmpController extends HttpServlet {
 		String msg = request.getParameter("msg");
 		//System.out.println(msg+"<--LoginEmpController msg");
 		if(msg!=null&&msg.equals("로그인 실패")) {
-			msg = "아이디 또는 비밀번호를 잘못 입력했습니다. 다시 시도해주세요.";
+			msg = "아이디 또는 비밀번호를 잘못 입력했습니다. \n다시 시도해주세요.";
 		}
 		request.setAttribute("msg", msg);
 		

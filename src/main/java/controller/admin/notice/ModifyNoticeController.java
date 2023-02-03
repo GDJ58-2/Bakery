@@ -74,7 +74,6 @@ public class ModifyNoticeController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
-		int no = Integer.parseInt(request.getParameter("no"));
 		int noticeCode = Integer.parseInt(request.getParameter("noticeCode"));
 		Notice notice = new Notice(noticeCode, noticeTitle, noticeContent, empId, null);
 		//System.out.println(notice+"<--ModifyNoticeController notice");
@@ -82,9 +81,9 @@ public class ModifyNoticeController extends HttpServlet {
 		this.noticeService = new NoticeService();
 		int row = noticeService.modifyNotice(notice);
 		System.out.println(row+"<--ModifyNoticeController row");
-		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeOne?no="+no+"'; </script>";
+		String msg = "<script>alert('공지 수정을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/notice/noticeList'; </script>";
 		if(row==1) {
-			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeOne?no="+no+"'; </script>";
+			msg = "<script>alert('공지가 수정되었습니다.'); location.href='/bakery/notice/noticeList'; </script>";
 		}
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();

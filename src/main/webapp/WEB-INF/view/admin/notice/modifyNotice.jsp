@@ -81,7 +81,6 @@
 					<div class="card">
 						<div class="card-body">
 							<form action="${pageContext.request.contextPath}/admin/notice/modifyNotice" method="post" id="modifyNoticeForm">
-								<input type="hidden" name="no" value="${n.rownum}">
 								<input type="hidden" name="noticeCode" value="${n.noticeCode}">
 								<div>
 									<input type="text" name="noticeTitle" value="${n.noticeTitle}" id="noticeTitle" class="form-control">

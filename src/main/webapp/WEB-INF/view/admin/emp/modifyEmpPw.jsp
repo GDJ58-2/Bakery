@@ -29,9 +29,54 @@
     <!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<style>
+		body {
+			margin: 0;
+		}
+		.create-account {
+  			margin-bottom: 30px;
+		}
+		.create-account h6 {
+  			color: #111111;
+  			font-weight: 600;
+  			text-transform: uppercase;
+  			margin-bottom: 25px;
+		}
+		.required, #pwck {
+			border-bottom : black 1px solid;
+			border-left: medium none;
+			border-right: medium none;
+			border-top: medium none;
+		}	
+		.msg {
+			color:red;
+			font-size: small;
+		}	
+		.cancel-btn {
+			 font-size: 14px;
+			 color: #111111;
+			 background: #ffffff;
+			 font-weight: 600;
+			 border: none;
+			 text-transform: uppercase;
+			 display: inline-block;
+			 letter-spacing: 2px;
+			 padding: 8px;
+			 border: 1px solid black;
+		}
+	</style>
+
 <script>
 	$(document).ready(function(){
+		
+		// 취소
+		$('#cancelBtn').click(function(){
+			location.href = '/bakery/admin/emp/home';
+		});
+		
+		// 변경
 		$('#submitBtn').click(function(){
+			
 			if($('#empPw').val().length==0) {
 				alert('비밀번호를 입력하세요.');
 				$('#empPw').focus();
@@ -58,32 +103,54 @@
 		});
 	});
 </script>
-<title>비밀번호 수정 | 사원 | 구디쥬르</title>
+<title>비밀번호 변경 | 직원 | 구디쥬르</title>
 </head>
 <body>
 	<!-- header -->
-	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
-	<h1>관리자- 직원비밀번호 변경</h1>
-	<form action="${pageContext.request.contextPath}/admin/emp/modifyEmpPw" method="post" id="modifyEmpPwForm">
-		<input type="hidden" value="${e.empCode}" name="empCode"> 
-		<table border="1">
-			<tr>
-				<th>현재 비밀번호</th>
-				<td><input type="password" name="empPw"></td>
-			</tr>
-			<tr>
-				<th>새 비밀번호</th>
-				<td><input type="password" name="newEmpPw"></td>
-			</tr>
-			<tr>
-				<th>비밀번호 확인</th>
-				<td><input type="password" name="checkEmpPw"></td>
-			</tr>
-		</table>
-		<div>
-			<button type="button" id="submitBtn">변경</button>
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>	
+	
+	<!-- 비밀번호 변경 section -->
+	<section class="contact spad">
+    	<div class="container">
+			<div class="row">  
+				<div class="col-lg-11 col-md-7 col-sm-6">
+					<div class = "d-flex justify-content-center">
+						<div class="create-account">
+							<div>
+								<h6>비밀번호 변경</h6>
+                        	</div>
+							<div>
+								<form action="${pageContext.request.contextPath}/admin/emp/modifyEmpPw" method="post" id="modifyEmpPwForm">
+									<input type="hidden" value="${e.empCode}" name="empCode"> 
+									<table class="table table-borderless">
+										<tr>
+											<td>현재 비밀번호</td>
+											<td><input type="password" id="empPw" name="empPw" class="addInfo required"></td>
+										</tr>
+										<tr>
+											<td>새 비밀번호</td>
+											<td><input type="password" id="newEmpPw" name="newEmpPw" class="addInfo required"></td>
+										</tr>
+										<tr>
+											<td>비밀번호 확인</td>
+											<td><input type="password" id="checkEmpPw" name="checkEmpPw" class="addInfo required"></td>
+										</tr>
+									</table>
+								</form>
+							</div>
+							<div class="m-1">
+								<button type="button" id="submitBtn" class="signup-btn btn-block">변경</button>
+							</div>	
+							<div class="m-1">
+								<button type="button" id="cancelBtn" class="cancel-btn btn-block">취소</button>
+							</div>		
+						</div>
+					</div>
+				</div>        		
+			</div>          
 		</div>
-	</form>
+	</section>
+    <!-- /비밀번호 변경 -->
 	
 	<!-- footer -->
 	<div>
