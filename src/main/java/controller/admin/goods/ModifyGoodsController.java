@@ -74,7 +74,7 @@ public class ModifyGoodsController extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
@@ -83,7 +83,7 @@ public class ModifyGoodsController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
-		
+		*/
 		// 프로젝트안 upload폴더의 실제 물리적 위치를 반환
 		String dir = request.getServletContext().getRealPath("/upload");
 		int maxFileSize = 1024 * 1024 * 100; // 100Mbyte

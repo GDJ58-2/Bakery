@@ -32,14 +32,14 @@
 	<!-- 자바스크립트로 유효성 확인 -->
 	<script>
 		$(document).ready(function(){ // 페이지가 로드되고 나면 실행
-			$('#deleteBtn').focus();
+			$('#removeBtn').focus();
 			
-			$('#deleteBtn').click(function(){
+			$('#removeBtn').click(function(){
 				if(!confirm("상품을 삭제하시면 관련 게시글도 전부 삭제됩니다.\n상품을 삭제하시겠습니까?")){
-					$('#deleteBtn').focus();
+					$('#removeBtn').focus();
 					return false;
 				} else {
-					$('#deleteForm').submit();
+					$('#removeForm').submit();
 				}
 			});
 		});
@@ -78,7 +78,7 @@
     <section class="product-details spad">
         <div class="container">
             <div class="row">
-            	<form action="${pageContext.request.contextPath}/admin/goods/modifyGoods" method="post" enctype="multipart/form-data" id="modifyForm">              
+            	<form action="${pageContext.request.contextPath}/admin/goods/removeGoods" method="post" id="removeForm">              
 	                <div class="col-lg-12">
 	                    <div class="product__details__text">
 	                        <table class="table table-bordered">
@@ -128,7 +128,7 @@
 								</tr>
 							</table>
 	                        <div class="product__details__option">                           
-			                	<button type="submit" class="btn primary-btn" id="deleteBtn">상품삭제</button>
+			                	<button type="submit" class="btn primary-btn" id="removeBtn">상품삭제</button>
 			                </div>
 	                    </div>
 	                </div>
