@@ -59,13 +59,13 @@
    
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
+		// 핸드폰번호에는 숫자만 입력가능하게 하는 함수
 		function handleOnInput(el, maxlength) {
 			  if(el.value.length > maxlength)  {
 			    el.value 
 			      = el.value.substr(0, maxlength);
 			  }
 		}
-		
 		function handleOnInput2(el, maxlength) {
 			  if(el.value.length > maxlength)  {
 			    el.value 
@@ -77,6 +77,12 @@
 			
 			let number = null;
 			let msgCk = 0;
+			// 회원가입 거절 알림창
+			if($('#checkMsg').val()) {
+				alert('중복되는 ID입니다');
+			} 
+			
+			//
 			$('#id').focus();
 			$('#id').blur(function() {
 				if($('#id').length > 20) {
@@ -174,6 +180,7 @@
 								<h6>Create Account</h6>
                         	</div>
 							<div>
+								<input type="hidden" id="checkMsg" value="${checkMsg}">
 								<form action = "${pageContext.request.contextPath}/customer/addCustomer" method = "post" id = "addForm">
 									<table class = "table table-borderless">
 										<tr>

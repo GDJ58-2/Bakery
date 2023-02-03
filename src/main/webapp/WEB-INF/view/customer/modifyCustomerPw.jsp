@@ -59,13 +59,75 @@
    
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
+		function logoutAction() {
+			let url = '${pageContext.request.contextPath}/customer/logout';
+				let out = confirm('로그아웃하시겠습니까?'); 
+			 	if(out) {
+		 			location.replace(url); 
+		     		alert('로그아웃되었습니다');
+		      	} else {
+		         	alert('로그아웃 취소');
+		         	return false;
+		      	}
+		 }  
+		
+		// 핸드폰번호에는 숫자만 입력가능하게 하는 함수
+		function handleOnInput(el, maxlength) {
+			  if(el.value.length > maxlength)  {
+			    el.value 
+			      = el.value.substr(0, maxlength);
+			  }
+		}
+		function handleOnInput2(el, maxlength) {
+			  if(el.value.length > maxlength)  {
+			    el.value 
+			      = el.value.substr(0, maxlength);
+			  }
+		}
+		
 		$(document).ready(function() {
-			$('#removeBtn').click(function() {
-				let removeCheck = $('#removeCheck').is(':checked');
-				if(removeCheck) {
-					$('#removeForm').submit();
+			// 비밀번호 변경 거절 알림창
+			if($('#check').val()) {
+				alert('변경할 수 없는 번호입니다');
+				$('#check').val() = '';
+			} 
+			
+			$('#modifyPwBtn').click(function() {
+				let msgCk = 0;
+				
+				// 비밀번호
+				if($('#pw').val() == ''){
+					$('#pwMsg').text('pw를 입력하세요');
+				} else {
+					$('#pwMsg').text('');
 				}
+				
+				// 새 비밀번호
+				if($('#newPw').val() == ''){
+					$('#newPwMsg').text('pw를 입력하세요');
+				} else {
+					$('#newPwMsg').text('');
+				}
+				
+				$('.msg').each(function() {
+					if($(this).text() != '') {
+						alert($(this).text());
+						return false;
+					} else {
+						++ msgCk 
+						console.log('msgCk'+msgCk);
+						console.log('length'+$('.msg').length);
+					}
+					if(msgCk == $('.msg').length) {
+						$('#modifyPwForm').submit();
+					}
+				});	
 			});
+			
+			// 로그아웃
+			$('#logoutBtn').on('click', function() {
+	   			logoutAction(url);
+	   		});
 		});
 	</script>
 </head>
@@ -80,7 +142,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__text">
-                        <h4>비밀번호변경</h4>
+                        <h3>비밀번호변경</h3>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -102,20 +164,22 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
-								<h6>비밀번호변경</h6>
-                        	</div>
-							<div>
-								<form action = "${pageContext.request.contextPath}/customer/modifyCustomerPw" method = "post" id = "removeForm">
+								<input type="hidden" id="check" value="${check}">
+								<form action = "${pageContext.request.contextPath}/customer/modifyCustomerPw" method = "post" id = "modifyPwForm">
 									<div>현재 비밀번호</div>
 									<div>
 										<input type = "password" id = "pw" name = "pw">
+										<span id = "pwMsg" class = "msg"></span>
 									</div>
 									
-									<div>새 비밀번호</div>
+									<div class="mt-5">새 비밀번호</div>
 									<div>
 										<input type = "password" id = "newPw" name = "newPw">
+										<span id = "newPwMsg" class = "msg"></span>
 									</div>
-									<button type = "submit" id = "modifyPwBtn">비밀번호변경</button>
+									<div class="mt-5">
+										<button type = "button" id = "modifyPwBtn" class="btn primary-btn">비밀번호변경</button>
+									</div>
 								</form>
 							</div>			
 						</div>

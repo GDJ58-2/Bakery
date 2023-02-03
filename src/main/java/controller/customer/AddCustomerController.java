@@ -23,6 +23,12 @@ public class AddCustomerController extends HttpServlet {
 			return;
 		}
 		
+		String checkMsg = request.getParameter("checkMsg");
+	    if(checkMsg != null) {
+	    	System.out.println(checkMsg);
+	    	request.setAttribute("checkMsg", checkMsg);
+	    }
+		
 		request.getRequestDispatcher("/WEB-INF/view/customer/addCustomer.jsp").forward(request, response);
 	}
 
@@ -65,12 +71,14 @@ public class AddCustomerController extends HttpServlet {
 		CustomerAddressService addressService = new CustomerAddressService();
 		addressService.addAddress(customerAddress);
 		String addMsg = null;
+		String checkMsg =null;
 		if(result == 1) { 
 			System.out.println("AddCustomerController: 회원가입 완료");
 			addMsg = "hello";
 			response.sendRedirect(request.getContextPath() + "/customer/login?addMsg="+addMsg);
 		} else {
-			response.sendRedirect(request.getContextPath() + "/customer/addCustomer");
+			checkMsg="check";
+			response.sendRedirect(request.getContextPath() + "/customer/addCustomer?checkMsg="+checkMsg);
 		}
 	}
 }

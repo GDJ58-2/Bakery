@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import vo.Customer;
+import vo.Emp;
 import service.CustomerService;
 
 @WebServlet("/customer/login")
@@ -20,12 +21,14 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    HttpSession session = request.getSession();// 로그인 전에만 진입가능
 	    Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
-	    if(loginCustomer != null) { // 이미 로그인 상태
+	    Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+	    if(loginCustomer != null) { // 이미 로그인된 회원
 	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
+	    } else if (loginEmp != null) { // 이미 로그인 된 관리자
+	    	response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+	    	return;
 	    }
-	    
-	    ArrayList<HashMap<String, Object>> userList = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");
 	    
 	    String addMsg = request.getParameter("addMsg");
 	    if(addMsg != null) {
@@ -41,9 +44,13 @@ public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 	    Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
-	    if(loginCustomer != null) { // 이미 로그인 상태
+	    Emp loginEmp = (Emp)session.getAttribute("loginEmp");
+	    if(loginCustomer != null) { // 이미 로그인 된 회원
 	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
+	    } else if (loginEmp != null) { // 이미 로그인 된 관리자
+	    	response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+	    	return;
 	    }
 		
 		String id = request.getParameter("id");
