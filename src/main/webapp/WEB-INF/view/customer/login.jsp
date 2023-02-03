@@ -43,6 +43,11 @@
 				history.replaceState({}, null, location.pathname);
 			}
 			
+			if($('#loginMsg').val()) {
+				alert('ID와 비밀번호를 확인하세요');
+				history.replaceState({}, null, location.pathname);
+			}
+			
 			$('#loginBtn').click(function() {
 				if(!$('#id').val()) {
 					alert('ID와 비밀번호를 입력하세요');
@@ -76,6 +81,7 @@
                             <div>
                             	<div>
 	                            	<input type = "hidden" id = "addMsg" value = "${addMsg}">
+	                            	<input type = "hidden" id = "loginMsg" value = "${loginMsg}">
 									<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
 										<table>
 											<tr>

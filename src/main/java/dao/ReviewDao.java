@@ -17,12 +17,15 @@ public class ReviewDao {
 		String sql = "SELECT r.review_memo reviewMemo"
 				+ ", o.customer_id customerId"
 				+ ", g.goods_name goodsName"
+				+ ", f.filename filename"
 				+ ", r.createdate createdate"
 				+ " FROM review r"
 				+ " INNER JOIN orders o"
 				+ " ON r.order_code = o.order_code"
 				+ " INNER JOIN goods g"
 				+ " ON o.goods_code = g.goods_code"
+				+ " INNER JOIN goods_img f"
+				+ " ON g.goods_code = f.goods_code"
 				+ " WHERE g.goods_code = ?"
 				+ " ORDER BY r.createdate DESC LIMIT ? OFFSET ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -35,6 +38,7 @@ public class ReviewDao {
 			m.put("reviewMemo", rs.getString("reviewMemo"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("customerId", rs.getString("customerId"));
+			m.put("filename", rs.getString("filename"));
 			m.put("createdate", rs.getString("createdate"));
 			list.add(m);
 		}
@@ -159,9 +163,12 @@ public class ReviewDao {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT o.order_code orderCode"
 				+ ", g.goods_name goodsName"
+				+ ", f.filename filename"
 				+ " FROM orders o"
 				+ " INNER JOIN goods g"
 				+ " ON o.goods_code = g.goods_code"
+				+ " INNER JOIN goods_img f"
+				+ " ON f.goods_code = o.goods_code"
 				+ " LEFT OUTER JOIN review r"
 				+ " ON o.order_code = r.order_code"
 				+ " WHERE o.customer_id = ?"
@@ -174,6 +181,7 @@ public class ReviewDao {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("orderCode", rs.getInt("orderCode"));
 			m.put("goodsName", rs.getString("goodsName"));
+			m.put("filename", rs.getString("filename"));
 			list.add(m);
 		}
 		DBUtil.close(rs, stmt, null);
