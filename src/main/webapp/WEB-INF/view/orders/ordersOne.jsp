@@ -68,19 +68,11 @@
                     	<c:forEach var="map" items="${list}">                	
 							<table class="table table-bordered">
 								<tr>
-									<td rowspan="11">
+									<td rowspan="9">
 										<img src="${pageContext.request.contextPath}/upload/${map.originName}" width="400" height="400">
 									</td>
-									<th>상품 번호 : </th>
-									<td>${map.goodsCode}</td>
-								</tr>
-								<tr>
 									<th>상품 이름 : </th>
 									<td>${map.goodsName}</td>
-								</tr>
-								<tr>
-									<th>상품 종류 : </th>
-									<td>${map.categoryName}</td>
 								</tr>
 								<tr>
 									<th>상품 수량 : </th>

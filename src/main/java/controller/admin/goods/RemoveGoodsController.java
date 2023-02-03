@@ -67,6 +67,7 @@ public class RemoveGoodsController extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/*
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
@@ -75,6 +76,7 @@ public class RemoveGoodsController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		*/
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
@@ -110,7 +112,7 @@ public class RemoveGoodsController extends HttpServlet {
 	    	
 	    	PrintWriter out = response.getWriter();
 	    	
-	    	out.println("<script>alert('상품을 삭제하였습니다.'); location.href='/bakery/goods/goodsList';</script>");
+	    	out.println("<script>alert('상품을 삭제하였습니다.'); location.href='/bakery/admin/goods/goodsListByAdmin';</script>");
 	    	
 	    	out.flush();
 	    } else {
