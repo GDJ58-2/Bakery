@@ -29,14 +29,6 @@
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<style>
-		.dropdown-menu {
-			z-index: 1000;
-		}
-		.dropdown-show {
-			display: block;
-		}
-	</style>
 <script>
 	$(document).ready(function(){
 		$('#submitBtn').click(function(){
@@ -44,7 +36,7 @@
 		});
 	});
 </script>
-<title>사원 목록 | 구디쥬르</title>
+<title>직원 관리 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
@@ -117,11 +109,19 @@
 												<td>${e.active}</td>
 												<td class="authCodeTd">${e.authCode} ${e.authMemo}</td>
 												<td>${e.createdate}</td>
+												
+												<!-- 본인의 관리자 권한은 수정 X -->
 												<td>
-													<div class="a-btn">
-														<a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a>
-													</div>
+													<c:if test="${e.empCode == loginEmp.empCode}">
+														-
+													</c:if>
+													<c:if test="${e.empCode != loginEmp.empCode}">
+														<div class="a-btn">
+															<a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a>
+														</div>
+													</c:if>
 												</td>
+												
 											</tr>
 										</c:forEach>
 									</tbody>

@@ -30,22 +30,22 @@
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<style>
-		.cancel-btn {
-			 font-size: 14px;
-			 color: #111111;
-			 background: #ffffff;
-			 font-weight: 600;
-			 text-transform: uppercase;
-			 display: inline-block;
-			 letter-spacing: 2px;
-			 padding: 8px;
-			 border: 1px solid black;
-		}
 		.cancel-btn, .signup-btn {
 			text-align: center;
 			vertical-align: middle;
 			height: 33px;
 			width: 58px;
+		}
+		.card, .table {
+			overflow: visible;
+		}
+		.card {
+			margin-bottom: 50px;
+		}
+		.nice-select {
+			display: inline-block;
+			float: none;
+			width: 50%;
 		}
 	</style>
 	
@@ -59,16 +59,11 @@
 		
 		// 변경
 		$('#submitBtn').click(function(){
-			if($('.authCode option:selected').val()==0){ // authCode=0 -> 비활성화
-				$('#active').val('N');
-			} else {
-				$('#active').val('Y');
-			}
 			$('#modifyEmpForm').submit();
 		});
 	});
 </script>
-<title>정보수정 | 관리자 | 구디쥬르</title>
+<title>정보 수정 | 직원 관리 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
@@ -109,7 +104,6 @@
 								<form action="${pageContext.request.contextPath}/admin/emp/modifyEmp" method="post" id="modifyEmpForm">
 									<input type="hidden" name="empId" value="${e.empId}">
 									<input type="hidden" name="empCode" value="${e.empCode}">
-									<input type="hidden" name="active" id="active">
 									<table class="table text-center">
 										<thead class="table-primary">
 											<tr>
@@ -131,7 +125,12 @@
 												<td>
 													<select name="authCode" id="authCode">
 														<c:forEach var="a" items="${authInfoList}">
-															<option value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
+															<c:if test="${a.authCode eq e.authCode}">
+																<option selected="selected" value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
+															</c:if>
+															<c:if test="${a.authCode ne e.authCode}">
+																<option value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
+															</c:if>
 														</c:forEach>
 													</select>
 												</td>

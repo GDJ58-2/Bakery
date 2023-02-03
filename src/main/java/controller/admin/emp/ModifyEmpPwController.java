@@ -31,9 +31,12 @@ public class ModifyEmpPwController extends HttpServlet {
 		
 		this.empService = new EmpService();
 		Emp emp = empService.getEmpOne(empCode);
+		
 		request.setAttribute("e", emp);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/modifyEmpPw.jsp").forward(request, response);
 	}
+	
 	// modifyEmp action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사 
@@ -48,10 +51,12 @@ public class ModifyEmpPwController extends HttpServlet {
 		String empCode = request.getParameter("empCode");
 		String empPw = request.getParameter("empPw");
 		String newEmpPw = request.getParameter("newEmpPw");
+		
 		if(empCode==null||empCode.equals("")||empPw==null||empPw.equals("")||newEmpPw==null||newEmpPw.equals("")) {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/modifyEmpPw");
 			return;
 		}
+		
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
 		map.put("empCode", empCode);
 		map.put("empPw", empPw);
@@ -60,10 +65,12 @@ public class ModifyEmpPwController extends HttpServlet {
 		this.empService = new EmpService();
 		int row = empService.modifyEmpPw(map);
 		System.out.println(row+"<--ModifyEmpPwController row");
+		
 		String msg = "<script>alert('비밀번호 변경을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/emp/home';</script>";
 		if(row==1) { // 수정 성공시
-			msg = "<script>alert('비밀번호를 변경했습니다.'); location.href='/bakery/admin/emp/home';</script>";
+			msg = "<script>alert('비밀번호를 변경했습니다.'); location.href='/bakery/index';</script>";
 		}
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println(msg);

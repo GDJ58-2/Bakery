@@ -48,22 +48,6 @@
 			border-right: medium none;
 			border-top: medium none;
 		}	
-		.msg {
-			color:red;
-			font-size: small;
-		}	
-		.cancel-btn {
-			 font-size: 14px;
-			 color: #111111;
-			 background: #ffffff;
-			 font-weight: 600;
-			 border: none;
-			 text-transform: uppercase;
-			 display: inline-block;
-			 letter-spacing: 2px;
-			 padding: 8px;
-			 border: 1px solid black;
-		}
 	</style>
 
 <script>

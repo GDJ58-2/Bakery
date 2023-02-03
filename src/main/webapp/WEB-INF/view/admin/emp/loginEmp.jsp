@@ -26,14 +26,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+    <!-- custom css -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<style>
 		body {
 			margin: 0;
-		}
-		#loginMsg {
-			color:red;
-			font-size: small;
 		}
 	</style>
 	
@@ -45,16 +43,16 @@
 		if(!!$('#msg').val()){
 			let msg = $('#msg').val();
 			msg = msg.replace(/\n/g, '<br/>'); // \n 을 <br>로 치환
-			$('#loginMsg').html(msg);
+			$('.msg').html(msg);
 		}
 		$('#loginBtn').click(function(){
 			if($('#empId').val().length==0){
-				$('#loginMsg').text('아이디를 입력해주세요.');
+				$('.msg').text('아이디를 입력해주세요.');
 				$('#empId').focus();
 				return;
 			}
 			if($('#empPw').val().length==0){
-				$('#loginMsg').text('비밀번호를 입력해주세요.');
+				$('.msg').text('비밀번호를 입력해주세요.');
 				$('#empPw').focus();
 				return;
 			}
@@ -78,7 +76,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-7 col-sm-6">
                         <div class="contact__address__item">
-                            <h6>Login</h6>
+                            <h6>Login - employee</h6>
                             <div>
 								<form action="${pageContext.request.contextPath}/admin/emp/loginEmp" method="post" id="loginEmpForm">
 									<table>
@@ -96,7 +94,7 @@
 										</tr>
 										<tr>
 											<td colspan="2">
-												<span id="loginMsg"></span>
+												<span class="msg"></span>
 											</td>
 										</tr>
 									</table>

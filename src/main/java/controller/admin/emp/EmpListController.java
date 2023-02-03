@@ -57,14 +57,17 @@ public class EmpListController extends HttpServlet {
 			currentPage = lastPage;
 		}
 		
+		// model 
 		this.authInfoService = new AuthInfoService();
 		ArrayList<AuthInfo> authInfoList = authInfoService.getAuthInfoList();
 		ArrayList<HashMap<String, Object>> empList = empService.getEmpListByAdmin(currentPage, rowPerPage, search);
+		
 		request.setAttribute("empList", empList);
 		request.setAttribute("authInfoList", authInfoList);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("lastPage", lastPage);
 		request.setAttribute("search", search);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/empList.jsp").forward(request, response);
 	}
 }

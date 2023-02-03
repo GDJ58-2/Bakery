@@ -23,17 +23,14 @@ public class HomeController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<1) { 
 			session.invalidate();
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp?msg="+URLEncoder.encode("비활성화상태를 풀어주세요.","UTF-8"));
 			return;
 		}
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/home.jsp").forward(request, response);
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-	}
-
 }

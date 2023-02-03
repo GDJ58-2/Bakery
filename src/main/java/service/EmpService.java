@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import dao.CustomerDao;
 import dao.EmpDao;
 import util.DBUtil;
 import vo.Emp;
@@ -37,33 +38,7 @@ public class EmpService {
 		return returnEmp;
 	}
 	
-	// 아이디 중복확인
-	public boolean checkId(String empId) {
-		boolean checkId = false;
-		this.empDao = new EmpDao();
-		Connection conn = null;
-		try {
-			conn = DBUtil.getConnection();
-			checkId = empDao.selectId(conn, empId);
-			conn.commit();
-		} catch (Exception e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			e.printStackTrace();
-		} finally {
-			try {
-				DBUtil.close(null, null, conn); // db 자원반납
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return checkId;
-	}
-	
-	 // 회원가입 - emp
+	// 회원가입 - emp
 	public int addEmp(Emp emp) {
 		int row = 0;
 		boolean checkId = false;

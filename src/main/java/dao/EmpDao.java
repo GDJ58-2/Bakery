@@ -41,26 +41,6 @@ public class EmpDao {
 		return row;
 	}
 
-	// id 중복 검사
-	public boolean selectId(Connection conn, String empId) throws Exception { 
-		boolean check = false;
-		String sql = "SELECT t.userId"
-				+ "		FROM("
-				+ "			SELECT customer_id userId FROM customer UNION"
-				+ "			SELECT emp_id userId FROM emp UNION"
-				+ "			SELECT id userId FROM outid) t"
-				+ "		WHERE userId = ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, empId);
-		ResultSet rs = stmt.executeQuery();
-		if(rs.next()) { // 사용 불가 -> true
-			check = true;
-		}
-		System.out.print(check);
-		DBUtil.close(rs, stmt, null);
-		return check;
-	}
-	
 	// UPDATE 
 	public int updateEmpPw(Connection conn, HashMap<String, Object> map) throws Exception { 
 		int row = 0;

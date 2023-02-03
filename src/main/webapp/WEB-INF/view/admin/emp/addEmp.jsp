@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+	<!-- custom css -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<style>
 		body {
@@ -45,10 +47,6 @@
 			border-left: medium none;
 			border-right: medium none;
 			border-top: medium none;
-		}	
-		.msg {
-			color:red;
-			font-size: small;
 		}	
 	</style>
 <script>
@@ -97,7 +95,7 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
-								<h6>Create Account</h6>
+								<h6>Create Account - employee</h6>
                         	</div>
                         	<div>
                         		<form action="${pageContext.request.contextPath}/admin/emp/addEmp" method="post" id="addEmpForm">
