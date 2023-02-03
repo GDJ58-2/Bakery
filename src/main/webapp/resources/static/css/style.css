@@ -3192,9 +3192,76 @@ ol {
   margin-bottom: 24px;
   resize: none;
 }
-.contact__form form textarea:last-child {
-  color: #111111;
+.contact__address__item {
+  margin-bottom: 30px;
 }
+.contact__address__item h6 {
+  color: #111111;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+}
+.contact__address__item ul li {
+  list-style: none;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.contact__address__item ul li:last-child {
+  margin-bottom: 0;
+}
+.contact__address__item ul li {
+  font-size: 24px;
+  color: #111111;
+  margin-right: 25px;
+  float: left;
+}
+.contact__address__item ul li p {
+  font-size: 14px;
+  color: #444444;
+  line-height: 26px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+/*-------------------My Home--------------*/
+
+.myHome {
+  padding-bottom: 40px;
+  border-bottom: 1px solid #e8eff4;
+  margin-bottom: 70px;
+}
+
+.myHome__item {
+  margin-bottom: 30px;
+}
+
+.myHome__text h3, h4, h5 {
+  color: #111111;
+  font-weight: 700;
+  font-style: italic;
+  font-family: "Playfair Display", serif;
+  margin-bottom: 20px;
+}
+
+.myHome__item ul li {
+  list-style: none;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.myHome__item ul li {
+  font-size: 24px;
+  color: #111111;
+  margin-right: 10px;
+}
+.myHome__item ul li p {
+  font-size: 14px;
+  color: #444444;
+  line-height: 26px;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
 
 /*--------------------------------- Responsive Media Quaries -----------------------------*/
 @media only screen and (min-width: 1200px) {
