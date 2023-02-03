@@ -203,9 +203,10 @@ form .primary-btn {
 	width: 50%;
 }
 
-/* nav */
-.nav-link .active{
-	font-weight: 800;
+/* 페이징 */
+.shop__pagination > .active{
+	background: #000000;
+ 	color: #ffffff;
 }
 
 /* 반응형 */

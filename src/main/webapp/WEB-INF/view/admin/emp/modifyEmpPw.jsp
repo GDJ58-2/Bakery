@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- core JSTL 사용 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,14 +58,14 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>비밀번호 수정 | 사원 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<h1>관리자- 직원비밀번호 변경</h1>
 	<form action="${pageContext.request.contextPath}/admin/emp/modifyEmpPw" method="post" id="modifyEmpPwForm">
-		<input type="hidden" value="${e.empId}" name="empId"> 
+		<input type="hidden" value="${e.empCode}" name="empCode"> 
 		<table border="1">
 			<tr>
 				<th>현재 비밀번호</th>
@@ -83,6 +84,11 @@
 			<button type="button" id="submitBtn">변경</button>
 		</div>
 	</form>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>

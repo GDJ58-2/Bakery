@@ -64,10 +64,10 @@ public class EmpDao {
 	// UPDATE 
 	public int updateEmpPw(Connection conn, HashMap<String, Object> map) throws Exception { 
 		int row = 0;
-		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_id = ? AND emp_pw = ?";
+		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_code = ? AND emp_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, (String)map.get("newEmpPw"));
-		stmt.setString(2, (String)map.get("empId"));
+		stmt.setString(2, (String)map.get("empCode"));
 		stmt.setString(3, (String)map.get("empPw"));
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
