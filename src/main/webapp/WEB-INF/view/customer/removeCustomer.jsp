@@ -54,6 +54,11 @@
 			border-top: medium none;
 		}
 		
+		.box {
+			border:1px solid; 
+			padding:20px;
+		}
+		
 	</style>
 	    
    
@@ -80,7 +85,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__text">
-                        <h4></h4>
+                        <h4>회원탈퇴</h4>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -102,22 +107,23 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
-								<h6>회원탈퇴</h6>
-                        	</div>
-							<div>
 								<form action = "${pageContext.request.contextPath}/customer/removeCustomer" method = "post" id = "removeForm">
 							    	<input type = "hidden" name = "id" value = "${loginCustomer.customerId}">
-							    	<div>회원탈퇴시 개인정보 및 개인데이터는 삭제됩니다
-							       		<br>단, 아래 항목은 삭제되지 않으므로 삭제를 원하시면 탈퇴 전 삭제하시기 바랍니다
-							       		<br>- 리뷰
-							       		<br>- QNA
-							       		<br>또한 탈퇴한 아이디는 재사용과 복구가 불가합니다
+							    	<div class="box">
+								    	<div>회원탈퇴시 개인정보 및 개인데이터는 삭제됩니다
+								       		<br>단, 아래 항목은 삭제되지 않으므로 삭제를 원하시면 탈퇴 전 삭제하시기 바랍니다
+								       		<br>- 리뷰
+								       		<br>- QNA
+								       		<br>또한 탈퇴한 아이디는 재사용과 복구가 불가합니다
+								    	</div>
 							    	</div>
-							    	<div>
+							    	<div class="mt-3">
 							    		<input type = "checkbox" id = "removeCheck">
 										안내사항을 확인하였으며, 이에 동의합니다
 							    	</div>
-							    	<button type = "button" id = "removeBtn">회원탈퇴</button>
+							    	<div class="mt-5">
+							    		<button type = "button" id = "removeBtn" class="btn primary-btn">회원탈퇴</button>
+							 		</div>
 							 	</form>
 							</div>			
 						</div>

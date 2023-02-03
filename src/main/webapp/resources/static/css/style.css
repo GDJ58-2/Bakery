@@ -1326,6 +1326,14 @@ ol {
   font-family: "Playfair Display", serif;
 }
 
+.breadcrumb__text h3, h4, h5 {
+  font-size: 30px;
+  color: #000000;
+  font-weight: 700;
+  font-style: italic;
+  font-family: "Playfair Display", serif;
+}
+
 .breadcrumb__links {
   text-align: right;
   padding-top: 15px;
@@ -2008,6 +2016,77 @@ ol {
   letter-spacing: 2px;
 }
 
+/*----review----*/
+.review__table {
+  margin-bottom: 30px;
+}
+
+.review__btn a {
+  color: #111111;
+  font-size: 14px;
+  font-weight: 200;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid #e1e1e1;
+  padding: 10px 30px;
+  display: inline-block;
+}
+.review__table table {
+  width: 100%;
+}
+.review__table table thead {
+  border-bottom: 1px solid #f2f2f2;
+}
+.review__table table thead tr th {
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding-bottom: 25px;
+}
+
+.review__table table tbody tr {
+  border-bottom: 1px solid #f2f2f2;
+}
+.review__table table tbody tr td {
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+.review__table table tbody tr td.product__item {
+  width: 200px;
+}
+.review__table table tbody tr td.product__item .product__item__pic {
+  float: left;
+  margin-right: 5px;
+}
+.review__table table tbody tr td.product__item .product__item__text {
+  overflow: hidden;
+  /*padding-top: 15px;*/
+}
+.review__table table tbody tr td.product__item .product__item__text h6 {
+  color: #111111;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.review__table table tbody tr td.product__item .product__item__text h5 {
+  color: #111111;
+  font-weight: 600;
+  font-size: 16px;
+}
+.order__List {
+  border-bottom: 1px solid #e8eff4;
+  margin-bottom: 50px;
+}
+
+.review__List {
+  margin-top: 50px;
+  border-bottom: 1px solid #e8eff4;
+}
+.line {
+  border-bottom: 5px solid #e8eff4;
+}
 /*---------------------
   Checkout
 -----------------------*/
@@ -3115,7 +3194,7 @@ ol {
 
 .contact__address {
   padding-bottom: 40px;
-  border-bottom: 1px solid #e8eff4;
+  /*border-bottom: 1px solid #e8eff4;*/
   margin-bottom: 70px;
 }
 

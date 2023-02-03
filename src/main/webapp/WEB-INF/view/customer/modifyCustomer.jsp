@@ -54,6 +54,10 @@
 			border-top: medium none;
 		}
 		
+		table {
+ 			border-collapse: separate;
+  			border-spacing: 0 20px;
+		}
 	</style>
 	    
    
@@ -72,30 +76,24 @@
 			      = el.value.substr(0, maxlength);
 			  }
 		}
+		
+		function logoutAction() {
+			let url = '${pageContext.request.contextPath}/customer/logout';
+ 			let out = confirm('로그아웃하시겠습니까?'); 
+ 		 	if(out) {
+      			location.replace(url); 
+          		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
 
 		$(document).ready(function() {
 			
-			let number = null;
-			let msgCk = 0;
-			$('#id').focus();
-			$('#id').blur(function() {
-				if($('#id').length > 20) {
-					alert('ID는 20자 이하로 입력하세요');
-					$('#id').val('');
-					$('#id').focus();
-				}
-			});
-		
-			
-			$('#createBtn').click(function() {
-				
-				// 아이디
-				if($('#id').val() == ''){
-					$('#idMsg').text('ID를 입력하세요');
-				} else {
-					$('#idMsg').text('');
-					$('#pw').focus();
-				}
+			$('#modifyBtn').click(function() {
+				let number = null;
+				let msgCk = 0;
 				// 비밀번호
 				if($('#pw').val() == ''){
 					$('#pwMsg').text('pw를 입력하세요');
@@ -103,12 +101,7 @@
 					$('#pwMsg').text('');
 					$('#pwck').focus();
 				}
-				// 비밀번호 확인
-				if($('#pw').val() != $('#pwck').val()){
-					$('#ckMsg').text('pw가 일치하지 않습니다');
-				} else {
-					$('#ckMsg').text('');
-				}
+
 				// 이름확인
 				if($('#name').val() == ''){
 					$('#nameMsg').text('이름을 입력하세요');
@@ -128,18 +121,7 @@
 						console.log('phoneNumber: '+$('#phone').val());
 					}
 				});
-				// 주소확인
-				if($('#address').val() == '') {
-					$('#addressMsg').text('주소를 입력하세요');
-				} else {
-					$('#addressMsg').text('');
-					if($('.addressKind:checked').length == 0) {
-						$('#addressKindMsg').text('주소지 이름을 선택하세요');
-						return;
-					} else {
-						$('#addressKindMsg').text('');
-					}
-				}
+	
 				$('.msg').each(function() {
 					if($(this).text() != '') {
 						alert($(this).text());
@@ -150,9 +132,14 @@
 						console.log('length'+$('.msg').length);
 					}
 					if(msgCk == $('.msg').length) {
-						$('#addForm').submit();
+						$('#modifyForm').submit();
 					}
 				});
+				
+				// 로그아웃
+				$('#logoutBtn').on('click', function() {
+		   			logoutAction(url);
+		   		});
 			});
 		});
 	</script>
@@ -190,37 +177,40 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
-								<h6>회원정보수정</h6>
-                        	</div>
-							<div>
 								<form action = "${pageContext.request.contextPath}/customer/modifyCustomer" method = "post" id = "modifyForm">
 									<table>
 										<tr>
-											<td>ID</td>
+											<td style="width: 100px">ID</td>
 											<td>
 												<input type = "text" id = "id" name = "id" value = "${selectCustomer.customerId}" readonly = "readonly">
 											</td>
 										</tr>
 										<tr>
-											<td>PW</td>
+											<td style="width: 100px">PW</td>
 											<td>
 												<input type = "password" id = "pw" name = "pw">
+												<span id = "pwMsg" class = "msg"></span>
 											</td>
 										</tr>
 										<tr>
-											<td>Name</td>
+											<td style="width: 100px">Name</td>
 											<td>
 												<input type = "text" id = "name" name = "name" value = "${selectCustomer.customerName}">
+												<span id = "nameMsg" class = "msg"></span>
 											</td>
 										</tr>
 										<tr>
-											<td>Phone Number</td>
+											<td style="width: 100px">Phone</td>
 											<td>
-												<input type = "text" id = "phone" name = "phone" value = "${selectCustomer.customerPhone}">
+												<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput(this, 3)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">
+												<input type = "hidden" id = "phone" name = "phone">
+												<span id = "phoneMsg" class = "msg"></span>
 											</td> 
 										</tr>
 									</table>
-									<button type = "submit" id = "modifyBtn">정보수정</button>
+									<div class="mt-3">
+										<button type = "button" id = "modifyBtn" class="btn primary-btn">정보수정</button>
+									</div>
 								</form>
 							</div>			
 						</div>

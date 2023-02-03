@@ -183,49 +183,62 @@
 	
 
     <!-- Create Account Section Begin -->
-	<section class="contact spad">
+	<section class="review spad">
     	<div class="container">
 			<div class="row">  
-				<div class="col-lg-11 col-md-7 col-sm-6">
-					<div class = "d-flex justify-content-center">
-						<div class="create-account">
+				<div class="col-lg-11">
+					<div class = "review__table">
+						<div>
 
 							<div>
-							<div>내가 쓴 리뷰</div>
-								<table>
-									<c:forEach var = "n" items = "${reviewList}" varStatus = "i">
-										<tr>
-											<td>${n.orderCode}</td>
-											<td>${n.goodsName}</td>
-											<td>${n.reviewMemo}</td>
-											<td>
-												<a href = "${pageContext.request.contextPath}/review/modifyReview?orderCode=${n.orderCode}">
-													수정하기
-												</a>
-											</td>
-											<td>
-												<a href = "${pageContext.request.contextPath}/review/removeReview?orderCode=${n.orderCode}">
-													삭제하기
-												</a>
-											</td>
-										</tr>	
-									</c:forEach>
-								</table>
+								<div class="order__List">
+								<div>작성 가능한 리뷰</div>
+									<table>
+										<c:forEach var = "nr" items = "${noReviewList}" varStatus = "i">
+											<tr>
+												<td class="product__item">${nr.orderCode}</td>
+												<td class="product__item__pic">
+													<img src = "${pageContext.request.contextPath}/upload/${nr.filename}" width = "70" height = "70">
+												</td>
+												<td class="product__item__text">${nr.goodsName}</td>
+												<td>
+													<div class = "review__btn">
+													<a href = "${pageContext.request.contextPath}/review/addReview?orderCode=${nr.orderCode}">
+														리뷰쓰기
+													</a>
+													</div>
+												</td>
+											</tr>	
+										</c:forEach>
+									</table>
+								</div>
+								<div class="line"></div>
+								<div class="review__List">
 								
-								<div>리뷰 작성하기</div>
-								<table>
-									<c:forEach var = "nr" items = "${noReviewList}" varStatus = "i">
-										<tr>
-											<td>${nr.orderCode}</td>
-											<td>${nr.goodsName}</td>
-											<td>
-												<a href = "${pageContext.request.contextPath}/review/addReview?orderCode=${nr.orderCode}">
-													리뷰쓰기
-												</a>
-											</td>
-										</tr>	
-									</c:forEach>
-								</table>
+									<div>내가 쓴 리뷰</div>
+									<table>
+										<c:forEach var = "n" items = "${reviewList}" varStatus = "i">
+											<tr>
+												<td>${n.orderCode}</td>
+												<td class="product__item__pic">
+													<img src = "${pageContext.request.contextPath}/upload/${nr.filename}" width = "70" height = "70">
+												</td>
+												<td>${n.goodsName}</td>
+												<td>${n.reviewMemo}</td>
+												<td>
+													<a href = "${pageContext.request.contextPath}/review/modifyReview?orderCode=${n.orderCode}">
+														수정하기
+													</a>
+												</td>
+												<td>
+													<a href = "${pageContext.request.contextPath}/review/removeReview?orderCode=${n.orderCode}">
+														삭제하기
+													</a>
+												</td>
+											</tr>	
+										</c:forEach>
+									</table>
+								</div>
 							</div>
 										
 						</div>
