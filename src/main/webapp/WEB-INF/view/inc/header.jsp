@@ -45,13 +45,16 @@
                    </li>
                      </c:when>
                      <c:otherwise>
-                           <li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
-                       <ul>
-                           <li style = "display:inline-block">
-                 	           <a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
-                 	       </li>
-                       </ul>
-                   </li>
+                       <li><a href="${pageContext.request.contextPath}/customer/myHome">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+	                       <ul>
+	                           <li style = "display:inline-block">
+	                 	           <a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
+	                 	       </li>
+	                 	        <li>
+	                 	           <a href="${pageContext.request.contextPath}/customer/myHome"><font size = "2" color = "white">My&nbsp;Page</font></a>
+	                 	       </li>
+	                       </ul>
+                  	   </li>
                      </c:otherwise>
             	</c:choose>
             </ul>
@@ -89,8 +92,11 @@
                    							</li>
                      					</c:when>
                      					<c:otherwise>
-                            				<li><a href="${pageContext.request.contextPath}/customer/home">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
+                            				<li><a href="${pageContext.request.contextPath}/customer/myHome">${loginCustomer.customerName} 님</a><span class="arrow_carrot-down"></span>
                        							<ul>
+                       								<li style = "display:inline-block">
+						                 	           <a href="${pageContext.request.contextPath}/customer/myHome"><font size = "2" color = "white">My&nbsp;Page</font></a>
+						                 	       </li>
                        								<li style = "display:inline-block">
                        									<a href = "javascript:logoutAction()" id = "logoutBtn"><font size = "2" color = "white">logout</font></a>
                        								</li>

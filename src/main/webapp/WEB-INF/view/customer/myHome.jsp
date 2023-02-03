@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
@@ -28,33 +29,25 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 	
-	<style>
-		body {
-			margin: 0;
-		}
-	</style>
-	    
-   
+	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		$(document).ready(function() {
-			if($('#addMsg').val()) {
-				alert('가입을 환영합니다');
-				history.replaceState({}, null, location.pathname);
-			}
-			
-			$('#loginBtn').click(function() {
-				if(!$('#id').val()) {
-					alert('ID와 비밀번호를 입력하세요');
-					$('#id').focus();
-				} else {
-					$('#pw').focus();
-				}
-				if($('#id').val() && $('#pw').val()){
-					$('#loginForm').submit();
-				}
-			});
-		});
+		function logoutAction() {
+			let url = '${pageContext.request.contextPath}/customer/logout';
+ 			let out = confirm('로그아웃하시겠습니까?'); 
+ 		 	if(out) {
+      			location.replace(url); 
+          		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
+	   $(document).ready(function() {
+	   		$('#logoutBtn').on('click', function() {
+	   			logoutAction(url);
+	   		});
+	   });
 	</script>
 </head>
 
@@ -63,63 +56,75 @@
    	<c:import url="../inc/header.jsp"></c:import>
 	<!-- Header Section End -->
 
-    <!-- login Section Begin -->
-    <section class="contact spad">
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
         <div class="container">
-            
-            <div class = "d-flex justify-content-center">
-                <div class="row">
-                   
-                    <div class="col-lg-12 col-md-7 col-sm-6">
-                        <div class="contact__address__item">
-                            <h6>Login</h6>
-                            <div>
-                            	<div>
-	                            	<input type = "hidden" id = "addMsg" value = "${addMsg}">
-									<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
-										<table>
-											<tr>
-												<td>ID</td>
-												<td>
-													<input type = "text" id = "id" name = "id">
-												</td>
-											</tr>
-											<tr>
-												<td>PW</td>
-												<td>
-													<input type = "password" id = "pw" name = "pw">
-												</td>
-											</tr>
-										</table>
-									</form>
-								</div>
-								<div class = "mt-1 mb-4">
-									<span class = "float-right">
-                            			<a href = "${pageContext.request.contextPath}/admin/emp/loginEmp">
-                            				<font size = "2" color = "black">직원로그인</font>
-                            			</a>
-									</span>
-								</div>
-								<div class = "mt-2">
-									<div>
-										<button type = "button" id = "loginBtn" class="login-btn btn-block">login</button>
-									</div>
-									<div class = "mt-1">
-										<a href = "${pageContext.request.contextPath}/customer/addCustomer">
-											<button type = "button" id = "createBtn" class="signup-btn btn-block">sign up</button>
-										</a>
-									</div>
-								</div>
-                            </div>
-                        </div>
-                	</div>
-               
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="breadcrumb__text">
+                        <h2>My Page</h2>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="breadcrumb__links">
+                        <span> My Page</span>
+                    </div>
                 </div>
             </div>
-          
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container">
+           <div class="contact__address">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="contact__address__item">
+                            <!-- 주문 조회 -->
+							<div>
+								<a href = "${pageContext.request.contextPath}/orders/ordersList">
+									<button type = "button" class= "btn primary-btn">주문목록</button>
+								</a>
+							</div>
+                        </div>
+                    </div>
+                     <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="contact__address__item">
+                            <!-- 주문 조회 -->
+							<div>
+								<a href = "${pageContext.request.contextPath}/question/questionList">
+									<button type = "button" class= "btn primary-btn">내 문의내역</button>
+								</a>
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="contact__address__item">
+                            <!-- 리뷰조회 -->
+							<div>
+								<a href = "${pageContext.request.contextPath}/review/reviewList">
+									<button type = "button"  class= "btn primary-btn">내 리뷰</button>
+								</a>
+							</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="contact__address__item">
+                           <!-- 회원정보조회 -->
+							<div>
+								<a href = "${pageContext.request.contextPath}/customer/selectOneCustomer">
+									<button type = "button" class= "btn primary-btn">회원정보</button>
+								</a>
+							</div>
+                        </div>
+                    </div>
+                </div>
+             </div>
         </div>
     </section>
-    <!-- Contact Section End -->
+    <!-- Shopping Cart Section End -->
 
     <!-- Footer Section Begin -->
     <c:import url="../inc/footer.jsp"></c:import>
