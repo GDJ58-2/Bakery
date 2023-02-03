@@ -156,7 +156,7 @@ public class ModifyGoodsController extends HttpServlet {
 		String fileSystemName = null;		
 		
 		// 방어 코드
-		if(mreq.getContentType("goodsImg") != null) {
+		if(mreq.getContentType("goodsImg") == null) {
 			response.sendRedirect(request.getContextPath()+"/admin/goods/goodsListByAdmin");
 			return;
 		} else {
@@ -210,7 +210,7 @@ public class ModifyGoodsController extends HttpServlet {
 		    	msg = URLEncoder.encode("게시글을 수정하였습니다.", "utf-8");
 				
 				// View
-				response.sendRedirect(request.getContextPath()+"/goods/goodsOne?goodsCode="+goodsCode+"&msg="+msg);
+				response.sendRedirect(request.getContextPath()+"/admin/goods/goodsOneByAdmin?goodsCode="+goodsCode+"&msg="+msg);
 			} else {
 				System.out.println("수정실패");
 		    	
