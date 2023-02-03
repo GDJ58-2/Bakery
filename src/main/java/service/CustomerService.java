@@ -47,7 +47,7 @@ public class CustomerService {
 		try {
 			conn = DBUtil.getConnection();
 			this.customerDao = new CustomerDao();
-			boolean checkId = customerDao.checkCustomerId(conn, customer);
+			boolean checkId = customerDao.checkCustomerId(conn, customer.getCustomerId());
 			if(checkId == true) { // 아이디 중복확인
 
 			} else {

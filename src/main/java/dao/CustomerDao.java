@@ -56,7 +56,7 @@ public class CustomerDao {
 	}
 	
 	// 아이디중복검사
-	public boolean checkCustomerId(Connection conn, Customer customer) throws Exception {
+	public boolean checkCustomerId(Connection conn, String id) throws Exception {
 		boolean check = false;
 		String sql = "SELECT i.id"
 				+ " FROM (SELECT customer_id id"
@@ -69,7 +69,7 @@ public class CustomerDao {
 				+ "			FROM emp) i"
 				+ " WHERE i.id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, customer.getCustomerId());
+		stmt.setString(1, id);
 		ResultSet rs = stmt.executeQuery(); 
 		if(rs.next()) { // ture이면 아이디 중복
 			check = true;
