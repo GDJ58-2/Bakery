@@ -27,6 +27,7 @@ public class CustomerListController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<1) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -38,12 +39,13 @@ public class CustomerListController extends HttpServlet {
 		if(request.getParameter("currentPage")!=null) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
-		int rowPerPage = 30;
+		int rowPerPage = 10;
 		String search = request.getParameter("search");
 		System.out.println(search+"<--customerList search, CustomerListController");
 		
 		this.customerService = new CustomerService();
-		int count = customerService.getCustomerCount(); 
+		int count = customerService.getCustomerCount(search);
+		
 		int lastPage = count/rowPerPage;
 		if(count%rowPerPage!=0) {
 			lastPage+=1;
@@ -54,11 +56,14 @@ public class CustomerListController extends HttpServlet {
 		} else if(currentPage>lastPage) {
 			currentPage = lastPage;
 		}
+		
 		ArrayList<Customer> list = customerService.getCustomerListByAdmin(search, currentPage, rowPerPage);		
+		
 		request.setAttribute("customerList", list);
 		request.setAttribute("search", search);
 		request.setAttribute("currentPage", currentPage);		
 		request.setAttribute("lastPage", lastPage);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/customer/customerList.jsp").forward(request, response);
 	}
 }

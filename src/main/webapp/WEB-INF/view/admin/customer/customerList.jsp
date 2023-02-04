@@ -34,8 +34,9 @@
 		$('#submitBtn').click(function(){
 			$('#searchForm').submit();
 		});
-		$('#removeCustomer').click(function(){
-			let result = confirm('삭제하시겠습니까?');
+		$('.removeCustomer').click(function(){
+			let customerName = $(this).attr('data-value');
+			let result = confirm(customerName+'님을 삭제하시겠습니까?');
 			if(result) {
 				return true;
 			} else {
@@ -44,12 +45,13 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>고객 관리 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
-		<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-		<jsp:include page="../../inc/menu.jsp"></jsp:include>
+		<!-- header -->
+		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+		
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
 			<div class="container">
@@ -70,13 +72,15 @@
 		</div>
 		<!-- /breadcrumb -->
 	
-	
 		<!-- customer admin section -->
 		<section class="blog-details spad">
 			<div class="content">
+			
 				<div class="row d-flex justify-content-center">
 					<div class="col-lg-12">
+					
 						<div class="card">
+						
 							<div class="card-header">
 								<div class="p-4">
 									<div class="row">
@@ -100,7 +104,7 @@
 											<th>아이디</th>
 											<th>이름</th>
 											<th>전화번호</th>
-											<th>가입일</th>
+											<th style="width: 15%">가입일</th>
 											<th>&nbsp;</th>
 										</tr>
 									</thead>
@@ -111,27 +115,51 @@
 											<td>${c.customerName}</td>
 											<td>${c.customerPhone}</td>
 											<td>${c.createdate}</td>
-											<td><a href="${pageContext.request.contextPath}/admin/customer/removeCustomer?customerId=${c.customerId}" id="removeCustomer">탈퇴</a></td>
+											<td>
+												<div class="a-btn">
+													<a href="${pageContext.request.contextPath}/admin/customer/removeCustomer?customerId=${c.customerId}" class="removeCustomer" data-value="${c.customerName}" >탈퇴</a>
+												</div>
+											</td>
 										</tr>
 									</c:forEach>
 								</table>
-							</div>
-							<!-- 페이징 -->
-							<div class="shop__last__option">
-								<div class="row d-flex">
-									<div class="col-lg-6 col-md-6 col-sm-6">
+							
+								<!-- 페이징 -->
+								<div class="shop__last__option">
+									<div class="row justify-content-center">
 										<div class="shop__pagination">
 											<a href="${pageContext.request.contextPath}/admin/customer/customerList?currentPage=${currentPage-1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-left"></span></a>
+											<a class="active" href="#">${currentPage}</a>
 											<a href="${pageContext.request.contextPath}/admin/customer/customerList?currentPage=${currentPage+1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-right"></span></a>
 										</div>
 									</div>
 								</div>
+							
 							</div>
 						</div>
+						<!-- /card -->
+						
 					</div>
 				</div>
+				
 			</div>
 		</section>
 	</div>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
+	
+<!-- Js Plugins -->
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
 </body>
 </html>

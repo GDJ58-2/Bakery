@@ -305,14 +305,18 @@ public class CustomerService {
 		}
 		return list;
 	}
+	
 	// 고객목록 페이징 카운트 -관리자기능
-	public int getCustomerCount() {
+	public int getCustomerCount(String search) {
 		int count = 0;
 		this.customerDao = new CustomerDao();
 		Connection conn = null;
+		if(search==null) { // 검색어
+			search="";
+		}
 		try {
 			conn = DBUtil.getConnection();
-			count = customerDao.selectCustomerCount(conn);
+			count = customerDao.selectCustomerCount(conn, search);
 			conn.commit();
 		} catch (Exception e) {
 			try {
