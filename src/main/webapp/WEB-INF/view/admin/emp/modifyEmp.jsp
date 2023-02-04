@@ -29,54 +29,134 @@
     <!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<style>
+		.cancel-btn, .signup-btn {
+			text-align: center;
+			vertical-align: middle;
+			height: 33px;
+			width: 58px;
+		}
+		.card, .table {
+			overflow: visible;
+		}
+		.card {
+			margin-bottom: 50px;
+		}
+		.nice-select {
+			display: inline-block;
+			float: none;
+			width: 50%;
+		}
+	</style>
+	
 <script>
 	$(document).ready(function(){
+		
+		// 취소
+		$('#cancelBtn').click(function(){
+			location.href = '/bakery/admin/emp/empList';
+		});
+		
+		// 변경
 		$('#submitBtn').click(function(){
-			if($('.authCode option:selected').val()==0){ // authCode=0 -> 비활성화
-				$('#active').val('N');
-			} else {
-				$('#active').val('Y');
-			}
 			$('#modifyEmpForm').submit();
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>정보 수정 | 직원 관리 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
-	<h1>관리자-직원 권한/활성화 상태 수정</h1>
-	<form action="${pageContext.request.contextPath}/admin/emp/modifyEmp" method="post" id="modifyEmpForm">
-		<input type="hidden" name="empId" value="${e.empId}">
-		<input type="hidden" name="empCode" value="${e.empCode}">
-		<input type="hidden" name="active" id="active">
-		<table border="1">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>ID</th>
-					<th>이름</th>
-					<th>권한</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>${e.empCode}</td>
-					<td>${e.empId}</td>
-					<td>${e.empName}</td>
-					<td>
-						<select name="authCode" id="authCode">
-							<c:forEach var="a" items="${authInfoList}">
-								<option value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
-							</c:forEach>
-						</select>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<div><button type="button" id="submitBtn">변경</button></div>
-	</form>
+	<div class="wrap">
+		<!-- header -->
+		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+		
+		<!-- breadcrumb -->
+		<div class="breadcrumb-option">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="breadcrumb__text">
+							<h2>직원관리</h2>
+						</div>
+					</div>	
+					<div class="col-lg-6 col-md-6 col-sm-6">
+						<div class="breadcrumb__links">
+							<a href="">Home</a>
+							<a href="${pageContext.request.contextPath}/admin/emp/empList">목록</a>
+							<span>정보 수정</span>
+						</div>
+					</div> 	
+				</div>
+			</div>
+		</div>
+		<!-- /breadcrumb -->
+			
+		<!-- modifyEmp section -->
+		<section class="blog-details spad">
+			<div class="container">
+			
+				<div class="row d-flex justify-content-center">
+					<div class="col-lg-12">
+					
+						<div class="card">
+							<div class="card-body">
+									
+								<form action="${pageContext.request.contextPath}/admin/emp/modifyEmp" method="post" id="modifyEmpForm">
+									<input type="hidden" name="empId" value="${e.empId}">
+									<input type="hidden" name="empCode" value="${e.empCode}">
+									<table class="table text-center">
+										<thead class="table-primary">
+											<tr>
+												<th>번호</th>
+												<th>ID</th>
+												<th>이름</th>
+												<th>활성화</th>
+												<th>권한</th>
+												<th>등록일</th>
+												<th>&nbsp;</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>${e.empCode}</td>
+												<td>${e.empId}</td>
+												<td>${e.empName}</td>
+												<td>${e.active}</td>
+												<td>
+													<select name="authCode" id="authCode">
+														<c:forEach var="a" items="${authInfoList}">
+															<c:if test="${a.authCode eq e.authCode}">
+																<option selected="selected" value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
+															</c:if>
+															<c:if test="${a.authCode ne e.authCode}">
+																<option value="${a.authCode}">${a.authCode} ${a.authMemo}</option>
+															</c:if>
+														</c:forEach>
+													</select>
+												</td>
+												<td>
+													<button type="button" id="submitBtn" class="signup-btn">변경</button>
+													<button type="button" id="cancelBtn" class="cancel-btn">취소</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</form>
+							</div>
+						</div>
+						
+					</div>        		
+				</div>    
+				  
+			</div>
+		</section>	
+	</div>
+						
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>

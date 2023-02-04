@@ -75,6 +75,32 @@ public class CustomerService {
 		return row; 
 	}
 	
+	// 아이디 중복확인
+	public boolean checkId(String id) {
+		boolean checkId = false;
+		this.customerDao = new CustomerDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			checkId = customerDao.checkCustomerId(conn, id);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return checkId;
+	}
+	
 	// 회원정보조회
 	public Customer getSelectOneCustomer(String customerId) {
 		Customer customer = null;

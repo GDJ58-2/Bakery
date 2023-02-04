@@ -93,6 +93,19 @@ a {
 .a-btn a:hover {
 	background: rgba(226, 108, 12, 0.2);
 }
+
+.cancel-btn {
+	 font-size: 14px;
+	 color: #111111;
+	 background: #ffffff;
+	 font-weight: 600;
+	 text-transform: uppercase;
+	 display: inline-block;
+	 letter-spacing: 2px;
+	 padding: 8px;
+	 border: 1px solid black;
+}
+
 .footer {
 	border-top: 1px solid #e8eff4;
 	padding-top: 30px;
@@ -203,9 +216,16 @@ form .primary-btn {
 	width: 50%;
 }
 
-/* nav */
-.nav-link .active{
-	font-weight: 800;
+/* 페이징 */
+.shop__pagination > .active{
+	background: #000000;
+ 	color: #ffffff;
+}
+
+/* msg */
+.msg {
+	color:red;
+	font-size: small;
 }
 
 /* 반응형 */

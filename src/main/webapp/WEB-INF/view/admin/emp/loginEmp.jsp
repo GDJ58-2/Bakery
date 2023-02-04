@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,6 +26,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+    <!-- custom css -->
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<style>
 		body {
@@ -35,19 +38,21 @@
 <script>
 	// 자바스크립트 유효성 검사
 	$(document).ready(function(){
-		console.log(!!$('#msg').val()); // false
+		console.log(!!$('#msg').val()); // !! : 다른 타입의 데이터를 boolean 타입으로 명시적으로 형 변환(Type Conversion)
 		console.log($('#msg').val());
 		if(!!$('#msg').val()){
-			alert($('#msg').val());
+			let msg = $('#msg').val();
+			msg = msg.replace(/\n/g, '<br/>'); // \n 을 <br>로 치환
+			$('.msg').html(msg);
 		}
 		$('#loginBtn').click(function(){
 			if($('#empId').val().length==0){
-				$('#msg').text('아이디를 입력해주세요.');
+				$('.msg').text('아이디를 입력해주세요.');
 				$('#empId').focus();
 				return;
 			}
 			if($('#empPw').val().length==0){
-				$('#msg').text('비밀번호를 입력해주세요.');
+				$('.msg').text('비밀번호를 입력해주세요.');
 				$('#empPw').focus();
 				return;
 			}
@@ -56,12 +61,12 @@
 	});
 </script>
 
-<title>Insert title here</title>
+<title>로그인 | 직원 | 구디쥬르</title>
 </head>
 <body>
 	<input type="hidden" id="msg" value="${msg}">
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
 	<!-- login section -->
     <section class="contact spad">
@@ -71,7 +76,7 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-7 col-sm-6">
                         <div class="contact__address__item">
-                            <h6>Login</h6>
+                            <h6>Login - employee</h6>
                             <div>
 								<form action="${pageContext.request.contextPath}/admin/emp/loginEmp" method="post" id="loginEmpForm">
 									<table>
@@ -85,6 +90,11 @@
 											<td>PW</td>
 											<td>
 												<input type="password" name="empPw" id="empPw">
+											</td>
+										</tr>
+										<tr>
+											<td colspan="2">
+												<span class="msg"></span>
 											</td>
 										</tr>
 									</table>
@@ -116,5 +126,21 @@
 		</div>
    	</section>
 	<!-- login section End -->
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
+	
+<!-- Js Plugins -->
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
 </body>
 </html>

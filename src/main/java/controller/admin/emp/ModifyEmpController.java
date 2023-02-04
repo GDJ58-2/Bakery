@@ -30,6 +30,7 @@ public class ModifyEmpController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -44,12 +45,20 @@ public class ModifyEmpController extends HttpServlet {
 		int empCode = Integer.parseInt(request.getParameter("empCode"));
 		//System.out.println(empCode+"<--ModifyEmpController empCode");
 		
+		// 본인의 관리자 권한은 수정못하도록 방어
+		if(empCode == loginEmp.getEmpCode()) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/empList");
+			return;
+		}
+		
 		this.empService = new EmpService();
-		Emp emp = empService.getEmpOne(empCode);
 		this.authInfoService = new AuthInfoService();
-		ArrayList<AuthInfo> authInfoList = authInfoService.getAuthInfoList();
-		request.setAttribute("authInfoList", authInfoList);
+		Emp emp = empService.getEmpOne(empCode);
+		ArrayList<AuthInfo> list = authInfoService.getAuthInfoList();
+		
 		request.setAttribute("e", emp);
+		request.setAttribute("authInfoList", list);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/modifyEmp.jsp").forward(request, response);
 	}
 	
@@ -70,16 +79,23 @@ public class ModifyEmpController extends HttpServlet {
 		
 		// 파라메타값 유효성검사 , 파라메타값 저장
 		String empId = request.getParameter("empId");
-		String active = request.getParameter("active");
 		if(empId==null||empId.equals("")||request.getParameter("authCode")==null||request.getParameter("authCode").equals("")||request.getParameter("empCode")==null||request.getParameter("empCode").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/modifyEmp");
 			return;
 		}
 		int empCode = Integer.parseInt(request.getParameter("empCode"));
 		int authCode = Integer.parseInt(request.getParameter("authCode"));
+		String active = "Y";
 		if(authCode==0) { // 관리자권한 비활성화(0) 시 active N
 			active = "N";
+		} 
+		
+		// 본인의 관리자 권한은 수정못하도록 방어
+		if(empCode == loginEmp.getEmpCode()) {
+			response.sendRedirect(request.getContextPath()+"/admin/emp/empList");
+			return;
 		}
+		
 		Emp emp = new Emp(); // 파라메타값으로 바인딩
 		emp.setEmpCode(empCode);
 		emp.setEmpId(empId);
@@ -90,11 +106,13 @@ public class ModifyEmpController extends HttpServlet {
 		this.empService = new EmpService();
 		int row = empService.modifyEmpByAdmin(emp);
 		System.out.println(row+"<--ModifyEmpController row");
+		
 		// 수정 실패시
 		String msg = "<script>alert('수정을 실패하였습니다. 다시 시도해주세요.'); location.href='/bakery/admin/emp/modifyEmp?empCode='"+empCode+";</script>";
 		if(row==1) { // 수정 성공
 			msg = "<script>alert('수정되었습니다'); location.href='/bakery/admin/emp/empList';</script>";
 		}
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println(msg);

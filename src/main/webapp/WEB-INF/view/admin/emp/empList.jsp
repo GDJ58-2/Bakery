@@ -36,12 +36,12 @@
 		});
 	});
 </script>
-<title>empList</title>
+<title>직원 관리 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
-		<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-		<jsp:include page="../../inc/menu.jsp"></jsp:include>
+		<!-- header -->
+		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 		
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
@@ -66,12 +66,15 @@
 		<!-- emp section -->
 		<section class="blog-details spad">
 			<div class="content">
+			
 				<div class="row d-flex justify-content-center">
 					<div class="col-lg-12">
+					
 						<div class="card">
 							<div class="card-header">
 								<div class="p-4">
 									<div class="row">
+									
 										<div class="searchForm">
 											<!-- 검색창 -->
 											<form action="${pageContext.request.contextPath}/admin/emp/empList" id="searchForm">
@@ -98,36 +101,57 @@
 										</tr>
 									</thead>
 									<tbody>
-										<c:forEach var="e" items="${empList}">
+										<c:forEach var="e" items="${empList}" varStatus="status">
 											<tr>
 												<td>${e.empCode}</td>
 												<td>${e.empId}</td>
 												<td>${e.empName}</td>
 												<td>${e.active}</td>
-												<td>${e.authCode} ${e.authMemo}</td>
+												<td class="authCodeTd">${e.authCode} ${e.authMemo}</td>
 												<td>${e.createdate}</td>
-												<td><a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a></td>
+												
+												<!-- 본인의 관리자 권한은 수정 X -->
+												<td>
+													<c:if test="${e.empCode == loginEmp.empCode}">
+														-
+													</c:if>
+													<c:if test="${e.empCode != loginEmp.empCode}">
+														<div class="a-btn">
+															<a href="${pageContext.request.contextPath}/admin/emp/modifyEmp?empCode=${e.empCode}">수정</a>
+														</div>
+													</c:if>
+												</td>
+												
 											</tr>
 										</c:forEach>
 									</tbody>
 								</table>
-							</div>
-							<!-- 페이징 -->
-							<div class="shop__last__option">
-								<div class="row d-flex">
-									<div class="col-lg-6 col-md-6 col-sm-6">
+								
+								<!-- 페이징 -->
+								<div class="shop__last__option">
+									<div class="row justify-content-center">
 										<div class="shop__pagination">
-											<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage-1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-left"></span></a>
-											<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage+1}&rowPerPage=${rowPerPage}&search=${search}"><span class="arrow_carrot-right"></span></a>
+											<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage-1}&search=${search}"><span class="arrow_carrot-left"></span></a>
+											<a class="active" href="#">${currentPage}</a>
+											<a href="${pageContext.request.contextPath}/admin/emp/empList?currentPage=${currentPage+1}&search=${search}"><span class="arrow_carrot-right"></span></a>
 										</div>
 									</div>
 								</div>
+								
 							</div>
 						</div>
+						<!-- /card -->
+						
 					</div>
 				</div>
+				
 			</div>
 		</section>
+	</div>
+	
+	 <!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	</div>
 	
 <!-- Js Plugins -->

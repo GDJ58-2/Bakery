@@ -20,7 +20,9 @@ public class LogoutEmpController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		session.invalidate();
+		
 		response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 	}
 }

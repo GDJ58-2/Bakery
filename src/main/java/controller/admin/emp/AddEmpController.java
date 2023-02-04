@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import service.CustomerService;
 import service.EmpService;
 import vo.Emp;
 
@@ -18,6 +19,7 @@ import vo.Emp;
 @WebServlet("/admin/emp/addEmp")
 public class AddEmpController extends HttpServlet {
 	private EmpService empService;
+	private CustomerService customerService;
 	// addEmp form
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사 
@@ -33,8 +35,10 @@ public class AddEmpController extends HttpServlet {
 			msg = "이미 사용중인 아이디이거나 탈퇴한 아이디입니다.";
 			request.setAttribute("msg", msg);
 		}
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/addEmp.jsp").forward(request, response);
 	}
+	
 	// addEmp action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.setCharacterEncoding("UTF-8"); 인코딩 필터 처리
@@ -51,19 +55,24 @@ public class AddEmpController extends HttpServlet {
 		String empId = request.getParameter("empId");
 		String empPw = request.getParameter("empPw");
 		String empName = request.getParameter("empName");
+		
 		if(empId==null||empId.equals("")||empPw==null||empPw.equals("")||empName==null||empName.equals("")) {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/empList");
 			return;
 		}
+		
 		Emp emp = new Emp(); // request Parameter 값으로 바인딩
 		emp.setEmpId(empId);
 		emp.setEmpPw(empPw);
 		emp.setEmpName(empName);
 		
 		this.empService = new EmpService();
+		this.customerService = new CustomerService();
+		
 		// 아이디 중복확인
-		boolean checkId = empService.checkId(empId);
+		boolean checkId = customerService.checkId(empId);
 		System.out.println(checkId+"<--AddEmpController checkId");
+		
 		String idMsg = URLEncoder.encode("중복된 아이디", "UTF-8");
 		if(checkId) { // true -> 아이디 중복
 			response.sendRedirect(request.getContextPath()+"/admin/emp/addEmp?msg="+idMsg);
@@ -79,6 +88,7 @@ public class AddEmpController extends HttpServlet {
 		if(row==1) { // emp 회원가입 성공
 			msg = "<script>alert('회원 가입을 축하합니다. 로그인 후 이용할 수 있습니다.'); location.href='/bakery/admin/emp/loginEmp';</script>'";
 		} 
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println(msg);

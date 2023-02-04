@@ -11,13 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import service.AuthInfoService;
 import service.EmpService;
+import vo.AuthInfo;
 import vo.Emp;
 
 
 @WebServlet("/admin/emp/empList") 
 public class EmpListController extends HttpServlet {
 	private EmpService empService;
+	private AuthInfoService authInfoService;
 	// empList 출력
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사 
@@ -39,7 +42,7 @@ public class EmpListController extends HttpServlet {
 		if(request.getParameter("currentPage")!=null) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
-		int rowPerPage = 30;
+		int rowPerPage = 10;
 		System.out.println(search+"<--empList search, EmpListController");
 		this.empService = new EmpService();
 		int count = empService.getEmpCount(); 
@@ -54,11 +57,17 @@ public class EmpListController extends HttpServlet {
 			currentPage = lastPage;
 		}
 		
-		ArrayList<HashMap<String, Object>> list = empService.getEmpListByAdmin(currentPage, rowPerPage, search);
-		request.setAttribute("empList", list);
+		// model 
+		this.authInfoService = new AuthInfoService();
+		ArrayList<AuthInfo> authInfoList = authInfoService.getAuthInfoList();
+		ArrayList<HashMap<String, Object>> empList = empService.getEmpListByAdmin(currentPage, rowPerPage, search);
+		
+		request.setAttribute("empList", empList);
+		request.setAttribute("authInfoList", authInfoList);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("lastPage", lastPage);
 		request.setAttribute("search", search);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/emp/empList.jsp").forward(request, response);
 	}
 }

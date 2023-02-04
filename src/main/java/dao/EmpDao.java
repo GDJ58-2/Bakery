@@ -41,33 +41,13 @@ public class EmpDao {
 		return row;
 	}
 
-	// id 중복 검사
-	public boolean selectId(Connection conn, String empId) throws Exception { 
-		boolean check = false;
-		String sql = "SELECT t.userId"
-				+ "		FROM("
-				+ "			SELECT customer_id userId FROM customer UNION"
-				+ "			SELECT emp_id userId FROM emp UNION"
-				+ "			SELECT id userId FROM outid) t"
-				+ "		WHERE userId = ?";
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, empId);
-		ResultSet rs = stmt.executeQuery();
-		if(rs.next()) { // 사용 불가 -> true
-			check = true;
-		}
-		System.out.print(check);
-		DBUtil.close(rs, stmt, null);
-		return check;
-	}
-	
 	// UPDATE 
 	public int updateEmpPw(Connection conn, HashMap<String, Object> map) throws Exception { 
 		int row = 0;
-		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_id = ? AND emp_pw = ?";
+		String sql = "UPDATE emp SET emp_pw = PASSWORD(?) WHERE emp_code = ? AND emp_pw = PASSWORD(?)";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, (String)map.get("newEmpPw"));
-		stmt.setString(2, (String)map.get("empId"));
+		stmt.setString(2, (String)map.get("empCode"));
 		stmt.setString(3, (String)map.get("empPw"));
 		row = stmt.executeUpdate();
 		DBUtil.close(null, stmt, null);
