@@ -10,6 +10,7 @@ import vo.AuthInfo;
 
 public class AuthInfoService {
 	private AuthInfoDao authInfoDao;
+	// insert
 	public int addAuthInfo(AuthInfo authInfo) { // authInfo 추가
 		int row = 0;
 		this.authInfoDao = new AuthInfoDao();
@@ -34,6 +35,8 @@ public class AuthInfoService {
 		}
 		return row;
 	}
+	
+	// update
 	public int modifyAuthInfo(AuthInfo authInfo) { // authInfo 수정
 		int row = 0;
 		this.authInfoDao = new AuthInfoDao();
@@ -58,6 +61,8 @@ public class AuthInfoService {
 		}
 		return row;
 	}
+	
+	// delete
 	public int removeAuthInfo(int authCode) { // authInfo 삭제
 		int row = 0;
 		this.authInfoDao = new AuthInfoDao();
@@ -82,6 +87,8 @@ public class AuthInfoService {
 		}
 		return row;
 	}
+	
+	// 상세보기
 	public AuthInfo getAuthInfoOne(int authCode) { // modifyAuthInfo form 
 		AuthInfo authInfo = null;
 		this.authInfoDao = new AuthInfoDao();
@@ -106,6 +113,8 @@ public class AuthInfoService {
 		}
 		return authInfo;
 	}
+	
+	// 리스트
 	public ArrayList<AuthInfo> getAuthInfoList() { // authInfoList 출력
 		ArrayList<AuthInfo> list = null;
 		this.authInfoDao = new AuthInfoDao();

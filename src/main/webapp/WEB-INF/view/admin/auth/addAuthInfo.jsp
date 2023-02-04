@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- core JSTL 사용 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,6 +29,11 @@
     <!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<style>
+		.card {
+			height: 100%;
+		}
+	</style>
 <script>
 	$(document).ready(function(){
 		$('#submitBtn').click(function(){
@@ -45,11 +51,11 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>관리자 권한 관리 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-	<jsp:include page="../../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
 	<!-- breadcrumb -->
 	<div class="breadcrumb-option">
@@ -57,13 +63,13 @@
 			<div class="row">
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div class="breadcrumb__text">
-						<h2>관리자권한</h2>
+						<h2>관리자 권한 관리</h2>
 					</div>
 				</div>	
 				<div class="col-lg-6 col-md-6 col-sm-6">
 					<div class="breadcrumb__links">
 						<a href="">Home</a>
-						<a href="">목록</a>
+						<a href="${pageContext.request.contextPath}/admin/auth/authInfoList">목록</a>
 						<span>추가</span>
 					</div>
 				</div> 	
@@ -72,11 +78,12 @@
 	</div>
 	<!-- /breadcrumb -->
 	
-	<!-- add authInfo form -->
 	<section class="blog-details spad">
 		<div class="container">
-			<div class="row d-flex justify-content-center">
-				<div class="col-lg-12">
+			<div class="row d-flex">
+				
+				<!-- add AuthInfo form -->
+				<div class="col-md-6">
 					<div class="card">
 						<div class="card-body">
 							<form action="${pageContext.request.contextPath}/admin/auth/addAuthInfo" method="post" id="addAuthInfoForm">
@@ -95,9 +102,41 @@
 						</div>
 					</div>
 				</div>
+				<!-- /add AuthInfo form -->
+				
+				<!-- authInfo List -->
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<table class="table text-center">
+								<thead class="table-primary">
+									<tr>
+										<th>번호</th>
+										<th>등급</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach var="a" items="${authInfoList}">
+										<tr>
+											<td>${a.authCode}</td>
+											<td class="title">${a.authMemo}</td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- /authInfo List -->
+				
 			</div>
 		</div>
 	</section>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>

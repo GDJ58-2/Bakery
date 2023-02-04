@@ -2,6 +2,7 @@ package controller.admin.auth;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,14 +27,21 @@ public class AddAuthInfoController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
 			return;
 		}
 		
+		this.authInfoService = new AuthInfoService();
+		ArrayList<AuthInfo> list = authInfoService.getAuthInfoList();
+		
+		request.setAttribute("authInfoList", list);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/auth/addAuthInfo.jsp").forward(request, response);
 	}
+	
 	// addAuthInfo action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//request.setCharacterEncoding("UTF-8"); 인코딩 --> 필터처리
@@ -45,6 +53,7 @@ public class AddAuthInfoController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -58,6 +67,7 @@ public class AddAuthInfoController extends HttpServlet {
 			return;
 		}
 		int authCode = Integer.parseInt(request.getParameter("authCode"));
+		
 		AuthInfo authInfo = new AuthInfo(authCode, authMemo, null); // request Parameter 값으로 바인딩
 		System.out.println(authInfo+"<--AddAuthInfoController authInfo");
 		
@@ -69,6 +79,7 @@ public class AddAuthInfoController extends HttpServlet {
 		if(row==1) { 
 			msg = "<script>alert('등록되었습니다.'); location.href='/bakery/admin/auth/authInfoList';</script>";
 		}
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println(msg);
