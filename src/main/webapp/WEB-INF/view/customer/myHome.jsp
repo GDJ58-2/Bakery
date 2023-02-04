@@ -9,7 +9,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>홈 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -32,11 +32,11 @@
 	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		function logoutAction() {
-			let url = '${pageContext.request.contextPath}/customer/logout';
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
  			let out = confirm('로그아웃하시겠습니까?'); 
  		 	if(out) {
-      			location.replace(url); 
+      			location.replace(customerUrl); 
           		alert('로그아웃되었습니다');
 	       	} else {
 	          	alert('로그아웃 취소');
@@ -44,9 +44,10 @@
 	       	}
 		 }  
 	   $(document).ready(function() {
-	   		$('#logoutBtn').on('click', function() {
-	   			logoutAction(url);
+	   		$('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
 	   		});
+	   		
 	   });
 	</script>
 </head>
