@@ -45,7 +45,6 @@
 			
 			if($('#loginMsg').val()) {
 				alert('ID와 비밀번호를 확인하세요');
-				history.replaceState({}, null, location.pathname);
 			}
 			
 			$('#loginBtn').click(function() {

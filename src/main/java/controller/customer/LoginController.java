@@ -35,6 +35,10 @@ public class LoginController extends HttpServlet {
 	    	System.out.println(addMsg);
 	    	request.setAttribute("addMsg", addMsg);
 	    }
+	    String loginMsg=request.getParameter("loginMsg");
+	    if(loginMsg != null) {
+	    	request.setAttribute("loginMsg", loginMsg);
+	    }
 	    
 	    // View
 	    request.getRequestDispatcher("/WEB-INF/view/customer/login.jsp").forward(request, response);
