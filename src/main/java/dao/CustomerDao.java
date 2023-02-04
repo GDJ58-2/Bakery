@@ -296,6 +296,7 @@ public class CustomerDao {
 		String sql = "SELECT customer_code customerCode, customer_id customerId, customer_name customerName, customer_phone customerPhone, point, createdate "
 				+ "		FROM customer "
 				+ "	   WHERE customer_name LIKE ? "
+				+ "	ORDER BY customer_code DESC "
 				+ "	   LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, "%"+search+"%");
@@ -309,11 +310,13 @@ public class CustomerDao {
 		DBUtil.close(rs, stmt, null);
 		return list;
 	}
+	
 	// 고객목록 페이징 - 관리자
-	public int selectCustomerCount(Connection conn) throws Exception {
+	public int selectCustomerCount(Connection conn, String search) throws Exception {
 		int count = 0;
-		String sql = "SELECT COUNT(*) count FROM customer";
+		String sql = "SELECT COUNT(*) count FROM customer WHERE customer_name LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+search+"%");
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			count = rs.getInt("count");

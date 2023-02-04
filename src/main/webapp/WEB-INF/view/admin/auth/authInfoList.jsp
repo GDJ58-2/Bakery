@@ -28,14 +28,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	
-	<!-- 부트스트랩 js cdn -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>	
 <script>
 	$(document).ready(function(){
-		console.log($('.removeAuthInfo').text());
 		$('.removeAuthInfo').click(function(){
 			let result = confirm('삭제하시겠습니까?');
 			if(result) {
