@@ -9,7 +9,8 @@ import util.DBUtil;
 import vo.AuthInfo;
 
 public class AuthInfoDao {
-	public int insertAuthInfo(Connection conn, AuthInfo authInfo) throws Exception { // addAuthInfo
+	// insert
+	public int insertAuthInfo(Connection conn, AuthInfo authInfo) throws Exception { 
 		int row = 0;
 		String sql = "INSERT INTO auth_info(auth_code, auth_memo, createdate) VALUES(?,?,NOW())";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -19,7 +20,9 @@ public class AuthInfoDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public int updateAuthInfo(Connection conn, AuthInfo authInfo) throws Exception { // modifyAuthInfo
+	
+	// update
+	public int updateAuthInfo(Connection conn, AuthInfo authInfo) throws Exception { 
 		int row = 0;
 		String sql = "UPDATE auth_info SET auth_memo = ? WHERE auth_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -29,7 +32,9 @@ public class AuthInfoDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public int deleteAuthInfo(Connection conn, int authCode) throws Exception { // removeAuthInfo
+	
+	// delete
+	public int deleteAuthInfo(Connection conn, int authCode) throws Exception {
 		int row = 0;
 		String sql = "DELETE FROM auth_info WHERE auth_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -38,7 +43,9 @@ public class AuthInfoDao {
 		DBUtil.close(null, stmt, null);
 		return row;
 	}
-	public AuthInfo selectAuthInfoOne(Connection conn, int authCode) throws Exception { // modifyAuthInfo form
+	
+	// 상세보기
+	public AuthInfo selectAuthInfoOne(Connection conn, int authCode) throws Exception { 
 		AuthInfo authInfo = null;
 		String sql = "SELECT auth_code authCode, auth_memo authMemo, createdate FROM auth_info WHERE auth_code=?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -50,6 +57,8 @@ public class AuthInfoDao {
 		DBUtil.close(rs, stmt, null);
 		return authInfo;
 	}
+	
+	// 리스트
 	public ArrayList<AuthInfo> selectAuthInfoList(Connection conn) throws Exception { // authInfoList, modifyEmpByAdmin Form
 		ArrayList<AuthInfo> list = new ArrayList<AuthInfo>();
 		String sql = "SELECT auth_code authCode, auth_memo authMemo, createdate FROM auth_info ORDER BY auth_code ASC";

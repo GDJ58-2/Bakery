@@ -29,9 +29,14 @@
 	<!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	
+	<!-- 부트스트랩 js cdn -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+	
 <script>
 	$(document).ready(function(){
-		$('#removeAuthInfo').click(function(){
+		console.log($('.removeAuthInfo').text());
+		$('.removeAuthInfo').click(function(){
 			let result = confirm('삭제하시겠습니까?');
 			if(result) {
 				return true;
@@ -41,12 +46,12 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>관리자 권한 관리 | 구디쥬르</title>
 </head>
 <body>
 	<div class="wrap">
-		<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-		<jsp:include page="../../inc/menu.jsp"></jsp:include>
+		<!-- header -->
+		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 		
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
@@ -54,7 +59,7 @@
 				<div class="row">
 					<div class="col-lg-6 col-md-6 col-sm-6">
 						<div class="breadcrumb__text">
-							<h2>관리자권한</h2>
+							<h2>관리자 권한 관리</h2>
 						</div>
 					</div>	
 					<div class="col-lg-6 col-md-6 col-sm-6">
@@ -71,44 +76,73 @@
 		<!-- authInfo section-->
 		<section class="blog-details spad">
 			<div class="content">
+			
 				<div class="row d-flex justify-content-center">
 					<div class="col-lg-12">
+					
 						<div class="card">
 							<div class="card-body">
-								<div class="a-btn">
+								
+								<div class="a-btn mb-1-4">
 									<a href="${pageContext.request.contextPath}/admin/auth/addAuthInfo">추가</a>
 								</div>
+								
 								<!-- authInfo List -->
 								<table class="table text-center">
 									<thead class="table-primary">
 										<tr>
 											<th>번호</th>
 											<th>등급</th>
-											<th>등록일</th>
-											<th>&nbsp;</th>
+											<th style="width:300px;">등록일</th>
+											<th style="width:200px;">&nbsp;</th>
 										</tr>
 									</thead>
 									<tbody>
 										<c:forEach var="a" items="${authInfoList}">
 											<tr>
 												<td>${a.authCode}</td>
-												<td class="text-left title">${a.authMemo}</td>
+												<td class="title">${a.authMemo}</td>
 												<td>${a.createdate}</td>
 												<td>
-													<a href="${pageContext.request.contextPath}/admin/auth/modifyAuthInfo?authCode=${a.authCode}">수정</a>
-													<!-- 삭제기능 : 데이터 삭제가 아닌, 수정 목적의 삭제 -->
-													<a href="${pageContext.request.contextPath}/admin/auth/removeAuthInfo?authCode=${a.authCode}" id="removeAuthInfo">삭제</a>
+													<div class="row justify-content-center">
+														<div class="a-btn">
+															<a href="${pageContext.request.contextPath}/admin/auth/modifyAuthInfo?authCode=${a.authCode}">수정</a>
+														</div>
+														<div class="a-btn">
+															<!-- 삭제기능 : 데이터 삭제가 아닌, 수정 목적의 삭제 -->
+															<a href="${pageContext.request.contextPath}/admin/auth/removeAuthInfo?authCode=${a.authCode}" class="removeAuthInfo">삭제</a>
+														</div>
+													</div>
 												</td>
 											</tr>
 										</c:forEach>
 									</tbody>
 								</table>
+								
 							</div>
 						</div>
+						
 					</div>
 				</div>
+				
 			</div>
 		</section>
 	</div>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
+	
+<!-- Js Plugins -->
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nice-select.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.barfiller.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.magnific-popup.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.slicknav.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/owl.carousel.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/jquery.nicescroll.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/static/js/main.js"></script>
 </body>
 </html>

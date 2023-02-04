@@ -25,6 +25,7 @@ public class RemoveAuthInfoController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -45,8 +46,9 @@ public class RemoveAuthInfoController extends HttpServlet {
 		
 		String msg = "<script>alert('삭제를 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/auth/authInfoList';</script>";
 		if(row==1) {
-			msg = "<script>alert('수정되었습니다.'); location.href='/bakery/admin/auth/authInfoList';</script>";
+			msg = "<script>alert('삭제되었습니다.'); location.href='/bakery/admin/auth/authInfoList';</script>";
 		}
+		
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		out.println(msg);

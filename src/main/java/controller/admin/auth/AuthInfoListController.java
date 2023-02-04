@@ -26,6 +26,7 @@ public class AuthInfoListController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/admin/emp/loginEmp");
 			return;
 		}
+		
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
 			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
@@ -34,7 +35,9 @@ public class AuthInfoListController extends HttpServlet {
 		
 		this.authInfoService = new AuthInfoService();
 		ArrayList<AuthInfo> list = authInfoService.getAuthInfoList();
+		
 		request.setAttribute("authInfoList", list);
+		
 		request.getRequestDispatcher("/WEB-INF/view/admin/auth/authInfoList.jsp").forward(request, response);
 	}
 }

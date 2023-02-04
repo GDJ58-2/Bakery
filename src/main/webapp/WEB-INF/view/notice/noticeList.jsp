@@ -37,7 +37,7 @@
 		$('#submitBtn').click(function(){
 			$('#searchForm').submit();
 		});
-		$('#removeNotice').click(function(){
+		$('.removeNotice').click(function(){
 			let result = confirm('삭제하시겠습니까?');
 			if(result) {
 				return true;
@@ -145,7 +145,7 @@
 															</div>
 															<div class="a-btn">
 																<!-- emp 기능 -->
-																<a href="${pageContext.request.contextPath}/admin/notice/removeNotice?noticeCode=${n.noticeCode}" id="removeNotice">삭제</a>
+																<a href="${pageContext.request.contextPath}/admin/notice/removeNotice?noticeCode=${n.noticeCode}" class="removeNotice">삭제</a>
 															</div>
 														</div>
 													</td>

@@ -149,7 +149,7 @@
 		</section>
 	</div>
 	
-	 <!-- footer -->
+	<!-- footer -->
 	<div>
 		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	</div>
