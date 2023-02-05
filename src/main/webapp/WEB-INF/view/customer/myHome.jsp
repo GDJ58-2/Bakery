@@ -47,7 +47,6 @@
 	   		$('#logoutBtn').click(function() {
 	   			logoutAction(customerUrl);
 	   		});
-	   		
 	   });
 	</script>
 </head>

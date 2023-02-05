@@ -17,7 +17,7 @@ public class ReviewDao {
 		String sql = "SELECT r.review_memo reviewMemo"
 				+ ", o.customer_id customerId"
 				+ ", g.goods_name goodsName"
-				+ ", f.filename filename"
+				+ ", f.origin_name originName"
 				+ ", r.createdate createdate"
 				+ " FROM review r"
 				+ " INNER JOIN orders o"
@@ -38,7 +38,7 @@ public class ReviewDao {
 			m.put("reviewMemo", rs.getString("reviewMemo"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("customerId", rs.getString("customerId"));
-			m.put("filename", rs.getString("filename"));
+			m.put("originName", rs.getString("originName"));
 			m.put("createdate", rs.getString("createdate"));
 			list.add(m);
 		}
@@ -72,11 +72,14 @@ public class ReviewDao {
 		String sql = "SELECT r.order_code orderCode"
 				+ ", r.review_memo reviewMemo"
 				+ ", g.goods_name goodsName"
+				+ ", f.origin_name originName"
 				+ " FROM review r"
 				+ " INNER JOIN orders o"
 				+ " ON r.order_code = o.order_code"
 				+ " INNER JOIN goods g"
 				+ " ON o.goods_code = g.goods_code"
+				+ " INNER JOIN goods_img f"
+				+ " ON f.goods_code = o.goods_code"
 				+ " WHERE o.customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
@@ -86,6 +89,7 @@ public class ReviewDao {
 			m.put("orderCode", rs.getInt("orderCode"));
 			m.put("reviewMemo", rs.getString("reviewMemo"));
 			m.put("goodsName", rs.getString("goodsName"));
+			m.put("originName", rs.getString("originName"));
 			list.add(m);
 		}
 		DBUtil.close(rs, stmt, null);
@@ -163,7 +167,7 @@ public class ReviewDao {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql = "SELECT o.order_code orderCode"
 				+ ", g.goods_name goodsName"
-				+ ", f.filename filename"
+				+ ", f.origin_name originName"
 				+ " FROM orders o"
 				+ " INNER JOIN goods g"
 				+ " ON o.goods_code = g.goods_code"
@@ -181,7 +185,7 @@ public class ReviewDao {
 			HashMap<String, Object> m = new HashMap<String, Object>();
 			m.put("orderCode", rs.getInt("orderCode"));
 			m.put("goodsName", rs.getString("goodsName"));
-			m.put("filename", rs.getString("filename"));
+			m.put("originName", rs.getString("originName"));
 			list.add(m);
 		}
 		DBUtil.close(rs, stmt, null);

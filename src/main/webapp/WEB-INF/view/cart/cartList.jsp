@@ -32,26 +32,18 @@
    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
    <script>
-      function logoutAction() {
-         let url = '${pageContext.request.contextPath}/customer/logout';
-            let out = confirm('로그아웃하시겠습니까?'); 
-             if(out) {
-              location.replace(url); 
-               alert('로그아웃되었습니다');
-             } else {
-                alert('로그아웃 취소');
-                return false;
-             }
-       }  
-      
-      function modifyAction() {
-         let code = a.dataset.goodsCode;
-         let quantity = $('td.quantity__item').find('input.cQuantity').val();
-         console.log(quantity);
-         let url = '${pageContext.request.contextPath}/cart/modifyCart?goodsCode='+code+'&cartQuantity='+quantity;
-         location.replace(url);
-      }
-      
+     	let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
+		let out = confirm('로그아웃하시겠습니까?'); 
+		 	if(out) {
+	   			location.replace(customerUrl); 
+	       		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		}  
+	
       $(document).ready(function() {
          // 총 금액
          $('.checkGoodsCode').each(function() {
@@ -69,14 +61,19 @@
          
          // 수량변경버튼
          $('.modifyBtn').on('click', function() {
-            modifyAction(url);
-            
+           	let cartCode = $(this).data('goodscode');
+           	let cartQ = $(this).parent().siblings().find('input').val();
+           	$('.updateCartQuantity').val(cartQ);
+           	$('.updateGoodsCode').val(cartCode);
+           	$('.modifyCartForm').submit();
+           	console.log('cartCode: '+cartCode);
+          	console.log('cartQ: '+cartQ);
          });
          
          // 로그아웃
-         $('#logoutBtn').on('click', function() {
-               logoutAction(url);
-            });
+         $('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
+	   		});
       });
    </script>
 </head>
@@ -143,7 +140,7 @@
                                                      </td>
                                                          <td class="product__cart__item">
                                                           <div class="product__cart__item__pic">
-                                                              <img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${user.originName}" width = "70" height = "70">
                                                           </div>
                                                           <div class="product__cart__item__text">
                                                               <h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
@@ -166,7 +163,7 @@
                                                        </td>
                                                         <td class="product__cart__item">
                                                             <div class="product__cart__item__pic">
-                                                               <img src = "${pageContext.request.contextPath}/upload/${user.filename}" width = "70" height = "70">
+                                                               <img src = "${pageContext.request.contextPath}/upload/${user.originName}" width = "70" height = "70">
                                                             </div>
                                                             <div class="product__cart__item__text">
                                                                 <h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
@@ -176,11 +173,11 @@
                                                       <td class="quantity__item">
                                                           <div class="quantity">
                                                               <div class="pro-qty">
-                                                                  <input type="text" class = "cQuantity" name="cartQuantity" value = "${user.cartQuantity}">개
+                                                                  <input type="text" class = "cQuantity" value = "${user.cartQuantity}">개
                                                               </div>
                                                           </div>
                                                           <div class = "cart__modify__btn">
-                                                             <a href = "#" class = "modifyBtn" data-goodsCode = "${user.goodsCode}">수정</a>
+                                                             <a href="javascript:void(0)" class = "modifyBtn" data-goodscode = "${user.goodsCode}">수정</a>
                                                           </div>
                                                       </td>
                                                         <td class="cart__price">&#8361;${user.goodsPrice * user.cartQuantity}</td>
@@ -223,7 +220,7 @@
                                                      </td>
                                                          <td class="product__cart__item">
                                                           <div class="product__cart__item__pic">
-                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.originName}" width = "70" height = "70">
                                                           </div>
                                                           <div class="product__cart__item__text">
                                                               <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
@@ -249,11 +246,11 @@
                                                 <tr>
                                                      <td>
                                                         <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}">
-                                                        <input type="hidden" name="goodsCode" id = "gCode" value="${customer.goodsCode}">
+                                                        <input type="hidden" id = "gCode" value="${customer.goodsCode}">
                                                      </td>
                                                       <td class="product__cart__item">
                                                           <div class="product__cart__item__pic">
-                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.filename}" width = "70" height = "70">
+                                                              <img src = "${pageContext.request.contextPath}/upload/${customer.originName}" width = "70" height = "70">
                                                           </div>
                                                           <div class="product__cart__item__text">
                                                               <h6><input type="hidden" name="goodsName" value="${customer.goodsName}">${customer.goodsName}</h6>
@@ -263,19 +260,19 @@
                                              			 <td class="quantity__item">
                                                           <div class="quantity">
                                                               <div class="pro-qty">
-                                                                  <input type="text" class = "cQuantity" name="cartQuantity" value="${customer.cartQuantity}">개
+                                                                  <input type="text" class = "cQuantity" value="${customer.cartQuantity}">개
                                                               </div>
-                                                          </div>
-                                                          <div class = "cart__modify__btn">
-                                                             <a href = "javascipt:modifyAction()" class = "modifyBtn" data-goodsCode = "${customer.goodsCode}">수정</a>
+                                                              <div class = "cart__modify__btn">
+                                                             	<a href="javascript:void(0)" class = "modifyBtn" data-goodscode = "${customer.goodsCode}">수정</a>
+                                                         	  </div>
                                                           </div>
                                                       </td>
                                                       <td class="cart__price" id = "cartPrice"><span>&#8361;${customer.goodsPrice * customer.cartQuantity}</span></td>
                                                       <td class="cart__close">
-                                                           <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
-                                                    <span class="icon_close"></span>
-                                                </a>
-                                             </td>
+                                                         <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${customer.goodsCode}">
+                                                    		<span class="icon_close"></span>
+                                                		</a>
+                                             		</td>
                                                   </tr>
                                                </c:otherwise>
                                             </c:choose>
@@ -321,6 +318,14 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 수량수정폼 -->
+        <form action="${pageContext.request.contextPath}/cart/modifyCart" method=post" class="modifyCartForm">
+        	<input type="hidden" name="cartQuantity" class="updateCartQuantity">
+        	<input type="hidden" name="goodsCode" class="updateGoodsCode">
+        	<input type="hidden" name="customerId" value="${loginCustomer.customerId}">
+        </form>
+        
     </section>
     <!-- Shopping Cart Section End -->
 
