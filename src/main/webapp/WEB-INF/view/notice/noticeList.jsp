@@ -50,9 +50,10 @@
 <title>공지사항 | 구디쥬르</title>
 </head>
 <body>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+	
 	<div class="wrap">
-		<!-- header -->
-		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 		
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
@@ -182,6 +183,7 @@
 				
 			</div>
 		</section>
+		
 	</div>
 	
 	<!-- footer -->

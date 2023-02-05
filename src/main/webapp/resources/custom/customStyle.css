@@ -106,10 +106,23 @@ a {
 	 border: 1px solid black;
 }
 
+.searchBtn {
+    float: left;
+    width: 70px;
+    background: #f08632;
+    height: 31.99px;
+    line-height: 15px;
+    color: #000000;
+    font-size: 13px;
+    border-radius: 0px;
+    border: none;
+}
+
 .footer {
 	border-top: 1px solid #e8eff4;
 	padding-top: 30px;
 }
+
 /* table */
 .table{
 	position: relative;
@@ -147,7 +160,7 @@ form .primary-btn {
 	text-align:center;
 	overflow: hidden;
 }
-.searchForm form input{
+.searchForm form input {
 	float:left;
 	width:250px;
 	height:32px;
@@ -156,19 +169,7 @@ form .primary-btn {
 	outline:0 none;
 	border: none;
 }
-.searchForm .searchBtn {
-    float: left;
-    width: 70px;
-    background: #f08632;
-    height: 31.99px;
-    line-height: 15px;
-    color: #000000;
-    font-size: 13px;
-    border-radius: 0px;
-    border: none;
-}
 .searchForm form select {
-	float: right;
 	border-radius: 0px;
 	border: none;
 	line-height: 15px;
@@ -192,6 +193,36 @@ form .primary-btn {
 .searchForm form input::placeholder {
   color: #888888;
   font-size: 15px;
+}
+
+.search2 {
+	background: #dee2e6;
+	padding: 20px;
+}
+.search2 th {
+	width: 80px;
+	padding: 10px;
+}
+.search2 .searchBtn {
+	float: right;
+}
+.search2 input {
+	padding:0 0 0 10px;
+}
+.search2 input[type=text] {
+	width: 250px;
+	height:32px;
+	outline:0 none;
+	border: none;
+}
+.search2 select {
+	border-radius: 0px;
+	border: none;
+	width: 100px;
+	height: 32px;
+	padding-left: 10px;
+	padding-right: 10px;
+	font-size: small;
 }
 
 /* checkout input */
@@ -226,6 +257,24 @@ form .primary-btn {
 .msg {
 	color:red;
 	font-size: small;
+}
+/* 탭 */
+.tablist {
+	width: 100%;
+	margin: auto;
+}
+.tablist .tab-link {
+	display: inline-block;
+	width: 110px;
+	padding-top: 13px;
+	padding-bottom: 13px;
+	margin: 5px;
+	text-align: center;
+	background: #9E9E9E;
+	color: #ffffff;
+}
+.nav-item > .active {
+	background: #5F5F5F;
 }
 
 /* 반응형 */

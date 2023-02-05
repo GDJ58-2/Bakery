@@ -209,7 +209,7 @@ public class OrdersDao {
 	}
 	
 	// 관리자 주문내역 보기 
-	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn, String searchKind, String search, String startDate, String endDate, String orderState, int beginRow, int rowPerPage) throws Exception {
+	public ArrayList<HashMap<String, Object>> selectOrdersListByAdmin(Connection conn, HashMap<String, Object> paramMap) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		String sql ="	SELECT o.order_code orderCode, o.goods_code goodsCode, c.customer_name customerName, c.customer_phone customerPhone, o.order_quantity orderQuantity, o.order_price orderPrice, o.order_state orderState, o.createdate createdate, g.goods_name goodsName"
 				+ "		  FROM orders o"
@@ -221,20 +221,21 @@ public class OrdersDao {
 				+ "			ON o.customer_id = c.customer_id"
 				+ "		 WHERE DATE_FORMAT(o.createdate, '%Y-%m-%d') BETWEEN ? AND ?"
 				+ "		   AND o.order_state LIKE ?"
-				+ "		   AND " + searchKind + " LIKE ?" // 검색
-				+ "	  ORDER BY (case when o.order_state LIKE '결제' then 5"
+				+ "		   AND " + paramMap.get("searchKind") + " LIKE ?" // 검색
+				+ "	  ORDER BY o.createdate DESC"
+				+ "				, (case when o.order_state LIKE '결제' then 5"
 				+ "					 when o.order_state LIKE '배송중' then 4"
 				+ "					 when o.order_state LIKE '배송완료' then 3"
 				+ "					 when o.order_state LIKE '구매확정' then 2"
-				+ "					 ELSE 1 END) DESC, o.createdate DESC"
+				+ "					 ELSE 1 END) DESC"
 				+ "		 LIMIT ?,?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, startDate);
-		stmt.setString(2, endDate);
-		stmt.setString(3, orderState);
-		stmt.setString(4, search);
-		stmt.setInt(5, beginRow);
-		stmt.setInt(6, rowPerPage);
+		stmt.setString(1, String.valueOf(paramMap.get("startDate")));
+		stmt.setString(2, String.valueOf(paramMap.get("endDate")));
+		stmt.setString(3, String.valueOf(paramMap.get("orderState")));
+		stmt.setString(4, "%"+String.valueOf(paramMap.get("search"))+"%");
+		stmt.setInt(5, (int)paramMap.get("beginRow"));
+		stmt.setInt(6, (int)paramMap.get("rowPerPage"));
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -252,14 +253,53 @@ public class OrdersDao {
 		DBUtil.close(rs, stmt, null);
 		return list;
 	}
-	
-	// 관리자 기능 - 배송상태 별 건수 확인
-	public ArrayList<HashMap<String, Object>> selectCountByOrderState(Connection conn) throws Exception {
-		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-		String sql = "SELECT order_state orderState, COUNT(order_state) cnt "
-				+ "		FROM orders "
-				+ "		GROUP BY order_state";
+	// 페이징 - 관리자 주문 관리
+	public int selectOrdersCount(Connection conn, HashMap<String, Object> map) throws Exception {
+		int count = 0;
+		String sql = "	SELECT COUNT(*) count "
+				+ "		  FROM orders o "
+				+ "	INNER JOIN customer c"
+				+ "			ON o.customer_id = c.customer_id"
+				+ "	   	 WHERE DATE_FORMAT(o.createdate, '%Y-%m-%d') BETWEEN ? AND ?"
+				+ "		   AND o.order_state LIKE ?"
+				+ "		   AND " + map.get("searchKind") + " LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, String.valueOf(map.get("startDate")));
+		stmt.setString(2, String.valueOf(map.get("endDate")));
+		stmt.setString(3, String.valueOf(map.get("orderState")));
+		stmt.setString(4, "%"+String.valueOf(map.get("search"))+"%");
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		DBUtil.close(rs, stmt, null);
+		return count;
+	}
+	
+	// 관리자 기능 - 배송상태 별 개수 확인
+	public ArrayList<HashMap<String, Object>> selectOrdersCountByOrderState(Connection conn, HashMap<String, Object> paramMap) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		String sql = "	SELECT d.orderState orderState, sum(CASE WHEN DATE_FORMAT(o.createdate, '%Y-%m-%d') BETWEEN ? AND ? THEN 1 ELSE 0 END) cnt"
+				+ "		  FROM orders o"
+				+ " RIGHT JOIN (SELECT '결제' orderState FROM DUAL"
+				+ "				UNION ALL "
+				+ "				SELECT '취소' orderState FROM DUAL"
+				+ "				UNION ALL "
+				+ "				SELECT '배송중' orderState FROM DUAL"
+				+ "				UNION ALL "
+				+ "				SELECT '배송완료' orderState FROM DUAL"
+				+ "				UNION ALL "
+				+ "				SELECT '구매확정' orderState FROM DUAL) d"
+				+ "			ON o.order_state = d.orderState"
+				+ "   GROUP BY o.order_state"
+				+ "	  ORDER BY (case when d.orderState LIKE '결제' then 5"
+				+ "					 when d.orderState LIKE '배송중' then 4"
+				+ "					 when d.orderState LIKE '배송완료' then 3"
+				+ "					 when d.orderState LIKE '구매확정' then 2"
+				+ "					 ELSE 1 END) DESC;";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, String.valueOf(paramMap.get("startDate")));
+		stmt.setString(2, String.valueOf(paramMap.get("endDate")));
 		ResultSet rs = stmt.executeQuery();
 		while(rs.next()) {
 			HashMap<String, Object> map = new HashMap<String, Object>();
