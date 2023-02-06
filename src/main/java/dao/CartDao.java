@@ -32,7 +32,7 @@ public class CartDao {
 		String sql = "SELECT c.goods_code goodsCode"
 				+ ", g.goods_name goodsName"
 				+ ", g.goods_price goodsPrice"
-				+ ", i.filename filename"
+				+ ", i.origin_name originName"
 				+ ", c.customer_id customerId"
 				+ ", c.cart_quantity cartQuantity"
 				+ ", c.createdate"
@@ -50,7 +50,7 @@ public class CartDao {
 			m.put("goodsCode", rs.getInt("goodsCode"));
 			m.put("goodsName", rs.getString("goodsName"));
 			m.put("goodsPrice", rs.getInt("goodsPrice"));
-			m.put("filename", rs.getString("filename"));
+			m.put("originName", rs.getString("originName"));
 			m.put("customerId", rs.getString("customerId"));
 			m.put("cartQuantity", rs.getInt("cartQuantity"));
 			m.put("createdate", rs.getString("createdate"));
@@ -63,12 +63,12 @@ public class CartDao {
 	// 비회원 장바구니 이미지 불러오기
 	public String selectGoodsImg(Connection conn, int goodsCode) throws Exception {
 		String result = null;
-		String sql = "SELECT filename FROM goods_img WHERE goods_code = ?";
+		String sql = "SELECT origin_name originName FROM goods_img WHERE goods_code = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, goodsCode);
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
-			result = rs.getString("filename");
+			result = rs.getString("originName");
 		}
 		DBUtil.close(rs, stmt, null);
 		return result;
@@ -145,7 +145,7 @@ public class CartDao {
 		String sql = "SELECT c.goods_code goodsCode"
 				+ "			, g.goods_name goodsName"
 				+ "			, g.goods_price goodsPrice"
-				+ "			, gi.filename filename"
+				+ "			, gi.origin_name originName"
 				+ "			, c.customer_id customerId"
 				+ "			, c.cart_quantity cartQuantity"
 				+ "			, c.createdate"
@@ -172,7 +172,7 @@ public class CartDao {
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("goodsCode", rs.getInt("goodsCode"));
 			map.put("goodsName", rs.getString("goodsName"));
-			map.put("filename", rs.getString("filename"));
+			map.put("originName", rs.getString("originName"));
 			map.put("goodsPrice", rs.getInt("goodsPrice"));
 			map.put("customerId", rs.getString("customerId"));
 			map.put("cartQuantity", rs.getInt("cartQuantity"));
