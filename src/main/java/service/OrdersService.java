@@ -274,15 +274,23 @@ public class OrdersService {
 			orderState="%%";
 		}
 		if(search==null||search.equals("")) {
-			search="%%";
+			search="";
 		}
 		if(searchKind==null||searchKind.equals("")) {
 			searchKind="o.order_code";
 		}
 		int beginRow = (currentPage-1)*rowPerPage;
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("startDate", startDate);
+		paramMap.put("endDate", endDate);
+		paramMap.put("orderState", orderState);
+		paramMap.put("searchKind", searchKind);
+		paramMap.put("search", search);
+		paramMap.put("beginRow", beginRow);
+		paramMap.put("rowPerPage", rowPerPage);
 		try {
 			conn = DBUtil.getConnection();
-			list = ordersDao.selectOrdersListByAdmin(conn, searchKind, search, startDate, endDate, orderState, beginRow, rowPerPage);
+			list = ordersDao.selectOrdersListByAdmin(conn, paramMap);
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -301,14 +309,71 @@ public class OrdersService {
 		return list;
 	}
 	
-	// 관리자 기능 - 배송상태 별 건수 확인
-	public ArrayList<HashMap<String, Object>> getCountByOrderState() {
+	// 페이징 - 관리자
+	public int getOrdersCount(String searchKind, String search, String startDate, String endDate, String orderState) {
+		int count = 0;
+		this.ordersDao = new OrdersDao();
+		Connection conn = null;
+		if(startDate==null||startDate.equals("")) {
+			startDate="%%";
+		}
+		if(endDate==null||endDate.equals("")) {
+			endDate="%%";
+		}
+		if(orderState==null||orderState.equals("")) {
+			orderState="%%";
+		}
+		if(searchKind == null || searchKind.equals("")) {
+			searchKind = "o.order_code";
+		}
+		if(search==null) {
+			search = "";
+		}
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("startDate", startDate);
+		paramMap.put("endDate", endDate);
+		paramMap.put("orderState", orderState);
+		paramMap.put("searchKind", searchKind);
+		paramMap.put("search", search);
+		
+		try {
+			conn = DBUtil.getConnection();
+			count = ordersDao.selectOrdersCount(conn, paramMap);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return count;
+	} 
+	
+	// 관리자 기능 - 배송상태 별 개수 확인
+	public ArrayList<HashMap<String, Object>> getCountByOrderState(String startDate, String endDate) {
 		ArrayList<HashMap<String, Object>> list = null;
 		this.ordersDao = new OrdersDao();
 		Connection conn = null;
+		if(startDate==null||startDate.equals("")) {
+			startDate="%%";
+		}
+		if(endDate==null||endDate.equals("")) {
+			endDate="%%";
+		}
+		HashMap<String, Object> paramMap = new HashMap<String, Object>();
+		paramMap.put("startDate", startDate);
+		paramMap.put("endDate", endDate);
 		try {
 			conn = DBUtil.getConnection();
-			list = ordersDao.selectCountByOrderState(conn);
+			list = ordersDao.selectOrdersCountByOrderState(conn, paramMap);
 			conn.commit();
 		} catch (Exception e) {
 			try {

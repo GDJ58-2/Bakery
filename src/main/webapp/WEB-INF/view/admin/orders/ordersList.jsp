@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %> <!-- 포맷 설정 -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,9 +30,28 @@
     <!-- custom css -->
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<title>orders</title>
+	<style>
+		input[type=radio] {
+			margin-left: 0.5rem;
+			margin-right: 0.25rem;
+		}
+	</style>
 <script>
 	$(document).ready(function(){
+		
+		// 오늘 버튼 선택시 
+		$('#todayBtn').click(function(){
+			// 오늘 날짜 구하기
+			let today = new Date();
+			let year = today.getFullYear();
+			let month = ('0' + (today.getMonth() + 1)).slice(-2); // 월 두자리수 포맷설정
+			let date = ('0' + today.getDate()).slice(-2); // 일 두자리수 포맷설정
+			let todayStr = year + '-' + month + '-' + date;
+			console.log(todayStr);
+			
+			$('input[type="date"]').val(todayStr);
+			$('#searchForm').submit();
+		});
 		
 		// 전체선택
 		$('#allcheck').click(function(){
@@ -61,11 +81,11 @@
 		$('input[type="date"]').change(function(){
 			$('#searchForm').submit();
 		});
-		$('#searchBtn').click(function(){
+		$('.searchBtn').click(function(){
 			$('#searchForm').submit();
 		});
 		
-		// 배송상태 변경기능 
+		// 배송상태 변경
 		$('#submitBtn').click(function(){
 			if($('input[name="orderState"]:checked').length==0) {
 				alert('배송상태를 선택해주세요.');
@@ -79,12 +99,14 @@
 		});
 	});
 </script>
+<title>주문 관리 | 구디쥬르</title>
 </head>
 <body>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+	
 	<div class="wrap">
-		<jsp:include page="../../inc/empMenu.jsp"></jsp:include>
-		<jsp:include page="../../inc/menu.jsp"></jsp:include>
-		
+	
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
 			<div class="container">
@@ -108,51 +130,87 @@
 		<!-- orders section -->
 		<section class="blog-details spad">
 			<div class="content">
+			
 				<div class="row d-flex justify-content-center">
 					<div class="col-lg-12">
+					
 						<div class="card">
 							<div class="card-header">
 								<div class="p-4">
-									<div class="row justify-content-center">
+									<div class="row">
+								
 										<!-- 상태별 목록보기 -->
-										<ul class="nav">
-										  	<li class="nav-item">
-										    	<a class="nav-link" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
-										 	 </li>
-										  	<li class="nav-item">
-										    	<a class="nav-link" id="결제" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=결제&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">결제</a>
-										  	</li>
-										  	<li class="nav-item">
-										    	<a class="nav-link" id="배송중" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=배송중&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">배송중</a>
-										  	</li>
-										  	<li class="nav-item">
-										    	<a class="nav-link" id="구매확정" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=구매확정&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">구매확정</a>										  	
-										    </li>
-										</ul>										
+										<ul class="nav tablist justify-content-center">
+											<c:if test="${orderState == null || orderState == '' }">
+												<li class="nav-item">
+											    	<a class="tab-link active" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
+											 	</li>
+											</c:if>
+											<c:if test="${orderState != null && orderState != '' }">
+												<li class="nav-item">
+											    	<a class="tab-link" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
+											 	</li>
+											</c:if>
+											
+											<c:forEach var="oc" items="${ordersCount}">
+												<c:if test="${orderState eq oc.orderState}">
+													<li class="nav-item">
+										    			<a class="tab-link active" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=${oc.orderState}">
+										    				${oc.orderState}
+										    				(${oc.count})
+										    			</a>
+										 			</li>
+												</c:if>
+												<c:if test="${orderState ne oc.orderState}">
+													<li class="nav-item">
+										    			<a class="tab-link" href="${pageContext.request.contextPath}/admin/orders/ordersList?orderState=${oc.orderState}">
+										    				${oc.orderState}
+										    				(${oc.count})
+										    			</a>
+										 			</li>
+												</c:if>
+											</c:forEach>
+										</ul>						
 									</div>
+									
 									<!-- 검색기능 form -->
-									<form action="${pageContext.request.contextPath}/admin/orders/ordersList" id="searchForm">
-										<input type="hidden" name="orderState" value="${orderState}">
-										<table>
-											<tr>
-												<th>기간</th>
-												<td><input type="date" name="startDate" value="${startDate}"> ~ <input type="date" name="endDate" value="${endDate}"></td>
-											</tr>
-											<tr>
-												<th>검색</th>
-												<td>
-													<input type="hidden" id="searchKind" value="${searchKind}">
-													<select name="searchKind">
-														<option value="o.order_code">주문 번호</option>
-														<option value="c.customer_name">주문자 명</option>
-														<option value="c.customer_phone">연락처</option>
-													</select>
-													<input type="text" name="search" value="${search}">
-													<button type="button" id="searchBtn">검색</button>
-												</td>
-											</tr>
-										</table>
-									</form>
+									<div class="d-flex justify-content-center">
+										<div class="col-lg-7">
+											<div class="search2">
+												<div class="msg"> * 한 달 기준 </div>
+												<form action="${pageContext.request.contextPath}/admin/orders/ordersList" id="searchForm">
+													<input type="hidden" name="orderState" value="${orderState}">
+													<table>
+														<tr>
+															<th>기간</th>
+															<td>
+																<input type="date" name="startDate" value="${startDate}"> ~ <input type="date" name="endDate" value="${endDate}">
+															</td>
+															<td>
+																<div class="a-btn">
+																	<a type="button" id="todayBtn">오늘</a>
+																</div>
+															</td>
+														</tr>
+														<tr>
+															<th>검색</th>
+															<td colspan="2">
+																<input type="hidden" id="searchKind" value="${searchKind}">
+																<select name="searchKind">
+																	<option value="o.order_code">주문 번호</option>
+																	<option value="c.customer_name">주문자 명</option>
+																	<option value="c.customer_phone">연락처</option>
+																</select>
+																<input type="text" name="search" value="${search}" placeholder="검색어를 입력해주세요.">
+																<button type="button" class="searchBtn">검색</button>
+															</td>
+														</tr>
+													</table>
+												</form>	
+											</div>
+										</div>
+									</div>
+									<!-- /검색기능 form -->
 								</div>
 							</div>
 							
@@ -163,7 +221,7 @@
 									<input type="hidden" name="endDate" value="${endDate}">
 									<input type="hidden" name="search" value="${search}">
 									<input type="hidden" name="searchKind" value="${searchKind}">
-									<table>
+									<table class="mb-1-4">
 										<tr>
 											<th>배송상태 변경</th>
 											<td>
@@ -172,12 +230,16 @@
 												<input type="radio" name="orderState" value="배송중">배송중
 												<input type="radio" name="orderState" value="배송완료">배송완료
 												<input type="radio" name="orderState" value="구매확정">구매확정
-												<button type="button" id="submitBtn">변경</button>
+											</td>
+											<td>
+												<div class="a-btn">
+													<a type="button" id="submitBtn" class="ml-2">변경</a>
+												</div>
 											</td>
 										</tr>
 									</table>
 									<!-- ordersList -->
-									<table class="table table-bordered text-center">
+									<table class="table table-bordered table-sm text-center">
 										<thead class="table-primary">
 											<tr>
 												<th>
@@ -185,9 +247,9 @@
 													<br> 주문자
 													<br> 연락처
 												</th>
-												<th><input type="checkbox" id="allcheck"></th> <!-- 전체선택 -->
+												<th style="width: 10%"><input type="checkbox" id="allcheck"></th> <!-- 전체선택 -->
 												<th>상품 번호</th>
-												<th>주문일</th>
+												<th style="width: 20%">주문일</th>
 												<th>상품 이름 </th>
 												<th>
 													총 수량 
@@ -205,10 +267,10 @@
 														<br> ${map.customerPhone}
 													</td>
 													<td>
-														<c:if test="${map.orderState eq '구매확정'}">
+														<c:if test="${map.orderState eq '구매확정' || map.orderState eq '취소'}">
 															&nbsp;
 														</c:if>
-														<c:if test="${map.orderState ne '구매확정'}">
+														<c:if test="${map.orderState ne '구매확정' && map.orderState ne '취소'}">
 															<input type="checkbox" name="orderCode" value="${map.orderCode}" class="checkOrderCode">
 														</c:if>
 													</td>
@@ -217,7 +279,7 @@
 													<td>${map.goodsName}</td>
 													<td class="text-right">
 														${map.orderQuantity}개
-														<br>${map.orderPrice}원
+														<br><fmt:formatNumber value="${map.orderPrice}" pattern="#,###원" />
 													</td>
 													<td>${map.orderState}</td>
 												</tr>
@@ -225,12 +287,40 @@
 										</tbody>
 									</table>
 								</form>
+								
+								<!-- 페이징 -->
+								<div class="shop__last__option">
+									<div class="row justify-content-center">
+										<div class="shop__pagination">
+											<a href="${pageContext.request.contextPath}/admin/orders/ordersList?currentPage=${startPage-1}&orderState=${orderState}&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}"><span class="arrow_carrot-left"></span></a>
+											<c:forEach var="i" begin="${startPage}" end="${endPage}" step="1">
+												<c:if test="${currentPage eq i}">
+													<a class="active" href="#">${i}</a>
+												</c:if>
+												<c:if test="${currentPage ne i}">
+													<a href="${pageContext.request.contextPath}/admin/orders/ordersList?currentPage=${i}&orderState=${orderState}&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}">${i}</a>
+												</c:if>
+											</c:forEach>
+											<a href="${pageContext.request.contextPath}/admin/orders/ordersList?currentPage=${endPage+1}&orderState=${orderState}&searchKind=${searchKind}&search=${search}&startDate=${startDate}&endDate=${endDate}"><span class="arrow_carrot-right"></span></a>
+										</div>
+									</div>
+								</div>
+								<!-- /페이징 -->
 							</div>
 						</div>
+						<!-- /card -->
+						
 					</div>
 				</div>
+			
 			</div>
 		</section>
+		
+	</div>
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	</div>
 
 <!-- Js Plugins -->
