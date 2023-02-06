@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <!-- Core JSTL 사용 -->
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,6 +31,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script>
 	$(document).ready(function(){
+		// 주소 입력
 		$('input[name="addressKind"]').change(function(){
 			console.log($('input[name="addressKind"]:checked').val());
 			if($('input[name="addressKind"]:checked').val()=='직접입력') {
@@ -39,17 +40,31 @@
 				$('input[name="address"]').attr("readonly", true);
 			}
 		});
-		let orderPrice = $('#orderPrice').val();
+		
+		// 포인트
 		$('#usePoint').blur(function(){
-			if($('#usePoint').val()!=0) {
+			let orderPrice = $('#orderPrice').val();
+			let usePoint = $('#usePoint').val();
+			let total = orderPrice - usePoint;
+			
+			// 보유포인트보다 사용포인트가 많을 경우
+			console.log(parseInt(usePoint) > parseInt($('input[name="point"]').val()));
+			
+			if(parseInt(usePoint) > parseInt($('input[name="point"]').val())){
+				$('#usePoint').val($('input[name="point"]').val());
+			}
+			
+			// 총 결제 금액에 사용 포인트 적용
+			if(usePoint!=0) {
 				$('#point').html('포인트 사용 <span>'+$('#usePoint').val()+'</span>');
-				$('#total').html('&#8361;'+(orderPrice-$('#usePoint').val()));
+				$('#total').html('&#8361;'+Number(total).toLocaleString('us')+'원');
 			} else {
 				$('#point').html('');
-				$('#total').html(orderPrice);
+				$('#total').html('&#8361;'+Number(orderPrice).toLocaleString('us')+'원');
 			}
-		
 		});
+		
+		// 
 		$('#submitBtn').click(function(){
 			if($('input:radio[name="addressKind"]:checked').length==0){
 				alert('주소를 입력해주세요.');
@@ -62,11 +77,11 @@
 		});
 	});
 </script>
-<title>Insert title here</title>
+<title>주문 | 구디쥬르</title>
 </head>
 <body>
-	<jsp:include page="../inc/customer.jsp"></jsp:include>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	
 	<!-- breadcrumb -->
 	<div class="breadcrumb-option">
@@ -138,7 +153,7 @@
 								<p>
 									보유포인트
 								</p>
-								<input type="number" name="point" readonly="readonly"> 원
+								<input type="number" name="point" readonly="readonly" value="${loginCustomer.point}"> 원
 							</div>
 							<div class="checkout__input">
 								<p>
@@ -161,14 +176,14 @@
 										<input type="hidden" name="cartQuantity" value="${o.cartQuantity}">
 										<li>
 											${o.goodsName}
-											<span>&#8361;${o.goodsPrice*o.cartQuantity}</span>
+											<span>&#8361;<fmt:formatNumber value="${o.goodsPrice * o.cartQuantity}" pattern="#,###원" /></span>
 										</li>
 									</c:forEach>
 								</ul>
 								<ul class="checkout__total__all">
 									<li>
 										SubTotal
-										<span>&#8361;${orderPrice}</span>										
+										<span>&#8361;<fmt:formatNumber value="${orderPrice}" pattern="#,###원" /></span>										
 									</li>
 									<li>
 										적립 예정 포인트
@@ -180,7 +195,7 @@
 									<li>
 										Total
 										<input type="hidden" id="orderPrice" value="${orderPrice}">
-										<span id="total">&#8361;${orderPrice}</span>										
+										<span id="total">&#8361;<fmt:formatNumber value="${orderPrice}" pattern="#,###원" /></span>										
 									</li>
 								</ul>
 								<button type="button" id="submitBtn" class="site-btn">주문하기</button>
@@ -191,6 +206,12 @@
 			</div>
 		</div>
 	</section>
+	
+	
+	<!-- footer -->
+	<div>
+		<c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
+	</div>
 	
 <!-- Js Plugins -->
 <script src="${pageContext.request.contextPath}/resources/static/js/bootstrap.min.js"></script>

@@ -28,26 +28,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <title>홈 | 직원 | 구디쥬르</title>
-	<script>
-		let empUrl='${pageContext.request.contextPath}/admin/emp/logout'
-		function logoutAction(empUrl) {
- 			let out = confirm('로그아웃하시겠습니까?'); 
- 		 	if(out) {
-      			location.replace(empUrl); 
-          		alert('로그아웃되었습니다');
-	       	} else {
-	          	alert('로그아웃 취소');
-	          	return false;
-	       	}
-		 }  
-	   $(document).ready(function() {
-	   		$('#logoutEmpBtn').click(function() {
-	   			logoutAction(empUrl);
-	   		});
-	   });
-	</script>
-
-
 </head>
 <body>
 	<!-- header -->
