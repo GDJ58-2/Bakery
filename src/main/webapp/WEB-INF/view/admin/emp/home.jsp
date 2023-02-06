@@ -43,11 +43,6 @@
 	
 	
 	
-	<div>
-		<a href="${pageContext.request.contextPath}/admin/emp/modifyEmpPw">비밀번호 변경</a>
-	</div>
-	
-	
 	
 	<!-- footer -->
 	<div>
