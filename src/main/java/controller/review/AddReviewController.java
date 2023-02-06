@@ -32,6 +32,13 @@ public class AddReviewController extends HttpServlet {
 		this.reviewService = new ReviewService();
 		HashMap<String, Object> map = reviewService.orderReview(orders);
 		request.setAttribute("map", map);
+		
+		// 리뷰 등록실패 알림 메시지
+		String reviewMsg=request.getParameter("reviewMsg");
+		System.out.println(reviewMsg);
+		if(reviewMsg != null) {
+			request.setAttribute("reviewMsg", reviewMsg);
+		} 
 				
 		request.getRequestDispatcher("/WEB-INF/view/review/addReview.jsp").forward(request, response);
 	}
@@ -45,17 +52,22 @@ public class AddReviewController extends HttpServlet {
 		}
 		request.setCharacterEncoding("utf-8");
 		String reviewMemo = request.getParameter("reviewMemo");
+		String reviewMsg = null;
 		int orderCode = Integer.parseInt(request.getParameter("orderCode"));
+		
 		Review review = new Review();
 		review.setOrderCode(orderCode);
 		review.setReviewMemo(reviewMemo);
+		
 		this.reviewService = new ReviewService();
 		int result = reviewService.addReview(review);
 		if(result == 1) { 
 			System.out.println("AddReviewListController: 리뷰작성완료");
-			response.sendRedirect(request.getContextPath() + "/review/reviewList");
+			reviewMsg="Y";
+			response.sendRedirect(request.getContextPath() + "/review/reviewList?reviewMsg="+reviewMsg);
 		} else {
-			response.sendRedirect(request.getContextPath() + "/review/addReview");
+			reviewMsg="N";
+			response.sendRedirect(request.getContextPath() + "/review/addReview?reviewMsg="+reviewMsg);
 		}
 	}
 }

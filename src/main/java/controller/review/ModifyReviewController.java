@@ -33,6 +33,14 @@ public class ModifyReviewController extends HttpServlet {
 		this.reviewService = new ReviewService();
 		HashMap<String, Object> map = reviewService.reviewListOne(orders);
 		request.setAttribute("map", map);
+		
+		// 리뷰 수정실패 알림 메시지
+		String modifyReviewMsg=request.getParameter("modifyReviewMsg");
+		System.out.println(modifyReviewMsg);
+		if(modifyReviewMsg != null) {
+			request.setAttribute("modifyReviewMsg", modifyReviewMsg);
+		} 
+		
 		// view
 		request.getRequestDispatcher("/WEB-INF/view/review/modifyReview.jsp").forward(request, response);
 	}
@@ -46,19 +54,23 @@ public class ModifyReviewController extends HttpServlet {
 		}
 		request.setCharacterEncoding("utf-8");
 		String reviewMemo = request.getParameter("reviewMemo");
+		String modifyReviewMsg=null;
 		int orderCode = Integer.parseInt(request.getParameter("orderCode"));
 		
 		Review review = new Review();
 		review.setOrderCode(orderCode);
 		review.setReviewMemo(reviewMemo);
+		
 		this.reviewService = new ReviewService();
 		int result = reviewService.modifyReview(review);
 		if(result == 1) {
 			System.out.println("ModifyReviewController: 리뷰수정완료");
-			response.sendRedirect(request.getContextPath() + "/review/reviewList");
+			modifyReviewMsg="Y";
+			response.sendRedirect(request.getContextPath() + "/review/reviewList?modifyReviewMsg="+modifyReviewMsg);
 		} else {
 			System.out.println("ModifyReviewController: 리뷰수정실패");
-			response.sendRedirect(request.getContextPath() + "/review/modifyReview?orderCode=" + orderCode);
+			modifyReviewMsg="N";
+			response.sendRedirect(request.getContextPath() + "/review/modifyReview?orderCode=" + orderCode+"&modifyReviewMsg="+modifyReviewMsg);
 		}
 	}
 }

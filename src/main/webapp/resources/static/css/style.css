@@ -1904,9 +1904,10 @@ ol {
   display: inline-block;
 }
 
-.cart__allcheck__btn {
+.cart__allcheck__btn button {
 	border: none; 
-	background-color: rgba(0,0,0,0);
+	/*background-color: rgba(0,0,0,0)*/
+	opacity:0;
 }
 
 .continue__btn.update__btn {
@@ -2012,6 +2013,16 @@ ol {
   background: #111111;
   color: #ffffff;
   padding: 12px 10px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.cart__total .customerLogin-btn a, button {
+  display: block;
+  background: #111111;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 15px 50px;
   text-align: center;
   letter-spacing: 2px;
 }

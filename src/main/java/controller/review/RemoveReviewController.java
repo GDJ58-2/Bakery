@@ -22,13 +22,18 @@ public class RemoveReviewController extends HttpServlet {
 		}
 		request.setCharacterEncoding("utf-8");
 		int orderCode = Integer.parseInt(request.getParameter("orderCode"));
+		String deleteReviewMsg=null;
+		
 		ReviewService reviewService = new ReviewService();
 		int result = reviewService.removeReview(orderCode);
 		if(result == 1) {
 			System.out.println("RemoveReviewController: 리뷰삭제완료");
-			response.sendRedirect(request.getContextPath() + "/review/reviewList");
+			deleteReviewMsg="Y";
+			response.sendRedirect(request.getContextPath() + "/review/reviewList?deleteReviewMsg="+deleteReviewMsg);
 		} else {
 			System.out.println("RemoveReviewController: 리뷰삭제실패");
+			deleteReviewMsg="N";
+			response.sendRedirect(request.getContextPath()+"/reviewe/reviewList?deleteReviewMsg="+deleteReviewMsg);
 		}
 	}
 }

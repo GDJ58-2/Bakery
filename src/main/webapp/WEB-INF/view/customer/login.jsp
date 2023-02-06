@@ -58,6 +58,11 @@
 					$('#loginForm').submit();
 				}
 			});
+			
+			// 탈퇴 완료 메시지
+			if($('#removeMsg').val() == "Y" && $('#removeMsg').val() != '') {
+				alert('탈퇴 처리가 완료되었습니다 이용해 주셔서 감사합니다');
+			}
 		});
 	</script>
 </head>
@@ -81,6 +86,7 @@
                             	<div>
 	                            	<input type = "hidden" id = "addMsg" value = "${addMsg}">
 	                            	<input type = "hidden" id = "loginMsg" value = "${loginMsg}">
+	                            	<input type = "hidden" id = "removeMsg" value = "${removeMsg}">
 									<form action = "${pageContext.request.contextPath}/customer/login" method = "post" id = "loginForm">
 										<table>
 											<tr>

@@ -9,7 +9,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>장바구니 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -44,20 +44,65 @@
 	       	}
 		}  
 	
+		
       $(document).ready(function() {
          // 총 금액
-         $('.checkGoodsCode').each(function() {
-            $('.checkGoodsCode').change(function() {
-               var total = 0;
-               var cartPrice = 0;
-               if($('.checkGoodsCode').is(':checked')) {
-                  var thisRow = $(this).closest('tr');
-                  cartPrice = Number(thisRow.find('td:eq(3)').find('span').text().substring(1));
-                  total = total + cartPrice;
-               }
-               console.log('cartPrice: '+cartPrice+' /total: '+total);
-            });
+
+         $('.checkGoodsCode').each(function() { // 하나씩 선택했을 때
+			let cPrice=0;
+			let cQunatity=0;
+			let total=0;
+			let plusTotal=0;
+			let minusTotal=0;
+			$('.checkGoodsCode').on('change', function() {
+				if($(this).is(':checked')) {
+	                 cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
+	                 cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+	                 plusTotal=cPrice*cQuantity;
+	                 total = total + plusTotal;
+	             } else if($(this).not(':checked')) {
+					cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
+	                cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+	               	minusTotal=cPrice*cQuantity;
+	               	total = total - minusTotal;
+				}
+				console.log(plusTotal+"/"+minusTotal+"/"+total);
+				$('#subTotal').text(total); // 선택합계
+			});
+		 });
+         
+      	// 체크박스 전체선택&전체해제
+         $('#chkAll').on('click', function() {
+      		let checkTotal = $('.checkGoodsCode').length;
+      		let checked = ($('.checkGoodsCode:checked')).length;
+      		let chkAllPrice = 0;
+      		let chkAllQuantity = 0;
+      		let chkAllTotal=0;
+      		if(checkTotal == checked) {
+      			$('.checkGoodsCode').prop('checked', false);
+      			$('#chkAll').prop('checked', false);
+      			$('#subTotal').text(0);
+      		} else {
+      			$('.checkGoodsCode').prop('checked', true);
+      			$('#chkAll').prop('checked', true);
+      			$('.checkGoodsCode').each(function() {
+      				chkAllPrice=Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
+      				chkAllQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+      				chkAllTotal = chkAllTotal + chkAllPrice*chkAllQuantity;
+      				$('#subTotal').text(chkAllTotal); // 전체선택 합계
+          		});
+      		}
+      	 });
+      	 
+      	// 장바구니 전체합계
+         let allTotal=0;
+         $('.gCode').each(function() {	
+        	let allPrice=Number($(this).parent().siblings().children('div').find('h5').html().substring(1)); 
+        	let allQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+        	allTotal = allTotal + allPrice*allQuantity;
+        	$('#total').text(allTotal);
          });
+
          
          // 수량변경버튼
          $('.modifyBtn').on('click', function() {
@@ -69,6 +114,17 @@
            	console.log('cartCode: '+cartCode);
           	console.log('cartQ: '+cartQ);
          });
+         
+     	// 체크된 주문만 결제페이지로 넘어갈 수 있음
+     	$('#orderBtn').click(function() {
+     		let checked = ($('.checkGoodsCode:checked')).length;
+     		if(!checked) {
+     			console.log(checked);
+     			alert('주문할 상품을 선택하세요');
+     		} else {
+     			$('#orderForm').submit();
+     		}
+     	});
          
          // 로그아웃
          $('#logoutBtn').click(function() {
@@ -138,13 +194,13 @@
                                                         <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}" onClick = "return false;">
                                                          <input type="hidden" name="goodsCode" value="${user.goodsCode}">   
                                                      </td>
-                                                         <td class="product__cart__item">
+                                                     <td class="product__cart__item">
                                                           <div class="product__cart__item__pic">
                                                               <img src = "${pageContext.request.contextPath}/upload/${user.originName}" width = "70" height = "70">
                                                           </div>
                                                           <div class="product__cart__item__text">
                                                               <h6><input type="hidden" name="goodsName" value="${user.goodsName}">${user.goodsName}</h6>
-                                                              <h5>&#8361;${user.goodsPrice}</h5>
+                                                              <h5 id= "price">&#8361;${user.goodsPrice}</h5>
                                                           </div>
                                                       </td>
                                                       <td>품절</td>
@@ -156,7 +212,7 @@
                                                   </tr>
                                               </c:when>
                                               <c:otherwise>
-                                                 <tr>
+                                              		<tr>
                                                        <td>
                                                           <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${user.goodsCode}">
                                                            <input type="hidden" name="goodsCode" class = "gCode" value="${user.goodsCode}">
@@ -183,9 +239,9 @@
                                                         <td class="cart__price">&#8361;${user.goodsPrice * user.cartQuantity}</td>
                                                         <td class="cart__close">
                                                            <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-                                                    <span class="icon_close"></span>
-                                                </a>
-                                             </td>
+                                                    			<span class="icon_close"></span>
+			                                                </a>
+			                                             </td>
                                                     </tr>
                                               </c:otherwise>
                                            </c:choose>
@@ -199,9 +255,9 @@
                                         <thead>
                                             <tr>
                                                <th>
-                                               <div class = "justify-content-start">
-                                                  <button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
-                                                </div>
+                                               		<div class = "justify-content-start">
+                                                		<input type="checkbox" id = "chkAll">
+                                                	</div>
                                                 </th>
                                                 <th>Product</th>
                                                 <th>Quantity</th>
@@ -237,16 +293,16 @@
                                                       <td>품절</td>
                                                       <td class="cart__close">
                                                          <a href = "${pageContext.request.contextPath}/cart/removeCartList?goodsCode=${user.goodsCode}">
-                                                    <span class="icon_close"></span>
-                                                </a>
-                                             </td>
+		                                                    <span class="icon_close"></span>
+		                                                </a>
+		                                             </td>
                                                   </tr>
                                                </c:when>
                                                <c:otherwise>
                                                 <tr>
                                                      <td>
                                                         <input type="checkbox" name="checkedGoodsCode" class = "checkGoodsCode" value="${customer.goodsCode}">
-                                                        <input type="hidden" id = "gCode" value="${customer.goodsCode}">
+                                                        <input type="hidden" class = "gCode" value="${customer.goodsCode}">
                                                      </td>
                                                       <td class="product__cart__item">
                                                           <div class="product__cart__item__pic">
@@ -310,10 +366,19 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span id = "subTotal">원</span></li>
-                            <li>Total <span id = "total">원</span></li>
+                            <li>Subtotal <span id = "subTotal">0원</span></li>
+                            <li>Total <span id = "total">0원</span></li>
                         </ul>
-                        <button type = "button" id = "orderBtn" class="primary-btn">Proceed to checkout</button>
+                        <c:choose>
+                        	<c:when test="${loginCustomer eq null}">
+                        		<a href="${pageContext.request.contextPath}/customer/login">
+                        			<button type ="button" id="customerLoginBtn" class="customerLogin-btn">login</button>
+                        		</a>
+                        	</c:when>
+                        	<c:otherwise>
+                        		<button type = "button" id = "orderBtn" class="primary-btn">Proceed to checkout</button>
+                    		</c:otherwise>
+                    	</c:choose>
                     </div>
                 </div>
             </div>

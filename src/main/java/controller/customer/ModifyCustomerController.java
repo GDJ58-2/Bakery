@@ -27,6 +27,12 @@ public class ModifyCustomerController extends HttpServlet {
 		Customer selectCustomer = customerService.getSelectOneCustomer(customerId);
 		request.setAttribute("selectCustomer", selectCustomer);
 		
+		// 회원정보 수정 실패 메시지
+		String checkInfo=request.getParameter("checkInfo");
+		if(checkInfo != null) {
+			request.setAttribute("checkInfo", checkInfo);
+		}
+		
 		// view
 		request.getRequestDispatcher("/WEB-INF/view/customer/modifyCustomer.jsp").forward(request, response);
 	}
@@ -52,12 +58,17 @@ public class ModifyCustomerController extends HttpServlet {
 		
 		this.customerService = new CustomerService();
 		int modifyResult = customerService.modifyCustomer(customer);
+		String checkInfo=null;
 		if(modifyResult == 1) {
 			System.out.println("ModifyCustomerController: 회원정보수정완료");
 			loginCustomer.setCustomerName(name);
+			checkInfo="Y";
+			session.setAttribute("loginCustomer", loginCustomer);
+			response.sendRedirect(request.getContextPath() + "/customer/selectOneCustomer?checkInfo="+checkInfo);
+		} else {
+			checkInfo="N";
+			response.sendRedirect(request.getContextPath() + "/customer/modifyCustomer?checkInfo="+checkInfo);
 		}
-		
-		session.setAttribute("loginCustomer", loginCustomer);
-		response.sendRedirect(request.getContextPath() + "/customer/selectOneCustomer");
+
 	}
 }

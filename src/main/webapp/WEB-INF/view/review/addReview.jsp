@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Page | 내 리뷰 | 새 리뷰 작성</title>
+    <title>새 리뷰쓰기 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -99,9 +99,25 @@
 		 }  
 		
 		$(document).ready(function() {
+			// 로그아웃
 			$('#logoutBtn').click(function() {
 	   			logoutAction(customerUrl);
 	   		});
+			
+			// 리뷰 유효성 검사
+			$('#addBtn').click(function() {
+				if($('#reviewMemo').val().length < 2) {
+					console.log($('#reviewMemo').val());
+					alert('3자 이상 입력한 글만 등록이 가능합니다');
+				} else {
+					$('#addForm').submit();
+				}
+			}); 
+			
+			// 리뷰 등록 알림창
+			if($('#reviewMsg').val() == "N" && $('#reviewMsg').val() != '') {
+				alert('리뷰 등록에 실패하였습니다 다시 시도하십시오');
+			}
 		});
 	</script>
 </head>
@@ -129,7 +145,6 @@
             </div>
         </div>
     </div>
-	
 
     <!-- Create Account Section Begin -->
 	<section class="review spad">
@@ -138,8 +153,8 @@
 				<div class="col-lg-11 col-md-7 col-sm-6">
 					<div class = "d-flex justify-content-center">
 						<div>
-
 							<div>
+								<input type="hidden" id="reviewMsg" value="${reviewMsg}">
 								<form action = "${pageContext.request.contextPath}/review/addReview" method = "post" id = "addForm">
 									<input type = "hidden" name = "orderCode" value = "${map.orderCode}">
 									<table>
@@ -156,7 +171,7 @@
 										</tr>
 									</table>
 									<div class= "review__btn">
-										<button type = "submit" id = "addBtn">리뷰등록</button>
+										<button type = "button" id = "addBtn">리뷰등록</button>
 									</div>
 								</form>
 							</div>

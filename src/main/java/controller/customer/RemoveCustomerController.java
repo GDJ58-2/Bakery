@@ -22,7 +22,7 @@ public class RemoveCustomerController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/customer/login");
 			return;
 		}
-
+		
 		// View
 		session.setAttribute("loginCustomer", loginCustomer);
 	    request.getRequestDispatcher("/WEB-INF/view/customer/removeCustomer.jsp").forward(request, response);
@@ -43,10 +43,12 @@ public class RemoveCustomerController extends HttpServlet {
 		customer.setCustomerId(id);
 		CustomerService customerService = new CustomerService();
 		int result = customerService.removeCustomer(customer);
+		String removeMsg=null;
 		if(result == 1) {
 			System.out.println("RemoveCustomerController: 탈퇴완료");
+			removeMsg="Y";
 			request.getSession().invalidate();
-			response.sendRedirect(request.getContextPath() + "/customer/login");
+			response.sendRedirect(request.getContextPath() + "/customer/login?removeMsg="+removeMsg);
 		}
 	}
 }

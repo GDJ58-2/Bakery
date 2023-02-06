@@ -21,11 +21,11 @@ public class ModifyCustomerPwController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/customer/login");
 			return;
 		}
-		// 비밀번호를 변경할 수 없을 때 메시지 넘기기
-		String check=request.getParameter("msg");
+		// 비밀번호 변경 실패 메시지
+		String checkPw=request.getParameter("checkPw");
 		//System.out.println(check);
-		if(check != null || check != "") {
-			request.setAttribute("check", check);
+		if(checkPw != null) {
+			request.setAttribute("checkPw", checkPw);
 		}
 		
 		// view
@@ -52,15 +52,16 @@ public class ModifyCustomerPwController extends HttpServlet {
 		customer.setCustomerPw(pw);
 		
 		//System.out.println(customer);
-		String msg="";
+		String checkPw=null;
 		CustomerService customerService = new CustomerService();
 		int row=customerService.modifyCustomerPw(newPw, customer);
 		if(row == 0) {
-			msg="denied";
-			response.sendRedirect(request.getContextPath() + "/customer/modifyCustomerPw?msg="+msg);
+			checkPw="N";
+			response.sendRedirect(request.getContextPath() + "/customer/modifyCustomerPw?checkPw="+checkPw);
 		} else {
 			//System.out.println("ModifyCustomerPwController: pw수정 완료");
-			response.sendRedirect(request.getContextPath() + "/customer/selectOneCustomer");
+			checkPw="Y";
+			response.sendRedirect(request.getContextPath() + "/customer/selectOneCustomer?checkPw="+checkPw);
 		}
 	}
 }

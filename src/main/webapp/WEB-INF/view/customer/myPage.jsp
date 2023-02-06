@@ -9,7 +9,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>회원정보 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -32,22 +32,33 @@
 	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		function logoutAction() {
-			let url = '${pageContext.request.contextPath}/customer/logout';
-				let out = confirm('로그아웃하시겠습니까?'); 
-			 	if(out) {
-	  			location.replace(url); 
-	      		alert('로그아웃되었습니다');
-	       	} else {
-	          	alert('로그아웃 취소');
-	          	return false;
-	       	}
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
+			let out = confirm('로그아웃하시겠습니까?'); 
+		 	if(out) {
+	 			location.replace(customerUrl); 
+	     		alert('로그아웃되었습니다');
+	      	} else {
+	         	alert('로그아웃 취소');
+	         	return false;
+	      	}
 		 }  
-		
+			
 		$(document).ready(function() {
-			$('#logoutBtn').on('click', function() {
-				logoutAction(url);
-			});
+			// 로그아웃
+			$('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
+	   		});
+			
+			// 비밀번호 변경 완료 메시지알림
+			if($('#checkPw').val() == "Y" && $('#checkPw').val() != '') {
+				alert('비밀번호가 변경되었습니다');
+			} 
+			
+			// 회원정보 변경 완료 메시지
+			if($('#checkInfo').val() == "Y" && $('#checkInfo').val() != '') {
+				alert('회원정보가 수정되었습니다');
+			}
 		});
 	
 	</script>
@@ -86,6 +97,7 @@
                         <div class="col-lg-4 col-md-6 col-sm-6">
 	                        <div class="contact__address__item">
 	                            <!-- 회원정보수정 -->
+	                            <input type="hidden" id="checkInfo" value="${checkInfo}">
 								<div>
 									<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">
 										<button type = "button" class= "btn primary-btn">회원정보수정</button>
@@ -97,6 +109,7 @@
                     	<div class="col-lg-4 col-md-6 col-sm-6">
 	                        <div class="contact__address__item">
 	                            <!-- 비밀번호변경 -->
+	                            <input type="hidden" id="checkPw" value="${checkPw}">
 								<div>
 									<a href = "${pageContext.request.contextPath}/customer/modifyCustomerPw">
 										<button type = "button" class= "btn primary-btn">비밀번호변경</button>
