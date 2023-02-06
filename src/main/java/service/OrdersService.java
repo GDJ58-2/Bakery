@@ -9,7 +9,6 @@ import dao.CartDao;
 import dao.CustomerAddressDao;
 import dao.GoodsDao;
 import dao.OrdersDao;
-import dao.PointHistoryDao;
 import util.DBUtil;
 import vo.Cart;
 import vo.CustomerAddress;
@@ -18,7 +17,7 @@ import vo.Orders;
 import vo.PointHistory;
 
 public class OrdersService {
-	private PointHistoryDao pointHistoryDao;
+	private PointHistoryService pointHistoryService;
 	private OrdersDao ordersDao;
 	private CartDao cartDao;
 	private GoodsDao goodsDao;
@@ -135,7 +134,7 @@ public class OrdersService {
 	// ADD
 	public HashMap<String, Object> addOrders(ArrayList<Orders> ordersList, CustomerAddress address, int paramUsePoint) { // 주문
 		HashMap<String, Object> map = null;	
-		this.pointHistoryDao = new PointHistoryDao();
+		this.pointHistoryService = new PointHistoryService();
 		this.customerAddressDao = new CustomerAddressDao();
 		this.ordersDao = new OrdersDao();
 		this.cartDao = new CartDao();
@@ -163,7 +162,7 @@ public class OrdersService {
 				// 포인트 사용 내역 추가 -> 적립은 구매확정 후 
 				if(paramUsePoint!=0) {
 					PointHistory usePoint = new PointHistory((int)map.get("orderCode"), "사용", paramUsePoint, null);
-					pointHistoryDao.insertPoint(conn, usePoint);
+					pointHistoryService.addPointHistory(address.getCustomerId(), usePoint);
 				}
 				// goods 재고 변경
 				HashMap<String, Object> stock = this.goodsDao.selectGoodsOne(conn, o.getGoodsCode());
@@ -194,15 +193,15 @@ public class OrdersService {
 	public int modifyOrders(Orders orders) { // 주문 상태 수정
 		int row = 0;
 		this.ordersDao = new OrdersDao();
-		this.pointHistoryDao = new PointHistoryDao();
+		this.pointHistoryService = new PointHistoryService();
 		this.goodsDao = new GoodsDao();
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			row = ordersDao.updateOrders(conn, orders);
-			if(orders.getOrderState().equals("취소")) {
+			if(orders.getOrderState().equals("취소")) { // 주문을 취소하면 그 주문에 대한 포인트내역 삭제(적립/사용)
 				// 포인트 내역 삭제
-				pointHistoryDao.deletePoint(conn, orders.getOrderCode());
+				pointHistoryService.removePointHistory(orders.getCustomerId(), orders.getOrderCode());
 				// 재고 변경
 				HashMap<String, Object> stock = this.goodsDao.selectGoodsOne(conn, orders.getGoodsCode());
 				Goods goods = new Goods();
@@ -211,8 +210,7 @@ public class OrdersService {
 			} else if(orders.getOrderState().equals("구매확정")) {
 				// 포인트 내역 추가 (적립)
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
-				pointHistoryDao.insertPoint(conn, p);
-				
+				pointHistoryService.addPointHistory(orders.getCustomerId(), p);
 			}
 			conn.commit();
 		} catch (Exception e) {
