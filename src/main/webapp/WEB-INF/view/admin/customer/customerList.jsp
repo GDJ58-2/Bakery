@@ -48,10 +48,10 @@
 <title>고객 관리 | 구디쥬르</title>
 </head>
 <body>
-	<div class="wrap">
-		<!-- header -->
-		<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
-		
+	<!-- header -->
+	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
+	
+	<div class="wrap">	
 		<!-- breadcrumb -->
 		<div class="breadcrumb-option">
 			<div class="container">

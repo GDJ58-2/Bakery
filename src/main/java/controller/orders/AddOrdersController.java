@@ -22,6 +22,7 @@ import vo.Orders;
 public class AddOrdersController extends HttpServlet {
 	private CartService cartService;
 	private OrdersService ordersService;
+	
 	// addOrders action
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 세션 검사
@@ -38,10 +39,11 @@ public class AddOrdersController extends HttpServlet {
 		String[] cartQuantityStr = request.getParameterValues("cartQuantity");
 		String addressKind = request.getParameter("addressKind");
 		String address = request.getParameter("address");
-		System.out.println(goodsCodeStr);
-		System.out.println(cartQuantityStr);
-		System.out.println(addressKind);
-		System.out.println(address);
+		
+		System.out.println(goodsCodeStr.length+"<-- goodsCodeStr.length addOrders action, AddOrdersController");
+		System.out.println(addressKind+"<-- addressKind addOrders action, AddOrdersController");
+		System.out.println(address+"<-- address addOrders action, AddOrdersController");
+		
 		if(goodsCodeStr==null||cartQuantityStr==null||addressKind==null||addressKind.equals("")) {
 			response.sendRedirect(request.getContextPath()+"/cart/cartList");
 			return;
@@ -52,7 +54,7 @@ public class AddOrdersController extends HttpServlet {
 			usePoint = Integer.parseInt(request.getParameter("usePoint"));
 		}
 		
-		// int 배열로 형변환
+		// 선택된 장바구니(굿즈코드, 담긴 상품) int 배열로 형변환
 		int[] goodsCodeInt = new int[goodsCodeStr.length];
 		for(int i=0; i<goodsCodeStr.length; i++) {
 			int j = Integer.parseInt(goodsCodeStr[i]);
@@ -69,14 +71,15 @@ public class AddOrdersController extends HttpServlet {
 		this.cartService = new CartService();
 		ArrayList<HashMap<String, Object>> list = cartService.getCartList(customerId, goodsCodeInt);
 		ArrayList<Orders> ordersList = new ArrayList<Orders>(); // 최종 주문목록 
-		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null); 
-		// ArrayList<HashMap<String, Object>>  ---> ArrayList<Orders>
+		CustomerAddress paramAddress = new CustomerAddress(0,customerId,addressKind,address,null); // 바인딩
+		// ArrayList<HashMap<String, Object>>  ---> ArrayList<Orders> 변환
 		for(HashMap<String, Object> map : list) {
 			Orders orders = new Orders(0,(int)map.get("goodsCode"), customerId, 0, (int)map.get("cartQuantity"), (int)map.get("goodsPrice")*(int)map.get("cartQuantity"), null,null);
 			ordersList.add(orders);
 		}
 		this.ordersService = new OrdersService();
-		HashMap<String, Object> map = ordersService.addOrders(ordersList, paramAddress, usePoint);
+		HashMap<String, Object> map = ordersService.addOrders(ordersList, paramAddress, usePoint); // 주문
+		
 		String msg = "<script>alert('주문 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/cart/cartList'; </script>";
 		if((int)map.get("row")==1) { // 주문 성공
 			int currentPoint = loginCustomer.getPoint();

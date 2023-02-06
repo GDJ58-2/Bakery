@@ -118,7 +118,7 @@
 					                  	<li><a href="${pageContext.request.contextPath}/admin/emp/home">${loginEmp.empName} 님</a><span class="arrow_carrot-down"></span>
 					                     <ul>
 					                      <li>
-					               	           <a href="${pageContext.request.contextPath}/admin/emp/home"><font size = "2" color = "white">My&nbsp;Page</font></a>
+					               	           <a href="${pageContext.request.contextPath}/admin/emp/modifyEmpPw"><font size = "2" color = "white">password</font></a>
 					               	       </li>
 					                         <li style = "display:inline-block">
 					               	           <a href = "javascript:logoutAction(empUrl)" id = "logoutEmpBtn"><font size = "2" color = "white">logout</font></a>
@@ -179,15 +179,15 @@
                                 </ul>
                             </li>
                             <c:if test="${loginEmp ne null}">
-                            <li><a href="${pageContext.request.contextPath}/goods/goodsList">관리자</a>
+                            <li><a href="${pageContext.request.contextPath}/admin/emp/home">관리자</a>
                             	<ul class="dropdown">
+                            		<li><a href="${pageContext.request.contextPath}/admin/emp/home">홈</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/admin/goods/goodsList">상품관리</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/admin/orders/ordersList">주문/배송</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/notice/noticeList">공지사항</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/emp/empList">직원관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/customer/customerList">고객관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/auth/authInfoList">관리자권한관리</a></li>
-                            		<li><a href="${pageContext.request.contextPath}/notice/noticeList">공지관리</a></li>
-                            		<li><a href="${pageContext.request.contextPath}/admin/goods/goodsList">상품관리</a></li>
-                            		<li><a href="${pageContext.request.contextPath}/admin/orders/ordersList">주문관리</a></li>
-                            		<li><a href="${pageContext.request.contextPath}/admin/emp/logout">로그아웃</a></li>
                             	</ul>
                             </li>
                             </c:if>
