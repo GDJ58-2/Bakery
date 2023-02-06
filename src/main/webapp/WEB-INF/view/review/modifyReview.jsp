@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>My Page | 내 리뷰 | 리뷰 수정하기</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -54,6 +54,18 @@
 			border-top: medium none;
 		}
 		
+		textarea {
+  			 width: 100%;
+  			 height: 6.25em;
+  			 border: none;
+   			resize: none;
+		 }
+		 
+		  .box {
+			border:1px solid; 
+			padding:20px;
+		}
+		
 	</style>
 	    
    
@@ -72,88 +84,23 @@
 			      = el.value.substr(0, maxlength);
 			  }
 		}
+		
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
+ 			let out = confirm('로그아웃하시겠습니까?'); 
+ 		 	if(out) {
+      			location.replace(customerUrl); 
+          		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
 
 		$(document).ready(function() {
-			
-			let number = null;
-			let msgCk = 0;
-			$('#id').focus();
-			$('#id').blur(function() {
-				if($('#id').length > 20) {
-					alert('ID는 20자 이하로 입력하세요');
-					$('#id').val('');
-					$('#id').focus();
-				}
-			});
-		
-			
-			$('#createBtn').click(function() {
-				
-				// 아이디
-				if($('#id').val() == ''){
-					$('#idMsg').text('ID를 입력하세요');
-				} else {
-					$('#idMsg').text('');
-					$('#pw').focus();
-				}
-				// 비밀번호
-				if($('#pw').val() == ''){
-					$('#pwMsg').text('pw를 입력하세요');
-				} else {
-					$('#pwMsg').text('');
-					$('#pwck').focus();
-				}
-				// 비밀번호 확인
-				if($('#pw').val() != $('#pwck').val()){
-					$('#ckMsg').text('pw가 일치하지 않습니다');
-				} else {
-					$('#ckMsg').text('');
-				}
-				// 이름확인
-				if($('#name').val() == ''){
-					$('#nameMsg').text('이름을 입력하세요');
-				} else {
-					$('#nameMsg').text('');
-				}
-				// 전화번호 확인
-				$('.phoneNum').each(function() {
-					
-					if($(this).val() == '') {
-						$('#phoneMsg').text('전화번호를 입력하세요');
-					} else {
-						$('#phoneMsg').text('');
-						number = $($('.phoneNum')[0]).val()+'-'+$($('.phoneNum')[1]).val()+'-'+$($('.phoneNum')[2]).val();
-						console.log(number);
-						$('#phone').val(number);
-						console.log('phoneNumber: '+$('#phone').val());
-					}
-				});
-				// 주소확인
-				if($('#address').val() == '') {
-					$('#addressMsg').text('주소를 입력하세요');
-				} else {
-					$('#addressMsg').text('');
-					if($('.addressKind:checked').length == 0) {
-						$('#addressKindMsg').text('주소지 이름을 선택하세요');
-						return;
-					} else {
-						$('#addressKindMsg').text('');
-					}
-				}
-				$('.msg').each(function() {
-					if($(this).text() != '') {
-						alert($(this).text());
-						return false;
-					} else {
-						++ msgCk 
-						console.log('msgCk'+msgCk);
-						console.log('length'+$('.msg').length);
-					}
-					if(msgCk == $('.msg').length) {
-						$('#addForm').submit();
-					}
-				});
-			});
+			$('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
+	   		});
 		});
 	</script>
 </head>
@@ -193,18 +140,22 @@
 
 							<form action = "${pageContext.request.contextPath}/review/modifyReview" method = "post" id = "modifyForm">
 								<input type = "hidden" name = "orderCode" value = "${map.orderCode}">
-								<table border = "1">
+								<table>
 									<tr>
 										<td>${map.orderCode} / ${map.goodsName}</td>
 									</tr>
 									<tr>
 										<td>review</td>
 										<td>
-											<input type = "text" id = "reviewMemo" name = "reviewMemo" value = "${map.reviewMemo}">
+											<div class="box">
+												<textarea cols="20" rows="3" id = "reviewMemo" name = "reviewMemo">${map.reviewMemo}</textarea>
+											</div>
 										</td>
 									</tr>
 								</table>
-								<button type = "submit" id = "modifyBtn">리뷰수정</button>
+								<div class= "review__btn">
+									<button type = "submit" id = "modifyBtn">리뷰수정</button>
+								</div>
 							</form>
 										
 						</div>

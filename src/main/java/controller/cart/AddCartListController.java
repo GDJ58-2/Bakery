@@ -24,7 +24,7 @@ public class AddCartListController extends HttpServlet {
 		Cart cart = null;
 		int goodsCode = Integer.parseInt(request.getParameter("goodsCode"));
 		this.cartService = new CartService();
-		String filename = cartService.getGoodsImg(goodsCode);
+		String originName = cartService.getGoodsImg(goodsCode);
 		GoodsService goodsService = new GoodsService(); 
 		HashMap<String, Object> goodsOne = goodsService.getGoodsOne(goodsCode); // goodsCode로 goods정보 얻기
 		String goodsName = (String)goodsOne.get("goodsName");
@@ -41,7 +41,7 @@ public class AddCartListController extends HttpServlet {
 				map.put("goodsCode", goodsCode);
 				map.put("goodsName", goodsName);
 				map.put("goodsPrice", goodsPrice);
-				map.put("filename", filename);
+				map.put("originName", originName);
 				map.put("cartQuantity", cartQuantity);
 				list.add(map);
 			} else { // 장바구니가 비어있지 않을 때
@@ -59,7 +59,7 @@ public class AddCartListController extends HttpServlet {
 					map2.put("goodsCode", goodsCode);
 					map2.put("goodsName", goodsName);
 					map2.put("goodsPrice", goodsPrice);
-					map2.put("filename", filename);
+					map2.put("originName", originName);
 					map2.put("cartQuantity", cartQuantity);
 					list.add(map2);
 				}

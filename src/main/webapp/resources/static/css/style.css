@@ -2018,7 +2018,7 @@ ol {
 
 /*----review----*/
 .review__table {
-  margin-bottom: 30px;
+  margin-bottom: 0;
 }
 
 .review__btn a {
@@ -2028,49 +2028,54 @@ ol {
   letter-spacing: 2px;
   text-transform: uppercase;
   border: 1px solid #e1e1e1;
-  padding: 10px 30px;
+  padding: 8px 25px;
   display: inline-block;
 }
+
+
+.review__btn button {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 8px 20px;
+  color: #ffffff;
+  background: #f08632;
+  letter-spacing: 2px;
+  border: none; 
+  margin-top: 30px;
+}
+
 .review__table table {
   width: 100%;
 }
-.review__table table thead {
-  border-bottom: 1px solid #f2f2f2;
-}
-.review__table table thead tr th {
-  color: #111111;
-  font-size: 16px;
-  font-weight: 600;
-  text-transform: uppercase;
-  padding-bottom: 25px;
-}
 
-.review__table table tbody tr {
+.review__table table tr {
   border-bottom: 1px solid #f2f2f2;
 }
-.review__table table tbody tr td {
-  padding-bottom: 20px;
-  padding-top: 20px;
+.review__table table tr td {
+  padding-bottom: 0;
+  padding-top: 0;
 }
-.review__table table tbody tr td.product__item {
-  width: 200px;
+.review__table table tr td.product__item {
+  width: 100px;
 }
-.review__table table tbody tr td.product__item .product__item__pic {
+.review__table table tr td.product__item .product__item__pic {
   float: left;
   margin-right: 5px;
 }
-.review__table table tbody tr td.product__item .product__item__text {
+.review__table table tr td.product__item .product__item__text {
   overflow: hidden;
   /*padding-top: 15px;*/
 }
-.review__table table tbody tr td.product__item .product__item__text h6 {
+.review__table table tr td.product__item .product__item__text h6 {
   color: #111111;
   font-size: 16px;
   font-weight: 500;
   text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 0;
 }
-.review__table table tbody tr td.product__item .product__item__text h5 {
+.review__table table tr td.product__item .product__item__text h5 {
   color: #111111;
   font-weight: 600;
   font-size: 16px;

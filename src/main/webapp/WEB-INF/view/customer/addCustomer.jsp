@@ -54,6 +54,10 @@
 			border-top: medium none;
 		}
 		
+		.msg {
+			color: #A94442;
+		}
+		
 	</style>
 	    
    
@@ -187,23 +191,31 @@
 											<td>ID</td>
 												<td>
 													<input type = "text" maxlength = "15" id = "id" class = "addInfo" name = "id" placeholder = "ID">
-													<span id = "idMsg" class = "msg"></span>
+													<div>
+														<span id = "idMsg" class = "msg"></span>
+													</div>
 												</td>
 											</tr>
 											<tr>
 												<td>PW</td>
 												<td>
 													<span><input type = "password" maxlength = "20" id = "pw" class = "addInfo" name = "pw"></span>
-													<span id = "pwMsg" class = "msg"></span><br>
+													<div>
+														<span id = "pwMsg" class = "msg"></span><br>
+													</div>
 													<span><input type = "password" id = "pwck" class = "addInfo" placeholder = "pw확인"></span>
-													<span id = "ckMsg" class = "msg"></span>
+													<div>
+														<span id = "ckMsg" class = "msg"></span>
+													</div>
 												</td>
 											</tr>
 											<tr>
 												<td>Name</td>
 												<td>
 													<input type = "text" maxlength = "20" id = "name" class = "addInfo" name = "name">
-													<span id = "nameMsg" class = "msg"></span>
+													<div>
+														<span id = "nameMsg" class = "msg"></span>
+													</div>
 												</td>
 											</tr>
 											<tr>
@@ -211,7 +223,9 @@
 												<td>
 													<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput(this, 3)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">
 													<input type = "hidden" id = "phone" name = "phone">
-													<span id = "phoneMsg" class = "msg"></span>
+													<div>
+														<span id = "phoneMsg" class = "msg"></span>
+													</div>
 												</td> 
 											</tr>
 											<tr>
@@ -220,10 +234,14 @@
 													<input type = "radio" class = "addressKind" name = "addressKind" value = "집">집
 													&nbsp;
 													<input type = "radio" class = "addressKind" name = "addressKind" value = "회사">회사
-													<span id = "addressKindMsg" class = "msg"></span>
-													<br>
+													<div>
+														<span id = "addressKindMsg" class = "msg"></span>
+														<br>
+													</div>
 													<input type = "text" id = "address" class = "addInfo" name = "address">
-													<span id = "addressMsg" class = "msg"></span>
+													<div>
+														<span id = "addressMsg" class = "msg"></span>
+													</div>
 												</td>
 											</tr>
 									</table>
