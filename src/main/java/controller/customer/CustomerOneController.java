@@ -24,6 +24,18 @@ public class CustomerOneController extends HttpServlet {
 		
 		String customerId = loginCustomer.getCustomerId();
 		
+		// 비밀번호 변경 완료 메시지
+		String checkPw=request.getParameter("checkPw");
+		if(checkPw != null) {
+			request.setAttribute("checkPw", checkPw);
+		} 
+		
+		// 회원정보 수정 완료 메시지
+		String checkInfo=request.getParameter("checkInfo");
+		if(checkInfo != null) {
+			request.setAttribute("checkInfo", checkInfo);
+		} 
+		
 		CustomerService customerService = new CustomerService();
 		Customer selectOneCustomer = customerService.getSelectOneCustomer(customerId); 
 		request.setAttribute("selectOneCustomer", selectOneCustomer);

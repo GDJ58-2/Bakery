@@ -237,30 +237,6 @@
 	
 	// 오른쪽 상단 장바구니 이모티콘에 들어가는 장바구니 수량
 	$('#quantity').text(($('.checkGoodsCode')).length);
-	
-	// 체크박스 전체선택&전체해제
-	$('#chkAll').on('click', function() {
-		var total = $('.checkGoodsCode').length;
-		var checked = ($('.checkGoodsCode:checked')).length;	
-		//console.log('total: '+total);
-		//console.log('checked: '+checked);
-		if(total == checked) {
-			$('.checkGoodsCode').prop('checked', false);
-		} else {
-			$('.checkGoodsCode').prop('checked', true);
-		}
-	});
-	
-	// 체크된 주문만 결제페이지로 넘어갈 수 있음
-	$('#orderBtn').click(function() {
-		var checked = ($('.checkGoodsCode:checked')).length;
-		if(!checked) {
-			console.log(checked);
-			alert('주문할 상품을 선택하세요');
-		} else {
-			$('#orderForm').submit();
-		}
-	});
 
     $(".product__details__thumb").niceScroll({
         cursorborder: "",

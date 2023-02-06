@@ -32,6 +32,26 @@ public class ReviewListController extends HttpServlet {
 		// 작성 가능한 리뷰 목록
 		ArrayList<HashMap<String, Object>> noReviewList = reviewService.getNoReviewList(customerId);
 		
+		// 리뷰 등록 알림 메시지
+		String reviewMsg=request.getParameter("reviewMsg");
+		if(reviewMsg != null || reviewMsg != "") {
+			request.setAttribute("reviewMsg", reviewMsg);
+		}
+		
+		// 리뷰 수정 알림 메시지
+		String modifyReviewMsg=request.getParameter("modifyReviewMsg");
+		if(modifyReviewMsg != null || modifyReviewMsg != "") {
+			request.setAttribute("modifyReviewMsg", modifyReviewMsg);
+		}
+		
+		// 리뷰 삭제 알림 메시지
+		String deleteReviewMsg=request.getParameter("deleteReviewMsg");
+		if(deleteReviewMsg != null || deleteReviewMsg != "") {
+			request.setAttribute("deleteReviewMsg", deleteReviewMsg);
+		}
+		
+		System.out.println(reviewMsg+modifyReviewMsg+deleteReviewMsg);
+		
 		request.setAttribute("reviewList", reviewList);
 		request.setAttribute("noReviewList", noReviewList);
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/review/reviewList.jsp");

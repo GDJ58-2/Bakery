@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>비밀번호변경 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -54,21 +54,26 @@
 			border-top: medium none;
 		}
 		
+		.msg {
+			color: #A94442;
+		}
+		
+		
 	</style>
 	    
    
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 	<script>
-		function logoutAction() {
-			let url = '${pageContext.request.contextPath}/customer/logout';
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
 				let out = confirm('로그아웃하시겠습니까?'); 
 			 	if(out) {
-		 			location.replace(url); 
-		     		alert('로그아웃되었습니다');
-		      	} else {
-		         	alert('로그아웃 취소');
-		         	return false;
-		      	}
+	  			location.replace(customerUrl); 
+	      		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
 		 }  
 		
 		// 핸드폰번호에는 숫자만 입력가능하게 하는 함수
@@ -86,11 +91,10 @@
 		}
 		
 		$(document).ready(function() {
-			// 비밀번호 변경 거절 알림창
-			if($('#check').val()) {
-				alert('변경할 수 없는 번호입니다');
-				$('#check').val() = '';
-			} 
+			// 비밀번호 변경 실패 메시지
+			if($('#checkPw').val() == "N" && $('#checkPw').val() != '') {
+				alert('비밀번호 변경에 실패하였습니다 변경 전 비밀번호와 새 비밀번호를 확인하십시오');
+			}
 			
 			$('#modifyPwBtn').click(function() {
 				let msgCk = 0;
@@ -125,8 +129,8 @@
 			});
 			
 			// 로그아웃
-			$('#logoutBtn').on('click', function() {
-	   			logoutAction(url);
+			$('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
 	   		});
 		});
 	</script>
@@ -164,18 +168,22 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
-								<input type="hidden" id="check" value="${check}">
+								<input type="hidden" id="checkPw" value="${checkPw}">
 								<form action = "${pageContext.request.contextPath}/customer/modifyCustomerPw" method = "post" id = "modifyPwForm">
 									<div>현재 비밀번호</div>
 									<div>
 										<input type = "password" id = "pw" name = "pw">
-										<span id = "pwMsg" class = "msg"></span>
+										<div>
+											<span id = "pwMsg" class = "msg"></span>
+										</div>
 									</div>
 									
 									<div class="mt-5">새 비밀번호</div>
 									<div>
 										<input type = "password" id = "newPw" name = "newPw">
-										<span id = "newPwMsg" class = "msg"></span>
+										<div>
+											<span id = "newPwMsg" class = "msg"></span>
+										</div>
 									</div>
 									<div class="mt-5">
 										<button type = "button" id = "modifyPwBtn" class="btn primary-btn">비밀번호변경</button>

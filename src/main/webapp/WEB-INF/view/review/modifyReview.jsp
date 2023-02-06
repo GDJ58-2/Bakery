@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Page | 내 리뷰 | 리뷰 수정하기</title>
+    <title>리뷰 수정 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -98,9 +98,27 @@
 		 }  
 
 		$(document).ready(function() {
+			// 로그아웃
 			$('#logoutBtn').click(function() {
 	   			logoutAction(customerUrl);
 	   		});
+			
+			// 리뷰수정 유효성 검사
+			$('#modifyBtn').click(function() {
+				console.log($('#reviewMemo').val());
+				if($('#reviewMemo').val().length < 2) {
+					alert('3자 이상 입력한 글만 등록이 가능합니다');
+				} else {
+					$('#modifyForm').submit();
+				}
+			}); 
+			
+			// 리뷰 수정 알림창
+			if($('#modifyReviewMsg').val() == "Y" && $('#modifyReviewMsg').val() != '') {
+				alert('리뷰를 수정하였습니다');
+			} else if($('#modifyReviewMsg').val() == "N" && $('#modifyReviewMsg').val() != '') {
+				alert('리뷰 수정에 실패하였습니다 다시 작성하십시오');
+			}
 		});
 	</script>
 </head>
@@ -137,7 +155,7 @@
 				<div class="col-lg-11 col-md-7 col-sm-6">
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
-
+							<input type="hidden" id="modifyReviewMsg" value="${modifyReviewMsg}">
 							<form action = "${pageContext.request.contextPath}/review/modifyReview" method = "post" id = "modifyForm">
 								<input type = "hidden" name = "orderCode" value = "${map.orderCode}">
 								<table>
@@ -154,7 +172,7 @@
 									</tr>
 								</table>
 								<div class= "review__btn">
-									<button type = "submit" id = "modifyBtn">리뷰수정</button>
+									<button type = "button" id = "modifyBtn">리뷰수정</button>
 								</div>
 							</form>
 										

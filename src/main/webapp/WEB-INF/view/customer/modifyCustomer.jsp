@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cake | Template</title>
+    <title>회원정보수정 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -58,6 +58,10 @@
  			border-collapse: separate;
   			border-spacing: 0 20px;
 		}
+		
+		.msg {
+			color: #A94442;
+		}
 	</style>
 	    
    
@@ -77,11 +81,11 @@
 			  }
 		}
 		
-		function logoutAction() {
-			let url = '${pageContext.request.contextPath}/customer/logout';
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
  			let out = confirm('로그아웃하시겠습니까?'); 
  		 	if(out) {
-      			location.replace(url); 
+      			location.replace(customerUrl); 
           		alert('로그아웃되었습니다');
 	       	} else {
 	          	alert('로그아웃 취소');
@@ -136,9 +140,14 @@
 					}
 				});
 				
+				// 리뷰 등록 알림창
+				if($('#checkInfo').val() == "N" && $('#checkInfo').val() != '') {
+					alert('회원정보 수정에 실패하였습니다 다시 시도하십시오');
+				}
+				
 				// 로그아웃
-				$('#logoutBtn').on('click', function() {
-		   			logoutAction(url);
+				$('#logoutBtn').click(function() {
+		   			logoutAction(customerUrl);
 		   		});
 			});
 		});
@@ -177,6 +186,7 @@
 					<div class = "d-flex justify-content-center">
 						<div class="create-account">
 							<div>
+								<input type="hidden" id="checkInfo" value="${checkInfo}">
 								<form action = "${pageContext.request.contextPath}/customer/modifyCustomer" method = "post" id = "modifyForm">
 									<table>
 										<tr>
@@ -189,14 +199,18 @@
 											<td style="width: 100px">PW</td>
 											<td>
 												<input type = "password" id = "pw" name = "pw">
-												<span id = "pwMsg" class = "msg"></span>
+												<div>
+													<span id = "pwMsg" class = "msg"></span>
+												</div>
 											</td>
 										</tr>
 										<tr>
 											<td style="width: 100px">Name</td>
 											<td>
 												<input type = "text" id = "name" name = "name" value = "${selectCustomer.customerName}">
-												<span id = "nameMsg" class = "msg"></span>
+												<div>
+													<span id = "nameMsg" class = "msg"></span>
+												</div>
 											</td>
 										</tr>
 										<tr>
@@ -204,7 +218,9 @@
 											<td>
 												<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput(this, 3)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">-<input type = "number" class = "phoneNum" min = "0" oninput="handleOnInput2(this, 4)">
 												<input type = "hidden" id = "phone" name = "phone">
-												<span id = "phoneMsg" class = "msg"></span>
+												<div>
+													<span id = "phoneMsg" class = "msg"></span>
+												</div>
 											</td> 
 										</tr>
 									</table>

@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My Page | 내 리뷰</title>
+    <title>내 리뷰 | 고객 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -58,7 +58,15 @@
   			 width: 100%;
   			 height: 6.25em;
   			 border: none;
-   			resize: none;
+   			 resize: none;
+		 }
+		 
+		 .input-div{
+		    vertical-align: middle;
+		 }
+		 
+		 .btnBox {
+		 	margin-left: 70px;
 		 }
 	</style>
 	    
@@ -95,6 +103,27 @@
 			$('#logoutBtn').click(function() {
 	   			logoutAction(customerUrl);
 	   		});
+			
+			// 리뷰 등록 알림창
+			if($('#reviewMsg').val() == "Y" && $('#reviewMsg').val() != '') {
+				alert('리뷰를 등록하였습니다');
+			} 
+			
+			// 리뷰 수정 알림창
+			if($('#modifyReviewMsg').val() == "Y" && $('#modifyReviewMsg').val() != '') {
+				alert('리뷰를 수정하였습니다');
+			} 
+			
+			// 리뷰 삭제 알림창
+			if($('#deleteReviewMsg').val() == "Y" && $('#deleteReviewMsg').val() != '') {
+				alert('리뷰를 삭제하였습니다');
+			} else if($('#deleteReviewMsg').val() == "N" && $('#deleteReviewMsg').val() != '') {
+				alert('리뷰 삭제에 실패하였습니다 다시 시도하십시오');
+			}
+			
+			 $("#input-letter").on("propertychange change keyup paste input",function(){
+		     	$(this).height(1).height($(this).prop('scrollHeight'));    
+		    });
 		});
 	</script>
 </head>
@@ -122,7 +151,6 @@
         </div>
     </div>
 	
-
     <!-- Create Account Section Begin -->
 	<section class="review spad">
     	<div class="container">
@@ -130,28 +158,34 @@
 				<div class="col-lg-11">
 					<div class = "review__table">
 						<div>
-
 							<div>
 								<div>작성 가능한 리뷰</div>
 								<div class="order__List">
 									<div>
 									<table>
-										<c:forEach var = "nr" items = "${noReviewList}" varStatus = "i">
-											<tr>
-												<td class="product__item">${nr.orderCode}</td>
-												<td class="product__item__pic">
-													<img src = "${pageContext.request.contextPath}/upload/${nr.originName}" width = "70" height = "70">
-												</td>
-												<td class="product__item__text">${nr.goodsName}</td>
-												<td>
-													<div class = "review__btn">
-													<a href = "${pageContext.request.contextPath}/review/addReview?orderCode=${nr.orderCode}">
-														리뷰쓰기
-													</a>
-													</div>
-												</td>
-											</tr>	
-										</c:forEach>
+										<c:choose>
+											<c:when test="${!empty noReviewList}">
+												<c:forEach var = "nr" items = "${noReviewList}" varStatus = "i">
+													<tr>
+														<td class="product__item">${nr.orderCode}</td>
+														<td class="product__item__pic">
+															<img src = "${pageContext.request.contextPath}/upload/${nr.originName}" width = "70" height = "70">
+														</td>
+														<td class="product__item__text">${nr.goodsName}</td>
+														<td>
+															<div class = "review__btn">
+															<a href = "${pageContext.request.contextPath}/review/addReview?orderCode=${nr.orderCode}">
+																리뷰쓰기
+															</a>
+															</div>
+														</td>
+													</tr>	
+												</c:forEach>
+											</c:when>
+											<c:when test="${empty noReviewList}">
+												<div class="mt-5">주문내역이 없습니다</div>
+											</c:when>
+										</c:choose>
 									</table>
 									</div>
 								</div>
@@ -159,35 +193,52 @@
 								
 								<div class="mt-5">내가 쓴 리뷰</div>
 								<div class="review__List">
+								
+								<!-- controller로 부터 넘어온 리뷰 등록/수정/삭제 성공여부에 대한 메시지 -->
+									<input type="hidden" id="reviewMsg" value="${reviewMsg}">
+									<input type="hidden" id="modifyReviewMsg" value="${modifyReviewMsg}">
+									<input type="hidden" id="deleteReviewMsg" value="${deleteReviewMsg}"> 
+									
 									<table>
-										<c:forEach var = "n" items = "${reviewList}" varStatus = "i">
-											<tr>
-												<td>${n.orderCode}</td>
-												<td class="product__item__pic">
-													<img src = "${pageContext.request.contextPath}/upload/${n.originName}" width = "70" height = "70">
-												</td>
-												<td>${n.goodsName}</td>
-												<td>
-													<div class="mt-5">
-														<textarea cols="25" rows="2">${n.reviewMemo}</textarea>
-													</div>
-												</td>
-												<td>
-													<div class = "review__btn">
-														<span>
-														<a href = "${pageContext.request.contextPath}/review/modifyReview?orderCode=${n.orderCode}">
-															수정하기
-														</a>
-														</span>
-														<span>
-														<a href = "${pageContext.request.contextPath}/review/removeReview?orderCode=${n.orderCode}">
-															삭제하기
-														</a>
-														</span>
-													</div>
-												</td>
-											</tr>	
-										</c:forEach>
+										<c:choose>
+											<c:when test="${!empty reviewList}">
+												<c:forEach var = "n" items = "${reviewList}" varStatus = "i">
+													<tr>
+														<td>${n.orderCode}</td>
+														<td class="product__item__pic">
+															<img src = "${pageContext.request.contextPath}/upload/${n.originName}" width = "70" height = "70">
+														</td>
+														<td>${n.goodsName}</td>
+														<td>
+															<div class="input-div">
+																<div class="mt-5">
+																	<textarea id="input-letter" maxlength="40" rows="1" style="resize: none;" spellcheck="false" readonly="readonly">${n.reviewMemo}</textarea>
+																</div>
+															</div>
+														</td>
+														<td>
+															<div class="btnBox">
+																<div class = "review__btn">
+																	<span>
+																	<a href = "${pageContext.request.contextPath}/review/modifyReview?orderCode=${n.orderCode}">
+																		수정하기
+																	</a>
+																	</span>
+																	<span>
+																	<a href = "${pageContext.request.contextPath}/review/removeReview?orderCode=${n.orderCode}">
+																		삭제하기
+																	</a>
+																	</span>
+																</div>
+															</div>
+														</td>
+													</tr>	
+												</c:forEach>
+										</c:when>
+										<c:when test="${empty reviewList}">
+											<div class="mt-5">등록된 리뷰가 없습니다</div>
+										</c:when>
+										</c:choose>
 									</table>
 								</div>
 							</div>

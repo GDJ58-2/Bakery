@@ -30,15 +30,24 @@ public class LoginController extends HttpServlet {
 	    	return;
 	    }
 	    
+	    // 회원가입 완료 메시지
 	    String addMsg = request.getParameter("addMsg");
 	    if(addMsg != null) {
 	    	System.out.println(addMsg);
 	    	request.setAttribute("addMsg", addMsg);
 	    }
+	    // 로그인 실패 메시지
 	    String loginMsg=request.getParameter("loginMsg");
 	    if(loginMsg != null) {
 	    	request.setAttribute("loginMsg", loginMsg);
 	    }
+	    
+	    // 탈퇴 완료 메시지
+ 		String removeMsg=request.getParameter("removeMsg");
+ 		if(removeMsg != null) {
+ 			request.setAttribute("removeMsg", removeMsg);
+ 		}
+
 	    
 	    // View
 	    request.getRequestDispatcher("/WEB-INF/view/customer/login.jsp").forward(request, response);
