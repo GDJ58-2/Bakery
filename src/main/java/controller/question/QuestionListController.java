@@ -14,18 +14,28 @@ import javax.servlet.http.HttpSession;
 import service.GoodsService;
 import service.QuestionService;
 import vo.Customer;
+import vo.Emp;
 
 @WebServlet("/question/questionList")
 public class QuestionListController extends HttpServlet {
 	private QuestionService questionService;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
-		if(loginCustomer==null) {
+		if(loginCustomer==null&&loginEmp==null) {
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
-		String customerId = loginCustomer.getCustomerId();
+		if(loginEmp != null && loginEmp.getAuthCode()<1) {
+			response.sendRedirect(request.getContextPath()+"/index");
+			return;
+		}
+		
+		String customerId = null;
+		if(loginCustomer!=null) {
+			customerId = loginCustomer.getCustomerId();
+		}
 		System.out.println(customerId);
 		
 		// 페이징

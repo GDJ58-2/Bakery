@@ -29,8 +29,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 </head>
 <body>
-	<jsp:include page="../inc/customer.jsp"></jsp:include>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	
     <!-- Header Section Begin -->
    	<c:import url="../inc/header.jsp"></c:import>

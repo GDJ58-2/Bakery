@@ -27,7 +27,7 @@ public class RemoveNoticeController extends HttpServlet {
 		}
 		// 관리자 권한 검사
 		if(loginEmp.getAuthCode()<1) { 
-			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
 		

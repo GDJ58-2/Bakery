@@ -26,7 +26,7 @@ public class LoginController extends HttpServlet {
 	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
 	    } else if (loginEmp != null) { // 이미 로그인 된 관리자
-	    	response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+	    	response.sendRedirect(request.getContextPath()+"/index");
 	    	return;
 	    }
 	    
@@ -62,7 +62,7 @@ public class LoginController extends HttpServlet {
 	    	response.sendRedirect(request.getContextPath()+"/customer/myHome");
 	        return;
 	    } else if (loginEmp != null) { // 이미 로그인 된 관리자
-	    	response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+	    	response.sendRedirect(request.getContextPath()+"/index");
 	    	return;
 	    }
 		

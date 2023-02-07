@@ -29,8 +29,6 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
 </head>
 <body>
-	<jsp:include page="../inc/customer.jsp"></jsp:include>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	
     <!-- Header Section Begin -->
    	<c:import url="../inc/header.jsp"></c:import>
@@ -42,7 +40,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__text">
-                        <h2>나의 문의 내역</h2>
+                        <h2>문의 내역</h2>
                         <br>
 						<div style="color:red;" id="msg">
 						${msg}
@@ -52,7 +50,7 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__links">
                         <a href="./index.html">Home</a>
-                        <span>나의 문의 내역</span>
+                        <span>문의 내역</span>
                     </div>
                 </div>
             </div>
@@ -65,8 +63,10 @@
         <div class="container">         
             <div class="row">          		
                 <div class="col-lg-12">
-	            	<div class="product__details__text">                       
-                        <a class="primary-btn" href="${pageContext.request.contextPath}/question/addQuestion">추가</a> <!-- 문의하기 -> 주문번호 선택-> 내 문의 내역 마이페이지-->
+	            	<div class="product__details__text">
+	            		<c:if test="${loginEmp == null && loginCustomer!=null}"> 
+	            			<a class="primary-btn" href="${pageContext.request.contextPath}/question/addQuestion">추가</a> <!-- 문의하기 -> 주문번호 선택-> 내 문의 내역 마이페이지-->
+	            		</c:if>
 						<br><br>
 						<table class="table table-bordered">
 							<thead>
@@ -90,16 +90,21 @@
 											</a>
 										</td> 
 										<td>${q.createdate}</td>
-										<c:if test="${q.commentCode eq null||q.commentCode == 0}">
+										<c:if test="${q.commentCode == null||q.commentCode == 0}">
 											<td>답변 대기</td>
-											<td>
-												<a class="btn dark-btn" href="${pageContext.request.contextPath}/question/modifyQuestion?questionCode=${q.questionCode}">수정</a>
-												<a class="btn dark-btn" href="${pageContext.request.contextPath}/question/removeQuestion?questionCode=${q.questionCode}">삭제</a>
-											</td>
+											<c:if test="${loginEmp == null && loginCustomer!=null}">
+												<td>
+													<a class="btn dark-btn" href="${pageContext.request.contextPath}/question/modifyQuestion?questionCode=${q.questionCode}">수정</a>
+													<a class="btn dark-btn" href="${pageContext.request.contextPath}/question/removeQuestion?questionCode=${q.questionCode}">삭제</a>
+												</td>
+											</c:if>
+											<c:if test="${loginEmp != null && loginCustomer==null}">
+												<td>-</td>
+											</c:if>
 										</c:if>
 										<c:if test="${q.commentCode ne null&&q.commentCode != 0}">
 											<td>답변 완료</td>
-											<th>&nbsp;</th>
+											<td>-</td>
 										</c:if>
 									</tr>
 								</c:forEach>

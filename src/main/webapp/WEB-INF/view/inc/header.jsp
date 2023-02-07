@@ -185,6 +185,7 @@
                             		<li><a href="${pageContext.request.contextPath}/admin/goods/goodsList">상품관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/orders/ordersList">주문/배송</a></li>
                             		<li><a href="${pageContext.request.contextPath}/notice/noticeList">공지사항</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/question/questionList">문의</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/emp/empList">직원관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/customer/customerList">고객관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/auth/authInfoList">관리자권한관리</a></li>

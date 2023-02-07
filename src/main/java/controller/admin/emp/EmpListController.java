@@ -32,7 +32,7 @@ public class EmpListController extends HttpServlet {
 		}
 		// 관리자 권한 검사 
 		if(loginEmp.getAuthCode()<3) { 
-			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			response.sendRedirect(request.getContextPath()+"/index");
 			return;
 		}
 		

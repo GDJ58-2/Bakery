@@ -28,7 +28,7 @@ public class LoginEmpController extends HttpServlet {
 		}
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp!=null) {
-			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			response.sendRedirect(request.getContextPath()+"/index");
 			return;
 		}
 		
@@ -76,7 +76,7 @@ public class LoginEmpController extends HttpServlet {
 		String redirectUrl = "/admin/emp/loginEmp?msg="+msg;
 		if(emp!=null) { 
 			session.setAttribute("loginEmp", emp);
-			redirectUrl = "/admin/emp/home";
+			redirectUrl = "/index";
 		}
 		
 		response.sendRedirect(request.getContextPath()+redirectUrl); // 로그인 후 관리자 홈으로 이동
