@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>내 리뷰 | 고객 | 구디쥬르</title>
+    <title>내 리뷰 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -130,7 +130,7 @@
 
 <body>
    <!-- Header Section Begin -->
-   	<c:import url="../inc/header.jsp"></c:import>
+   	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<!-- Header Section End -->
 
 	<div class="breadcrumb-option">
@@ -252,7 +252,7 @@
     <!-- Contact Section End -->
 
     <!-- Footer Section Begin -->
-    <c:import url="../inc/footer.jsp"></c:import>
+    <c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 
 <!-- Search Begin -->

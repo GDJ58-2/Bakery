@@ -170,7 +170,7 @@
 
 <body>
    <!-- Header Section Begin -->
-   	<c:import url="../inc/header.jsp"></c:import>
+   	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<!-- Header Section End -->
 
     <!-- Create Account Section Begin -->
@@ -264,7 +264,7 @@
     <!-- Contact Section End -->
 
     <!-- Footer Section Begin -->
-    <c:import url="../inc/footer.jsp"></c:import>
+    <c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 
 <!-- Search Begin -->

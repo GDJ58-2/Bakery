@@ -130,6 +130,7 @@ public class CustomerDao {
 				+ ", customer_name customerName"
 				+ ", customer_phone customerPhone"
 				+ ", point"
+				+ ", createdate"
 				+ " FROM customer"
 				+ " WHERE customer_id = ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
@@ -142,6 +143,7 @@ public class CustomerDao {
 			resultCustomer.setCustomerName(rs.getString("customerName"));
 			resultCustomer.setCustomerPhone(rs.getString("customerPhone"));
 			resultCustomer.setPoint(rs.getInt("point"));
+			resultCustomer.setCreatedate(rs.getString("createdate"));
 		}
 		DBUtil.close(rs, stmt, null);
 		return resultCustomer;
