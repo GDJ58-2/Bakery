@@ -43,66 +43,85 @@
 	          	return false;
 	       	}
 		}  
-	
 		
       $(document).ready(function() {
-         // 총 금액
+    	// 장바구니 전체합계
+          let allTotal=0;
+          $('.gCode').each(function() {	
+         	let allPrice=Number($(this).parent().siblings().children('div').find('h5').html().substring(1)); 
+         	let allQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+         	allTotal = allTotal + allPrice*allQuantity;
+         	$('#total').text(allTotal);
+          });
+          
+       // 체크박스 전체선택&전체해제
+          $('#chkAll').on('click', function() {
+       		let checkTotal = $('.checkGoodsCode').length;
+       		let checked = ($('.checkGoodsCode:checked')).length;
+       		let chkAllPrice = 0;
+       		let chkAllQuantity = 0;
+       		let chkAllTotal=0;
+       		if(checkTotal == checked) {
+       			$('.checkGoodsCode').prop('checked', false);
+       			$('#chkAll').prop('checked', false);
+       			$('#subTotal').html(0);
+       		} else {
+       			$('.checkGoodsCode').prop('checked', true);
+       			$('#chkAll').prop('checked', true);
+       			$('#subTotal').html($('#total').text());
+       		}
+       	 });
+       	
+       	// 주문 개별 선택시 전체선택 체크박스 체크되게 하기
+       	$('.checkGoodsCode').on('click', function() {
+       		let checkTotal = $('.checkGoodsCode').length;
+       		let checked = ($('.checkGoodsCode:checked')).length;
+       		if(checkTotal == checked) {
+       			$('#chkAll').prop('checked', true);
+       		} else {
+       			$('#chkAll').prop('checked', false);
+       		}
+       	});
 
+		 // 결제 금액 미리보기
          $('.checkGoodsCode').each(function() { // 하나씩 선택했을 때
-			let cPrice=0;
+        	let cPrice=0;
 			let cQunatity=0;
 			let total=0;
 			let plusTotal=0;
 			let minusTotal=0;
+			let subTotalNum=Number($('#subTotal').text());
+			let totalNum=Number($('#total').text());
+			let chkTotal = $(this).length;
+       		let chk = ($(this)).length;
+       		
 			$('.checkGoodsCode').on('change', function() {
-				if($(this).is(':checked')) {
-	                 cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
-	                 cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-	                 plusTotal=cPrice*cQuantity;
-	                 total = total + plusTotal;
-	             } else if($(this).not(':checked')) {
+ 				if($(this).is(':checked')) {
 					cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
-	                cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-	               	minusTotal=cPrice*cQuantity;
-	               	total = total - minusTotal;
-				}
+                 	cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+                 	plusTotal=cPrice*cQuantity;
+                 	total = total + plusTotal;
+                 	if(total > totalNum) {
+                 		total = totalNum;
+                 	}
+                 	$('#subTotal').text(total);
+                 	console.log('plus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
+             	} else if($(this).not(':checked')) {
+             		cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
+                	cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+               		minusTotal=cPrice*cQuantity;
+               		total = total - minusTotal;
+               		if(total < 0){
+               			total = 0;
+               		}
+               		$('#subTotal').text(total);
+               		console.log('minus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
+             	} 
 				console.log(plusTotal+"/"+minusTotal+"/"+total);
-				$('#subTotal').text(total); // 선택합계
+				
+				 // 선택합계
 			});
 		 });
-         
-      	// 체크박스 전체선택&전체해제
-         $('#chkAll').on('click', function() {
-      		let checkTotal = $('.checkGoodsCode').length;
-      		let checked = ($('.checkGoodsCode:checked')).length;
-      		let chkAllPrice = 0;
-      		let chkAllQuantity = 0;
-      		let chkAllTotal=0;
-      		if(checkTotal == checked) {
-      			$('.checkGoodsCode').prop('checked', false);
-      			$('#chkAll').prop('checked', false);
-      			$('#subTotal').text(0);
-      		} else {
-      			$('.checkGoodsCode').prop('checked', true);
-      			$('#chkAll').prop('checked', true);
-      			$('.checkGoodsCode').each(function() {
-      				chkAllPrice=Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
-      				chkAllQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-      				chkAllTotal = chkAllTotal + chkAllPrice*chkAllQuantity;
-      				$('#subTotal').text(chkAllTotal); // 전체선택 합계
-          		});
-      		}
-      	 });
-      	 
-      	// 장바구니 전체합계
-         let allTotal=0;
-         $('.gCode').each(function() {	
-        	let allPrice=Number($(this).parent().siblings().children('div').find('h5').html().substring(1)); 
-        	let allQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-        	allTotal = allTotal + allPrice*allQuantity;
-        	$('#total').text(allTotal);
-         });
-
          
          // 수량변경버튼
          $('.modifyBtn').on('click', function() {
@@ -136,7 +155,7 @@
 
 <body>
     <!-- Header Section Begin -->
-   	<c:import url="../inc/header.jsp"></c:import>
+   	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<!-- Header Section End -->
 
 
@@ -176,8 +195,8 @@
                                          <tr>
                                             <th>
                                                <div class = "justify-content-start">
-                                                  <button type = "button" class = "cart__allcheck__btn" id = "chkAll"><i class='far fa-check-square' style='font-size:20px'></i></button>
-                                                </div>
+                                               		<input type="checkbox" id = "chkAll">
+                                               	</div>
                                             </th>
                                              <th>Product</th>
                                              <th>Quantity</th>
@@ -366,8 +385,8 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span id = "subTotal">0원</span></li>
-                            <li>Total <span id = "total">0원</span></li>
+                            <li>Subtotal <span id = "subTotal">0</span></li>
+                            <li>Total <span id = "total">0</span></li>
                         </ul>
                         <c:choose>
                         	<c:when test="${loginCustomer eq null}">
@@ -395,7 +414,7 @@
     <!-- Shopping Cart Section End -->
 
     <!-- Footer Section Begin -->
-    <c:import url="../inc/footer.jsp"></c:import>
+    <c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 	
 	<!-- Search Begin -->

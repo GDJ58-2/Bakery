@@ -199,6 +199,17 @@ ol {
   padding: 8px;
 }
 
+.mypage-btn {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  color: #ffffff;
+  background: #f08632;
+  letter-spacing: 2px;
+}
+
 /* Preloder */
 #preloder {
   position: fixed;

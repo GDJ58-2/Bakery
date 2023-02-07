@@ -92,6 +92,6 @@ public class LoginController extends HttpServlet {
 		}
 		
 		session.setAttribute("loginCustomer", returnCustomer); // 세션에 로그인 정보 저장
-		response.sendRedirect(request.getContextPath() + "/customer/myHome");
+		response.sendRedirect(request.getContextPath() + "/index");
 	}
 }

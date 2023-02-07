@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="zxx">
 
@@ -9,7 +10,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>회원정보 | 고객 | 구디쥬르</title>
+    <title>회원정보 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -31,6 +32,15 @@
 
 	<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<style>
+		.box {
+			border:1px solid #dfdfe0; 
+			padding-top:30px;
+			padding-right:70px;
+			padding-left:70px;
+			padding-bottom:30px;
+		}
+	</style>
 	<script>
 		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
 		function logoutAction(customerUrl) {
@@ -67,7 +77,7 @@
 
 <body>
     <!-- Header Section Begin -->
-   	<c:import url="../inc/header.jsp"></c:import>
+   	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<!-- Header Section End -->
 
 	<div class="breadcrumb-option">
@@ -91,53 +101,73 @@
     <!-- Contact Section Begin -->
     <section class="contact spad">
         <div class="container">
+            		
             <div class="contact__address">
                 <div class="container">
-                	 <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-6">
-	                        <div class="contact__address__item">
-	                            <!-- 회원정보수정 -->
-	                            <input type="hidden" id="checkInfo" value="${checkInfo}">
-								<div>
-									<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">
-										<button type = "button" class= "btn primary-btn">회원정보수정</button>
-									</a>
+                	<div class="row">
+                        <div class="col-lg-11 col-md-5 col-sm-4">
+	              			<div class = "d-flex justify-content-center">
+								<div class="mb-5">
+									<div class="box">
+										<div>
+											<table>
+												<tr>
+													<td style="width: 100px">ID</td>
+													<td>${selectOneCustomer.customerId}</td>
+												</tr>
+												<tr>
+													<td style="width: 100px">Name</td>
+													<td>${selectOneCustomer.customerName}</td>
+												</tr>
+												<tr>
+													<td style="width: 100px">Phone</td>
+													<td>${selectOneCustomer.customerPhone}</td> 
+												</tr>
+												<tr>
+													<td>가입일</td>
+													<td>	
+														<c:set var = "date" value = "${selectOneCustomer.createdate}" />${fn:substring(date,0,10)}
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
 								</div>
-	                        </div>
-                    	</div>
-                    	
-                    	<div class="col-lg-4 col-md-6 col-sm-6">
-	                        <div class="contact__address__item">
-	                            <!-- 비밀번호변경 -->
-	                            <input type="hidden" id="checkPw" value="${checkPw}">
-								<div>
-									<a href = "${pageContext.request.contextPath}/customer/modifyCustomerPw">
-										<button type = "button" class= "btn primary-btn">비밀번호변경</button>
-									</a>
+							</div>
+
+                        	<div class="contact__address__item">
+         						<div class = "d-flex justify-content-center">
+									<div>
+										<span>
+											<input type="hidden" id="checkInfo" value="${checkInfo}">
+											<a href = "${pageContext.request.contextPath}/customer/modifyCustomer">
+												<button type = "button" class= "btn mypage-btn">회원정보수정</button>
+											</a>
+										</span>
+										<span>
+											<input type="hidden" id="checkPw" value="${checkPw}">
+											<a href = "${pageContext.request.contextPath}/customer/modifyCustomerPw">
+												<button type = "button" class= "btn mypage-btn">비밀번호변경</button>
+											</a>
+										</span>
+										<span>
+											<a href = "${pageContext.request.contextPath}/customer/removeCustomer">
+												<button type = "button" class= "btn mypage-btn">회원탈퇴</button>
+											</a>
+										</span>
+									</div>
 								</div>
-	                        </div>
+                        	</div>
                     	</div>
-                    	
-                    	<div class="col-lg-4 col-md-6 col-sm-6">
-	                        <div class="contact__address__item">
-	                            <!-- 회원탈퇴 -->
-								<div>
-									<a href = "${pageContext.request.contextPath}/customer/removeCustomer">
-										<button type = "button" class= "btn primary-btn">회원탈퇴</button>
-									</a>
-								</div>
-	                        </div>
-                    	</div>
-                    </div>
-                </div>
-            </div>
-           
+            		</div>
+            	</div>
+           	</div>
         </div>
     </section>
     <!-- Contact Section End -->
 
     <!-- Footer Section Begin -->
-    <c:import url="../inc/footer.jsp"></c:import>
+    <c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 
 	<!-- Search Begin -->

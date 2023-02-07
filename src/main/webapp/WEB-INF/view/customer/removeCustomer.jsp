@@ -8,7 +8,7 @@
     <meta name="keywords" content="Cake, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>탈퇴 | 고객 | 구디쥬르</title>
+    <title>회원탈퇴 | 구디쥬르</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
@@ -55,8 +55,8 @@
 		}
 		
 		.box {
-			border:1px solid; 
-			padding:20px;
+			border:1px solid #dfdfe0; 
+			padding:30px;
 		}
 		
 	</style>
@@ -95,7 +95,7 @@
 
 <body>
     <!-- Header Section Begin -->
-   	<c:import url="../inc/header.jsp"></c:import>
+   	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
 	<!-- Header Section End -->
     
     <div class="breadcrumb-option">
@@ -140,7 +140,7 @@
 										안내사항을 확인하였으며, 이에 동의합니다
 							    	</div>
 							    	<div class="mt-5">
-							    		<button type = "button" id = "removeBtn" class="btn primary-btn">회원탈퇴</button>
+							    		<button type = "button" id = "removeBtn" class="btn mypage-btn">회원탈퇴</button>
 							 		</div>
 							 	</form>
 							</div>			
@@ -153,7 +153,7 @@
     <!-- Contact Section End -->
 
     <!-- Footer Section Begin -->
-    <c:import url="../inc/footer.jsp"></c:import>
+    <c:import url="/WEB-INF/view/inc/footer.jsp"></c:import>
 	<!-- Footer Section End -->
 
 	<!-- Search Begin -->
