@@ -26,7 +26,7 @@ public class AddEmpController extends HttpServlet {
 		HttpSession session = request.getSession();
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp!=null) {
-			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			response.sendRedirect(request.getContextPath()+"/index");
 			return;
 		}
 		
@@ -47,7 +47,7 @@ public class AddEmpController extends HttpServlet {
 		HttpSession session = request.getSession();
 		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		if(loginEmp!=null) {
-			response.sendRedirect(request.getContextPath()+"/admin/emp/home");
+			response.sendRedirect(request.getContextPath()+"/index");
 			return;
 		}
 		

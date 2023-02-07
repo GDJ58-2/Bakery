@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import service.QuestionCommentService;
 import service.QuestionService;
 import vo.Customer;
+import vo.Emp;
 import vo.Question;
 import vo.QuestionComment;
 
@@ -23,11 +24,19 @@ public class QuestionOneController extends HttpServlet {
 		// 로그인 후에만 진입가능
 		HttpSession session = request.getSession();
 		
+		Emp loginEmp = (Emp)session.getAttribute("loginEmp");
 		Customer loginCustomer = (Customer)session.getAttribute("loginCustomer");
-		if(loginCustomer == null) { // 로그아웃 상태
+		if(loginCustomer == null && loginEmp == null) { // 로그아웃 상태
 			response.sendRedirect(request.getContextPath()+"/customer/login");
 			return;
 		}
+		if(loginEmp != null && loginEmp.getAuthCode()<1) {
+			response.sendRedirect(request.getContextPath()+"/index");
+			return;
+		}
+		
+		System.out.println(loginEmp+"<--loginEmp");
+		System.out.println(loginCustomer+"<--loginCustomer");
 		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");

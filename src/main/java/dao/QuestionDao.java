@@ -35,7 +35,7 @@ public class QuestionDao {
 				+ "		INNER JOIN orders o"
 				+ "		WHERE o.customer_id LIKE ?"	
 				+ "		GROUP BY q.question_code "
-				+ "		ORDER BY qc.createdate ASC, q.createdate DESC"
+				+ "		ORDER BY q.createdate DESC, qc.createdate DESC "
 				+ "		LIMIT ?, ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
@@ -116,29 +116,29 @@ public class QuestionDao {
 	}
 	
 	// 문의가능 주문목록 불러오기
-		public ArrayList<HashMap<String, Object>> ordersCodeList(Connection conn, String customerId) throws Exception {
-			ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
-			HashMap<String, Object> map = null;
-			String sql = "SELECT o.order_code orderCode"
-					+ ", o.goods_code goodsCode"
-					+ ", o.order_quantity orderQuantity"
-					+ ", g.goods_name goodsName"
-					+ " FROM orders o"
-					+ " INNER JOIN goods g"
-					+ " ON o.goods_code = g.goods_code"
-					+ " WHERE order_state = '결제' OR order_state = '배송중' AND customer_id = ?";
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, customerId);
-			ResultSet rs = stmt.executeQuery();
-			while(rs.next()) {
-				map = new HashMap<String, Object>();
-				map.put("orderCode", rs.getInt("orderCode"));
-				map.put("goodsCode", rs.getInt("goodsCode"));
-				map.put("orderQuantity", rs.getInt("orderQuantity"));
-				map.put("goodsName", rs.getString("goodsName"));
-				list.add(map);
-			}
-			DBUtil.close(rs, stmt, null);
-			return list;
+	public ArrayList<HashMap<String, Object>> ordersCodeList(Connection conn, String customerId) throws Exception {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		HashMap<String, Object> map = null;
+		String sql = "SELECT o.order_code orderCode"
+				+ ", o.goods_code goodsCode"
+				+ ", o.order_quantity orderQuantity"
+				+ ", g.goods_name goodsName"
+				+ " FROM orders o"
+				+ " INNER JOIN goods g"
+				+ " ON o.goods_code = g.goods_code"
+				+ " WHERE order_state = '결제' OR order_state = '배송중' AND customer_id = ?";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, customerId);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			map = new HashMap<String, Object>();
+			map.put("orderCode", rs.getInt("orderCode"));
+			map.put("goodsCode", rs.getInt("goodsCode"));
+			map.put("orderQuantity", rs.getInt("orderQuantity"));
+			map.put("goodsName", rs.getString("goodsName"));
+			list.add(map);
 		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
 }

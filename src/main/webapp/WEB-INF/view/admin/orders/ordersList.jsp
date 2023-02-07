@@ -143,12 +143,12 @@
 										<ul class="nav tablist justify-content-center">
 											<c:if test="${orderState == null || orderState == '' }">
 												<li class="nav-item">
-											    	<a class="tab-link active" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
+											    	<a class="tab-link active" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
 											 	</li>
 											</c:if>
 											<c:if test="${orderState != null && orderState != '' }">
 												<li class="nav-item">
-											    	<a class="tab-link" id="전체주문" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
+											    	<a class="tab-link" href="${pageContext.request.contextPath}/admin/orders/ordersList">전체주문</a>
 											 	</li>
 											</c:if>
 											

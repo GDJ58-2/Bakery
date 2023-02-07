@@ -66,7 +66,7 @@ public class ModifyEmpPwController extends HttpServlet {
 		int row = empService.modifyEmpPw(map);
 		System.out.println(row+"<--ModifyEmpPwController row");
 		
-		String msg = "<script>alert('비밀번호 변경을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/admin/emp/home';</script>";
+		String msg = "<script>alert('비밀번호 변경을 실패했습니다. 다시 시도해주세요.'); location.href='/bakery/index';</script>";
 		if(row==1) { // 수정 성공시
 			msg = "<script>alert('비밀번호를 변경했습니다.'); location.href='/bakery/index';</script>";
 		}
