@@ -62,13 +62,14 @@
        		let chkAllQuantity = 0;
        		let chkAllTotal=0;
        		if(checkTotal == checked) {
+       			$('.checkGoodsCode').click();
        			$('.checkGoodsCode').prop('checked', false);
        			$('#chkAll').prop('checked', false);
-       			$('#subTotal').html(0);
+       			
        		} else {
+       			$('.checkGoodsCode').click();
        			$('.checkGoodsCode').prop('checked', true);
        			$('#chkAll').prop('checked', true);
-       			$('#subTotal').html($('#total').text());
        		}
        	 });
        	
@@ -96,7 +97,7 @@
        		let chk = ($(this)).length;
        		
 			$('.checkGoodsCode').on('change', function() {
- 				if($(this).is(':checked')) {
+				if($(this).is(':checked')) {
 					cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
                  	cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
                  	plusTotal=cPrice*cQuantity;
@@ -104,7 +105,6 @@
                  	if(total > totalNum) {
                  		total = totalNum;
                  	}
-                 	$('#subTotal').text(total);
                  	console.log('plus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
              	} else if($(this).not(':checked')) {
              		cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
@@ -114,12 +114,10 @@
                		if(total < 0){
                			total = 0;
                		}
-               		$('#subTotal').text(total);
                		console.log('minus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
-             	} 
+             	}
+             	$('#subTotal').text(total);
 				console.log(plusTotal+"/"+minusTotal+"/"+total);
-				
-				 // 선택합계
 			});
 		 });
          
@@ -385,8 +383,16 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Subtotal <span id = "subTotal">0</span></li>
-                            <li>Total <span id = "total">0</span></li>
+                            <li>Subtotal 
+                            	<span>원</span>
+                            	<span id = "subTotal">0</span>
+                            	<span>&#8361; </span>
+                            </li>
+                            <li>Total
+                            	<span>원</span> 
+                            	<span id = "total">0</span>
+                            	<span>&#8361; </span>
+                            	</li>
                         </ul>
                         <c:choose>
                         	<c:when test="${loginCustomer eq null}">
