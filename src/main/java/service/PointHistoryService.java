@@ -111,14 +111,14 @@ public class PointHistoryService {
 			for(HashMap<String, Object> map : pHistory) { // 적립 -> + , 사용 -> -
 				pKind = (String)map.get("pointKind");
 				if(pKind.equals("적립")) {
-					plusPoint = (int)map.get("point");
-					minusPoint = 0;
-				} else {
-					minusPoint = (int)map.get("point");
-					plusPoint = 0;
+					plusPoint += (int)map.get("point");
+				} else if(pKind.equals("사용")){
+					minusPoint += (int)map.get("point");
 				}
-				totalPoint = totalPoint + (plusPoint - minusPoint);
 			}
+			System.out.println(plusPoint +"<--적립포인트");
+			System.out.println(minusPoint +"<--사용포인트");
+			totalPoint = plusPoint - minusPoint;
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -140,21 +140,28 @@ public class PointHistoryService {
 	// insert
 	public int addPointHistory(String customerId, PointHistory point) {
 		int row = 0;
+		int totalPoint = 0;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			this.pointHistoryDao = new PointHistoryDao();
-			row = pointHistoryDao.insertPoint(conn, point);
+			row = pointHistoryDao.insertPoint(conn, point); // insert 먼저 실행 되어야함 --> 트랜잭션처리 x
+			conn.commit();
 			
-			// 내역 추가 시 customer 테이블 point 컬럼값도 변경
-			int totalPoint = this.totalPoint(customerId);
-			System.out.println(totalPoint+"<-- totalPoint PointHistoryService");
-			if(row==1) {
-				Customer customerPoint = new Customer();
-				customerPoint.setCustomerId(customerId);
-				customerPoint.setPoint(totalPoint);
-				customerDao.customerPoint(conn, customerPoint); 
+			if(row!=1) {
+				return -1;
 			}
+			// 내역 추가 시 customer 테이블 point 컬럼값도 변경
+			totalPoint = this.totalPoint(customerId);
+			System.out.println(customerId+"<-- customerId PointHistoryService");
+			System.out.println(totalPoint+"<-- totalPoint PointHistoryService");
+						
+						
+			Customer customerPoint = new Customer();
+			customerPoint.setCustomerId(customerId);
+			customerPoint.setPoint(totalPoint);
+			customerDao.customerPoint(conn, customerPoint); 
+			
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -170,27 +177,33 @@ public class PointHistoryService {
 				e.printStackTrace();
 			}
 		}
-		return row; // point_history 에 insert row 리턴
+		return totalPoint; 
 	}
 	
 	// delete 
 	public int removePointHistory(String customerId, int orderCode) {
 		int row = 0;
+		int totalPoint = 0;
 		Connection conn = null;
 		try {
 			conn = DBUtil.getConnection();
 			this.pointHistoryDao = new PointHistoryDao();
-			row = pointHistoryDao.deletePoint(conn, orderCode); // 포인트 내역 삭제
+			row = pointHistoryDao.deletePoint(conn, orderCode); // deletePoint 먼저 실행 되어야함 
+			conn.commit();
 			
 			// 내역 삭제 시 customer 테이블 point 컬럼값도 변경
-			int totalPoint = this.totalPoint(customerId);
+			totalPoint = this.totalPoint(customerId);
 			System.out.println(totalPoint+"<-- totalPoint PointHistoryService");
-			if(row==1) {
-				Customer customerPoint = new Customer();
-				customerPoint.setCustomerId(customerId);
-				customerPoint.setPoint(totalPoint);
-				customerDao.customerPoint(conn, customerPoint); 
+			
+			if(row!=1) {
+				return -1;
 			}
+			
+			Customer customerPoint = new Customer();
+			customerPoint.setCustomerId(customerId);
+			customerPoint.setPoint(totalPoint);
+			customerDao.customerPoint(conn, customerPoint); 
+			
 			conn.commit();
 		} catch(Exception e) {
 			try {
@@ -206,6 +219,6 @@ public class PointHistoryService {
 				e.printStackTrace();
 			}
 		}
-		return row; // point_history 에 delete row 리턴 --> 구매확정 시 취소불가, 취소 시 구매확정 불가 설정으로 row는 2가 리턴될 수 없음.
+		return totalPoint; 
 	}
 }

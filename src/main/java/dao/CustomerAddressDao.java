@@ -31,16 +31,16 @@ public class CustomerAddressDao {
 	// address_kind 별 가장 최근 추가된 데이터 출력
 	public ArrayList<CustomerAddress> selectAddressList(Connection conn, String customerId) throws Exception {
 		ArrayList<CustomerAddress> list = new ArrayList<CustomerAddress>();
-		String sql = " SELECT ca.address_code addressCode, ca.customer_id customerId, ca.address_kind addressKind, ca.address, ca.createdate"
-				+ "		 FROM customer_address ca"
-				+ "INNER JOIN (SELECT address_kind, max(createdate) maxDate"
-				+ "				 FROM customer_address"
-				+ "				WHERE customer_id = ?"
-				+ "			 GROUP BY address_kind) t"
-				+ "		   ON ca.address_kind = t.address_kind AND ca.createdate=t.maxDate"
-				+ "	 ORDER BY (case when ca.address_kind LIKE '집' then 1"
-				+ "			 	    when ca.address_kind LIKE '회사' then 2"
-				+ "				    ELSE 3 END) ASC";
+		String sql = "  SELECT ca.address_code addressCode, ca.customer_id customerId, ca.address_kind addressKind, ca.address, ca.createdate"
+				+ "		  FROM customer_address AS ca"
+				+ " INNER JOIN (SELECT address_kind, max(createdate) maxDate"
+				+ "				  FROM customer_address "
+				+ "				 WHERE customer_id = ?"
+				+ "			  GROUP BY address_kind) t"
+				+ "		    ON ca.address_kind = t.address_kind AND ca.createdate=t.maxDate"
+				+ "	  ORDER BY (case when t.address_kind LIKE '집' then 1"
+				+ "			 	     when t.address_kind LIKE '회사' then 2"
+				+ "				     ELSE 3 END) ASC";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, customerId);
 		ResultSet rs = stmt.executeQuery();

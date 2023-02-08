@@ -179,10 +179,9 @@
                                 </ul>
                             </li>
                             <c:if test="${loginEmp ne null}">
-                            <li><a href="${pageContext.request.contextPath}/admin/emp/home">관리자</a>
+                            <li><a href="${pageContext.request.contextPath}/admin/orders/ordersList">관리자</a>
                             	<ul class="dropdown">
-                            		<li><a href="${pageContext.request.contextPath}/admin/emp/home">홈</a></li>
-                            		<li><a href="${pageContext.request.contextPath}/admin/goods/goodsList">상품관리</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin">상품관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/orders/ordersList">주문/배송</a></li>
                             		<li><a href="${pageContext.request.contextPath}/notice/noticeList">공지사항</a></li>
                             		<li><a href="${pageContext.request.contextPath}/question/questionList">문의</a></li>
@@ -220,3 +219,22 @@
    		});
    });
 </script>
+
+<script>
+		let customerUrl = '${pageContext.request.contextPath}/customer/logout';
+		function logoutAction(customerUrl) {
+ 			let out = confirm('로그아웃하시겠습니까?'); 
+ 		 	if(out) {
+      			location.replace(customerUrl); 
+          		alert('로그아웃되었습니다');
+	       	} else {
+	          	alert('로그아웃 취소');
+	          	return false;
+	       	}
+		 }  
+	   $(document).ready(function() {
+	   		$('#logoutBtn').click(function() {
+	   			logoutAction(customerUrl);
+	   		});
+	   });
+	</script>

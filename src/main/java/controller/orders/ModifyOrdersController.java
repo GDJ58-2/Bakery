@@ -39,18 +39,29 @@ public class ModifyOrdersController extends HttpServlet {
 		System.out.println(orderState);
 		System.out.println(orderCode);
 		
+		this.ordersService = new OrdersService();
+		HashMap<String, Object> map = ordersService.getOrdersOne(orderCode);
+		
 		Orders orders = new Orders();
+		
+		orders.setCustomerId((String)map.get("customerId"));
 		orders.setOrderCode(orderCode);
 		orders.setOrderState(orderState);
+		orders.setGoodsCode((int)map.get("goodsCode"));
+		orders.setOrderPrice((int)map.get("orderPrice"));
+		orders.setOrderQuantity((int)map.get("orderQuantity"));
+		
 		System.out.println(orders);
 		
 		this.ordersService = new OrdersService();
-		int row = ordersService.modifyOrders(orders);
-		System.out.println(row+"<--ModifyOrdersController row");
+		int point = ordersService.modifyOrders(orders);
+		System.out.println(point+"<--ModifyOrdersController point");
 		
 		String msg = "<script>alert('다시 시도해주세요.'); location.href='/bakery/orders/modifyOrders?orderCode="+orderCode+"';</script>'"; 
-		if(row==1) { // emp 회원가입 성공
+		if(point != -1) { 
 			msg = "<script>alert('포인트가 적립되었습니다. 소중한 리뷰글을 남겨주세요.'); location.href='/bakery/orders/ordersList';</script>'";
+			loginCustomer.setPoint(point); // 세션 포인트 값 변경
+			session.setAttribute("loginCustomer", loginCustomer);
 		} 
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out = response.getWriter();

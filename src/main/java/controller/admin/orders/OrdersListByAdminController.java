@@ -185,23 +185,25 @@ public class OrdersListByAdminController extends HttpServlet {
 		
 		this.ordersService = new OrdersService();
 		// 반복문 돌려 형변환, 바인딩, 주문상태 업데이트 실행
-		int row = 0;
+		int point = 0;
 		for(String s : orderCodeStr) {
 			int i = Integer.parseInt(s);
 			Orders orders = new Orders();
 			orders.setOrderState(orderState);
 			orders.setOrderCode(i);
+			
 			HashMap<String, Object> map = ordersService.getOrdersOne(i);
+			
+			orders.setCustomerId((String)map.get("customerId"));
+			orders.setGoodsCode((int)map.get("goodsCode"));
 			orders.setOrderPrice((int)map.get("orderPrice"));
-			row += ordersService.modifyOrders(orders);
+			orders.setOrderQuantity((int)map.get("orderQuantity"));
+			
+			point = ordersService.modifyOrders(orders);
 		}	
 		
 		System.out.println(orderCodeStr.length + "<-- orderCodeStr OrdersListByAdminController");
-		System.out.println(row + "<-- row OrdersListByAdminController");
-		
-		if(orderCodeStr.length == row) { // 모두 업데이트 성공
-			System.out.println("모두 업데이트 성공 OrdersListByAdminController");
-		}
+		System.out.println(point + "<-- point OrdersListByAdminController");
 		
 		response.sendRedirect(request.getContextPath()+"/admin/orders/ordersList?searchKind="+searchKind+"&search"+search+"&startDate="+startDate+"&endDate="+endDate);
 	}

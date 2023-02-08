@@ -152,6 +152,7 @@ public class OrdersService {
 				addressCode = customerAddressDao.selectAddressCode(conn, address);
 			}
 			System.out.println(addressCode+"<--OrdersService addressCode");
+			
 			// 주문추가 
 			for(Orders o : ordersList) {
 				o.setAddressCode(addressCode);
@@ -161,7 +162,7 @@ public class OrdersService {
 				cartDao.deleteCartList(conn, cart);
 				// 포인트 사용 내역 추가 -> 적립은 구매확정 후 
 				if(paramUsePoint!=0) {
-					PointHistory usePoint = new PointHistory((int)map.get("orderCode"), "사용", paramUsePoint, null);
+					PointHistory usePoint = new PointHistory((int)map.get("orderCode"), "사용", paramUsePoint/(ordersList.size()) , null);
 					pointHistoryService.addPointHistory(address.getCustomerId(), usePoint);
 				}
 				// goods 재고 변경
@@ -192,6 +193,7 @@ public class OrdersService {
 	// UPDATE
 	public int modifyOrders(Orders orders) { // 주문 상태 수정
 		int row = 0;
+		int point = 0;
 		this.ordersDao = new OrdersDao();
 		this.pointHistoryService = new PointHistoryService();
 		this.goodsDao = new GoodsDao();
@@ -199,19 +201,27 @@ public class OrdersService {
 		try {
 			conn = DBUtil.getConnection();
 			row = ordersDao.updateOrders(conn, orders);
+			if(row!=1) {
+				return -1;
+			}
+			
 			if(orders.getOrderState().equals("취소")) { // 주문을 취소하면 그 주문에 대한 포인트내역 삭제(적립/사용)
 				// 포인트 내역 삭제
-				pointHistoryService.removePointHistory(orders.getCustomerId(), orders.getOrderCode());
+				point = pointHistoryService.removePointHistory(orders.getCustomerId(), orders.getOrderCode());
 				// 재고 변경
-				HashMap<String, Object> stock = this.goodsDao.selectGoodsOne(conn, orders.getGoodsCode());
+				HashMap<String, Object> stock = goodsDao.selectGoodsOne(conn, orders.getGoodsCode());
 				Goods goods = new Goods();
 				goods.setGoodsCode(orders.getGoodsCode());
 				goods.setGoodsStock((int)stock.get("goodsStock")+orders.getOrderQuantity());
+				goodsDao.updateGoodsStock(conn, goods);
+				
 			} else if(orders.getOrderState().equals("구매확정")) {
 				// 포인트 내역 추가 (적립)
 				PointHistory p = new PointHistory(orders.getOrderCode(),"적립", (int)(orders.getOrderPrice()*0.05),null);
-				pointHistoryService.addPointHistory(orders.getCustomerId(), p);
+				point = pointHistoryService.addPointHistory(orders.getCustomerId(), p);
+				
 			}
+			
 			conn.commit();
 		} catch (Exception e) {
 			try {
@@ -227,7 +237,7 @@ public class OrdersService {
 				e.printStackTrace();
 			}
 		}
-		return row;
+		return point;
 	}
 	
 	// REMOVE
