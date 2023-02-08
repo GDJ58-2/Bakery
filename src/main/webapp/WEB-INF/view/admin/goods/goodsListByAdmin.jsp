@@ -82,6 +82,22 @@
             <div class="shop__option">
                 <div class="row">
                     <div class="col-lg-7 col-md-7">
+                    	<c:choose>
+							<c:when test="${categoryKind == null || categoryKind eq ''}">
+								<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryKind=">전체</a>
+								<c:forEach var="gc" items="${gcList}">
+									<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
+								</c:forEach>
+							</c:when>
+							<c:otherwise>
+								<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryKind=">전체</a>
+								<c:forEach var="gc" items="${gcList}">
+									<c:if  test="${categoryKind eq gc.categoryKind}">
+										<a href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?categoryNo=${gc.categoryNo}&categoryKind=${gc.categoryKind}">${gc.categoryName}</a>
+									</c:if>
+								</c:forEach>
+							</c:otherwise>
+						</c:choose>               
                         <div class="shop__option__search">
                             <form action="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin">
                                 <select name="categoryNo">
