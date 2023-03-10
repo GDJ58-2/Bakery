@@ -186,6 +186,29 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6">
                     	<!-- 페이징 -->
+					    <div class="shop__pagination">
+						    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${startPage}&search=${search}">처음</a>
+						    <c:if test="${currentPage > 10}">
+							    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${currentPage-1}&search=${search}"><span class="arrow_carrot-left"></span></a>
+						    </c:if>
+						    <c:choose>
+							    <c:when test="${lastPage > 10}">
+								    <c:forEach begin="${blockStartNum}" end="${blockLastNum}" step="1" varStatus="status">
+									    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${status.current}&search=${search}">${status.current}</a>
+								    </c:forEach>
+							    </c:when>
+							    <c:otherwise>
+								    <c:forEach begin="${startPage}" end="${lastPage}" step="1" varStatus="status">
+									    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${status.current}&search=${search}">${status.current}</a>
+								    </c:forEach>
+							    </c:otherwise>
+						    </c:choose>
+						    <c:if test="${currentPage < lastPage}">
+						    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${currentPage+1}&search=${search}"><span class="arrow_carrot-right"></span></a>
+						    </c:if>
+						    <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=${lastPage}&search=${search}">마지막</a>
+					    </div> 
+                    	<!-- 페이징 -->
                         <div class="shop__pagination">
                            <a type="button" href="${pageContext.request.contextPath}/admin/goods/goodsListByAdmin?currentPage=1"><span class="arrow_carrot-left"></span></a>
 								<c:if test="${currentPage > 1}">

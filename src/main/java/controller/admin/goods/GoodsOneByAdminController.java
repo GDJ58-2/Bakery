@@ -58,8 +58,7 @@ public class GoodsOneByAdminController extends HttpServlet {
 		// 연관 상품 추천 리스트
 		String categoryName = null;
 		if(request.getParameter("categoryName") == null || request.getParameter("categoryName").equals("")) {
-			response.sendRedirect(request.getContextPath()+"/goods/goodsList");
-			return;
+			categoryName = (String)map.get("categoryName");
 		} else {
 			categoryName = request.getParameter("categoryName");
 		}

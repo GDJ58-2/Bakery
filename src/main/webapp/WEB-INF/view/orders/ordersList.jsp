@@ -134,6 +134,9 @@
 											${m.orderPrice}원
 										</td>
 										<td>
+											${m.createdate}
+										</td>
+										<td>
 											${m.orderState}
 										</td>
 									</tr>
