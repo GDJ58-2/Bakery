@@ -2,6 +2,7 @@ package controller.admin.emp;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -45,7 +46,8 @@ public class EmpListController extends HttpServlet {
 		int rowPerPage = 10;
 		System.out.println(search+"<--empList search, EmpListController");
 		this.empService = new EmpService();
-		int count = empService.getEmpCount(); 
+		int count = empService.getEmpCount(search);
+		
 		int lastPage = count/rowPerPage;
 		if(count%rowPerPage!=0) {
 			lastPage+=1;
@@ -55,6 +57,16 @@ public class EmpListController extends HttpServlet {
 			currentPage = 1;
 		} else if(currentPage>lastPage) {
 			currentPage = lastPage;
+		}
+		System.out.println(count+"<--empList count, EmpListController");
+		System.out.println(lastPage+"<--empList lastPage, EmpListController");
+		
+		if(count==0) { // 검색 결과가 없다면 빈 list 반환
+			request.setAttribute("empList", Collections.EMPTY_LIST);
+			request.setAttribute("currentPage", currentPage);
+			request.setAttribute("search", search);
+			request.getRequestDispatcher("/WEB-INF/view/admin/emp/empList.jsp").forward(request, response);
+			return;
 		}
 		
 		// model 

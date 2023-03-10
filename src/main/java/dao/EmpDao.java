@@ -111,10 +111,11 @@ public class EmpDao {
 	}
 	
 	// 페이징 - 전체 행 수 
-	public int selectEmpCount(Connection conn) throws Exception {
+	public int selectEmpCount(Connection conn, String search) throws Exception {
 		int count = 0;
-		String sql = "SELECT COUNT(*) count FROM emp";
+		String sql = "SELECT COUNT(*) count FROM emp WHERE emp_name LIKE ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+search+"%");
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			count = rs.getInt("count");

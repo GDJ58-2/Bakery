@@ -97,7 +97,9 @@
 								<tr>
 									<th>리뷰 작성 : </th> <!-- orderState이 구매확정일 때만 -->
 									<td>
-										<a class="primary-btn" href="${pageContext.request.contextPath}/review/addReview?orderCode=${map.orderCode}">리뷰 작성</a>
+										<c:if test="${map.orderState eq '배송완료'}">
+											<a class="primary-btn" href="${pageContext.request.contextPath}/review/addReview?orderCode=${map.orderCode}">리뷰 작성</a>
+										</c:if>
 									</td>
 								</tr>
 								<tr>

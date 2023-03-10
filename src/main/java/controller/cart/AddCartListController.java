@@ -30,7 +30,10 @@ public class AddCartListController extends HttpServlet {
 		String goodsName = (String)goodsOne.get("goodsName");
 		String categoryName = request.getParameter("categoryName");
 		int goodsPrice = (int)goodsOne.get("goodsPrice");
-		int cartQuantity = Integer.parseInt(request.getParameter("cartQuantity"));
+		int cartQuantity = 1;
+		if(request.getParameter("cartQuantity")!=null) {
+			cartQuantity = Integer.parseInt(request.getParameter("cartQuantity"));
+		}
 		System.out.println("goodsCode:"+goodsCode+"/goodsName:"+goodsName);
 		if(loginCustomer == null) { // 비회원
 			list = (ArrayList<HashMap<String, Object>>)session.getAttribute("userList");

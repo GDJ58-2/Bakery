@@ -83,13 +83,13 @@
 										<tr>
 											<td>ID</td>
 											<td>
-												<input type="text" name="empId" id="empId">
+												<input type="text" name="empId" id="empId" value="emp">
 											</td>
 										</tr>
 										<tr>
 											<td>PW</td>
 											<td>
-												<input type="password" name="empPw" id="empPw">
+												<input type="password" name="empPw" id="empPw" value="1234">
 											</td>
 										</tr>
 										<tr>

@@ -69,14 +69,14 @@ public class ModifyNoticeController extends HttpServlet {
 		String empId = loginEmp.getEmpId();
 		String noticeTitle = request.getParameter("noticeTitle");
 		String noticeContent = request.getParameter("noticeContent");
-		if(noticeTitle==null||noticeTitle.equals("")||noticeContent==null||noticeContent.equals("")||request.getParameter("no")==null||request.getParameter("no").equals("")
+		if(noticeTitle==null||noticeTitle.equals("")||noticeContent==null||noticeContent.equals("")
 			||request.getParameter("noticeCode")==null||request.getParameter("noticeCode").equals("")) {
 			response.sendRedirect(request.getContextPath()+"/notice/noticeList");
 			return;
 		}
 		int noticeCode = Integer.parseInt(request.getParameter("noticeCode"));
 		Notice notice = new Notice(noticeCode, noticeTitle, noticeContent, empId, null);
-		//System.out.println(notice+"<--ModifyNoticeController notice");
+		System.out.println(notice+"<--ModifyNoticeController notice");
 		
 		this.noticeService = new NoticeService();
 		int row = noticeService.modifyNotice(notice);

@@ -92,13 +92,13 @@
 											<tr>
 												<td>ID</td>
 												<td>
-													<input type = "text" id = "id" name = "id">
+													<input type = "text" id = "id" name = "id" value="customer">
 												</td>
 											</tr>
 											<tr>
 												<td>PW</td>
 												<td>
-													<input type = "password" id = "pw" name = "pw">
+													<input type = "password" id = "pw" name = "pw" value="1234">
 												</td>
 											</tr>
 										</table>
