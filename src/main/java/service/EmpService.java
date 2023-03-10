@@ -177,13 +177,16 @@ public class EmpService {
 	}
 	
 	// 페이징 - 전체 행수
-	public int getEmpCount() {
+	public int getEmpCount(String search) {
 		int count = 0;
 		this.empDao = new EmpDao();
 		Connection conn = null;
+		if(search==null) {
+			search="";
+		}
 		try {
 			conn = DBUtil.getConnection();
-			count = empDao.selectEmpCount(conn);
+			count = empDao.selectEmpCount(conn, search);
 			conn.commit();
 		} catch (Exception e) {
 			try {

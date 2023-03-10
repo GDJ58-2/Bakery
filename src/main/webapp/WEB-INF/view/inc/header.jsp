@@ -56,11 +56,11 @@
                	   </li>
                   </c:if>
                   <c:if test="${loginCustomer eq null && loginEmp ne null}">
-                  	<li><a href="${pageContext.request.contextPath}/admin/emp/home">${loginEmp.empName} 님</a><span class="arrow_carrot-down"></span>
+                  	<li><a href="">${loginEmp.empName} 님</a><span class="arrow_carrot-down"></span>
                      <ul>
                      	<li>
-               	           <a href="${pageContext.request.contextPath}/admin/emp/home"><font size = "2" color = "white">My&nbsp;Page</font></a>
-               	       	</li>
+               	           <a href="${pageContext.request.contextPath}/admin/emp/modifyEmpPw"><font size = "2" color = "white">password</font></a>
+               	       </li>
                          <li style = "display:inline-block">
                	           <a href = "javascript:logoutAction(empUrl)" id = "logoutEmpBtn"><font size = "2" color = "white">logout</font></a>
                	       </li>
@@ -115,7 +115,7 @@
 					               	   </li>
 					                  </c:if>
 					                  <c:if test="${loginCustomer eq null && loginEmp ne null}">
-					                  	<li><a href="${pageContext.request.contextPath}/admin/emp/home">${loginEmp.empName} 님</a><span class="arrow_carrot-down"></span>
+					                  	<li><a href="">${loginEmp.empName} 님</a><span class="arrow_carrot-down"></span>
 					                     <ul>
 					                      <li>
 					               	           <a href="${pageContext.request.contextPath}/admin/emp/modifyEmpPw"><font size = "2" color = "white">password</font></a>

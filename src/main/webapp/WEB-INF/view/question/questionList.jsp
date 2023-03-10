@@ -27,8 +27,22 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/static/css/style.css" type="text/css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/custom/customStyle.css" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+    	$(document).ready(function(){
+    		if($('#msg').val()!=null && $('#msg').val()!=''){
+    			alert($('#msg').val());
+    		}
+    		$('#modalBtn').click(function(){
+        		$('#modal').show();
+        	});
+    	})
+    	
+    </script>
 </head>
 <body>
+	<input type="hidden" id="msg" value="${msg}">
 	
     <!-- Header Section Begin -->
    	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>
@@ -40,11 +54,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <div class="breadcrumb__text">
-                        <h2>문의 내역</h2>
-                        <br>
-						<div style="color:red;" id="msg">
-						${msg}
-						</div>						
+                        <h2>문의 내역</h2>		
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-6">
@@ -99,7 +109,7 @@
 												</td>
 											</c:if>
 											<c:if test="${loginEmp != null && loginCustomer==null}">
-												<td>-</td>
+											<td>-</td>
 											</c:if>
 										</c:if>
 										<c:if test="${q.commentCode ne null&&q.commentCode != 0}">

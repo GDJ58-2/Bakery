@@ -69,7 +69,6 @@
 	</script>	
 </head>
 <body>
-	<jsp:include page="../inc/menu.jsp"></jsp:include>
 	
 	<!-- Header Section Begin -->
    	<c:import url="/WEB-INF/view/inc/header.jsp"></c:import>

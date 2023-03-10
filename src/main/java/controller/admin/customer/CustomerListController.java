@@ -2,6 +2,7 @@ package controller.admin.customer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -45,7 +46,7 @@ public class CustomerListController extends HttpServlet {
 		
 		this.customerService = new CustomerService();
 		int count = customerService.getCustomerCount(search);
-		
+	
 		int lastPage = count/rowPerPage;
 		if(count%rowPerPage!=0) {
 			lastPage+=1;
@@ -56,6 +57,14 @@ public class CustomerListController extends HttpServlet {
 		} else if(currentPage>lastPage) {
 			currentPage = lastPage;
 		}
+		if(count==0) { // 검색 결과가 없다면 빈 list 반환
+			request.setAttribute("customerList", Collections.EMPTY_LIST);
+			request.setAttribute("currentPage", currentPage);
+			request.setAttribute("search", search);
+			request.getRequestDispatcher("/WEB-INF/view/admin/customer/customerList.jsp").forward(request, response);
+			return;
+		}
+		
 		
 		ArrayList<Customer> list = customerService.getCustomerListByAdmin(search, currentPage, rowPerPage);		
 		
