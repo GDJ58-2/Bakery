@@ -172,7 +172,7 @@
 	                        <table class="table table-bordered">
 								<tr>
 									<td rowspan="8">
-										<img class="big_img" src="${pageContext.request.contextPath}/upload/${map.filename}" width="400" height="400">
+										<img class="big_img" src="${pageContext.request.contextPath}/upload/${map.originName}" width="400" height="400">
 									</td>
 									<th>상품 코드 : </th>
 									<td>

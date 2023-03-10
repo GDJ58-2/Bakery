@@ -49,6 +49,21 @@ public class GoodsListByAdminController extends HttpServlet {
 		// System.out.println("lastPage : " + lastPage);
 		request.setAttribute("lastPage", lastPage);
 		
+		// 블록 페이지
+		// 현재 페이지가 속한 block의 시작 번호, 끝 번호를 계산
+		int rowPerPage = 10;
+		int blockNum = (int)Math.floor((currentPage-1)/rowPerPage);
+		System.out.println("blockNum : " + blockNum);
+		int blockStartNum = (rowPerPage*blockNum) + 1;
+		System.out.println("blockStartNum : " + blockStartNum);
+		int blockLastNum = blockStartNum + (rowPerPage-1);
+		System.out.println("blockLastNum : " + blockLastNum);
+		
+		request.setAttribute("startPage", 1);
+		request.setAttribute("endPage", lastPage);
+		request.setAttribute("blockStartNum", blockStartNum);
+		request.setAttribute("blockLastNum", blockLastNum);
+		
 		// 메시지가 있을 경우
 		request.setCharacterEncoding("UTF-8");
 		String msg = null;
