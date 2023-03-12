@@ -27,7 +27,7 @@ public class ReviewDao {
 				+ " INNER JOIN goods_img f"
 				+ " ON g.goods_code = f.goods_code"
 				+ " WHERE g.goods_code = ?"
-				+ " ORDER BY r.createdate DESC LIMIT ? OFFSET ?";
+				+ " ORDER BY createdate DESC LIMIT ? OFFSET ?";
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, goodsCode);
 		stmt.setInt(2, rowPerPage);
