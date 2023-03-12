@@ -71,6 +71,7 @@ public class GoodsOneController extends HttpServlet {
 		request.setAttribute("list", list);
 		request.setAttribute("currentPage", currentPage);
 		request.setAttribute("endPage", endPage);
+		System.out.println(list);
 		
 		// View
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/goods/goodsOne.jsp");

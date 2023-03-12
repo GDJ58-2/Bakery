@@ -55,21 +55,19 @@
           });
           
        // 체크박스 전체선택&전체해제
-          $('#chkAll').on('click', function() {
+          $('#chkAll').click(function() {
+        	let subTotalNum=Number($('#subTotal').text());
+            let totalNum=Number($('#total').text());
        		let checkTotal = $('.checkGoodsCode').length;
        		let checked = ($('.checkGoodsCode:checked')).length;
-       		let chkAllPrice = 0;
-       		let chkAllQuantity = 0;
-       		let chkAllTotal=0;
        		if(checkTotal == checked) {
-       			$('.checkGoodsCode').click();
        			$('.checkGoodsCode').prop('checked', false);
        			$('#chkAll').prop('checked', false);
-       			
+       			$('#subTotal').text(0);
        		} else {
-       			$('.checkGoodsCode').click();
        			$('.checkGoodsCode').prop('checked', true);
        			$('#chkAll').prop('checked', true);
+       			$('#subTotal').text(totalNum);
        		}
        	 });
        	
@@ -84,42 +82,26 @@
        		}
        	});
 
-		 // 결제 금액 미리보기
-         $('.checkGoodsCode').each(function() { // 하나씩 선택했을 때
-        	let cPrice=0;
-			let cQunatity=0;
-			let total=0;
-			let plusTotal=0;
-			let minusTotal=0;
-			let subTotalNum=Number($('#subTotal').text());
-			let totalNum=Number($('#total').text());
-			let chkTotal = $(this).length;
-       		let chk = ($(this)).length;
-       		
-			$('.checkGoodsCode').on('change', function() {
-				if($(this).is(':checked')) {
-					cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
-                 	cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-                 	plusTotal=cPrice*cQuantity;
-                 	total = total + plusTotal;
-                 	if(total > totalNum) {
-                 		total = totalNum;
-                 	}
-                 	console.log('plus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
-             	} else if($(this).not(':checked')) {
-             		cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
-                	cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
-               		minusTotal=cPrice*cQuantity;
-               		total = total - minusTotal;
-               		if(total < 0){
-               			total = 0;
-               		}
-               		console.log('minus subTotalNum: '+subTotalNum+'/totalNum: '+totalNum+'/total: '+total)
-             	}
-             	$('#subTotal').text(total);
-				console.log(plusTotal+"/"+minusTotal+"/"+total);
-			});
-		 });
+     	// 결제 금액 미리보기
+        $('.checkGoodsCode').change(function() {
+            let subTotalNum=Number($('#subTotal').text());
+            let totalNum=Number($('#total').text());
+            let cPrice = Number($(this).parent().siblings().children('div').find('h5').html().substring(1));
+            let cQuantity=Number($(this).parent().siblings().children('div').find('.cQuantity').val());
+            
+            if($(this).is(':checked')) {
+                subTotalNum = subTotalNum + cPrice*cQuantity;
+                if(subTotalNum > totalNum) {
+                    subTotalNum = totalNum;
+                }
+            } else if($(this).not(':checked')) {
+                subTotalNum = subTotalNum - cPrice*cQuantity;;
+                if(subTotalNum < 0){
+                    subTotalNum = 0;
+                }
+            }
+            $('#subTotal').text(subTotalNum);
+        });
          
          // 수량변경버튼
          $('.modifyBtn').on('click', function() {
