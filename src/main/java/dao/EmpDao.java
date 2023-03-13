@@ -123,4 +123,102 @@ public class EmpDao {
 		DBUtil.close(rs, stmt, null);
 		return count;
 	}
+	
+	// 월별 매출
+	public ArrayList<HashMap<String, Object>> selectMonthStats(Connection conn, String year) throws Exception {
+		ArrayList<HashMap<String, Object>> list=new ArrayList<HashMap<String, Object>>();
+		String sql="SELECT MONTH(createdate) month, SUM(order_price) price"
+				+ " from orders"
+				+ " WHERE YEAR(createdate) Like ?"
+				+ " GROUP BY MONTH(createdate)"
+				+ " ORDER BY MONTH(createdate) ASC";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+year+"%");
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("month", rs.getInt("month"));
+			map.put("price", rs.getString("price"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
+	// 연도별 매출
+	public ArrayList<HashMap<String, Object>> selectYearStats(Connection conn) throws Exception {
+		ArrayList<HashMap<String, Object>> list=new ArrayList<HashMap<String, Object>>();
+		String sql="SELECT YEAR(createdate) year, SUM(order_price) price"
+				+ " from orders"
+				+ " GROUP BY year"
+				+ " ORDER BY year ASC LIMIT 0, 5";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("year", rs.getInt("year"));
+			map.put("price", rs.getString("price"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
+	// 월별 상품랭킹
+	public ArrayList<HashMap<String, Object>> selectProductRankingMonth(Connection conn, String year, String month) throws Exception {
+		ArrayList<HashMap<String, Object>> list=new ArrayList<HashMap<String, Object>>();
+		String sql="SELECT SUM(o.order_quantity) goodsCount"
+				+ ", SUM(o.order_price) price"
+				+ ", g.goods_name goodsName"
+				+ " FROM orders o"
+				+ " INNER JOIN goods g"
+				+ " ON o.goods_code = g.goods_code"
+				+ " WHERE YEAR(o.createdate) Like ? AND MONTH(o.createdate) Like ?"
+				+ " GROUP BY MONTH(o.createdate), o.goods_code"
+				+ " ORDER BY goodsCount DESC LIMIT 0, 5";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+year+"%");
+		stmt.setString(2, "%"+month+"%");
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("goodsCount", rs.getInt("goodsCount"));
+			map.put("price", rs.getString("price"));
+			map.put("goodsName", rs.getString("goodsName"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
+	
+	// 연도별 카테고리 랭킹
+	public ArrayList<HashMap<String, Object>> selectProductRankingCategory(Connection conn, String year, String categoryNo) throws Exception {
+		ArrayList<HashMap<String, Object>> list=new ArrayList<HashMap<String, Object>>();
+		String sql="SELECT SUM(o.order_quantity) goodsCount"
+				+ ", SUM(o.order_price) price"
+				+ ", g.goods_name goodsName"
+				+ ", c.category_name categoryName"
+				+ " FROM orders o"
+				+ " INNER JOIN goods g"
+				+ " ON o.goods_code = g.goods_code"
+				+ " INNER JOIN goods_category c"
+				+ " ON g.category_no = c.category_no"
+				+ " WHERE YEAR(o.createdate) Like ? AND g.category_no Like ?"
+				+ " GROUP BY MONTH(o.createdate), o.goods_code"
+				+ " ORDER BY goodsCount DESC LIMIT 0, 5";
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setString(1, "%"+year+"%");
+		stmt.setString(2, "%"+categoryNo+"%");
+		ResultSet rs = stmt.executeQuery();
+		while(rs.next()) {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("goodsCount", rs.getInt("goodsCount"));
+			map.put("price", rs.getString("price"));
+			map.put("goodsName", rs.getString("goodsName"));
+			map.put("categoryName", rs.getString("categoryName"));
+			list.add(map);
+		}
+		DBUtil.close(rs, stmt, null);
+		return list;
+	}
 }

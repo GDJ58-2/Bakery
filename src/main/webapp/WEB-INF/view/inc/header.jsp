@@ -188,6 +188,7 @@
                             		<li><a href="${pageContext.request.contextPath}/admin/emp/empList">직원관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/customer/customerList">고객관리</a></li>
                             		<li><a href="${pageContext.request.contextPath}/admin/auth/authInfoList">관리자권한관리</a></li>
+                            		<li><a href="${pageContext.request.contextPath}/admin/emp/stats">통계</a></li>
                             	</ul>
                             </li>
                             </c:if>

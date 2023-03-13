@@ -204,4 +204,108 @@ public class EmpService {
 		}
 		return count;
 	}
+	
+	// 통계:월별
+	public ArrayList<HashMap<String, Object>> getSelectMonthStats(String year) {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = empDao.selectMonthStats(conn, year);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 통계:연도별
+	public ArrayList<HashMap<String, Object>> getSelectYearStats() {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = empDao.selectYearStats(conn);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 통계:상품랭킹
+	public ArrayList<HashMap<String, Object>> getSelectProductRankingMonth(String year, String month) {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = empDao.selectProductRankingMonth(conn, year, month);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	// 통계:상품랭킹
+	public ArrayList<HashMap<String, Object>> getSelectProductRankingCategory(String year, String categoryNo) {
+		ArrayList<HashMap<String, Object>> list = null;
+		this.empDao = new EmpDao();
+		Connection conn = null;
+		try {
+			conn = DBUtil.getConnection();
+			list = empDao.selectProductRankingCategory(conn, year, categoryNo);
+			conn.commit();
+		} catch (Exception e) {
+			try {
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			e.printStackTrace();
+		} finally {
+			try {
+				DBUtil.close(null, null, conn); // db 자원반납
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 }
